@@ -2,21 +2,23 @@
 <html lang="en">
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M98MBQCEM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-5M98MBQCEM');
-</script>
+      gtag('config', 'G-5M98MBQCEM');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cosmic Odometer - Calculate Your Distance Traveled in Space</title>
+    
+    <meta name="google-site-verification" content="hJkIsZVGK6SFUbbTUBl3xvLUFNqCyRkEh5sBY7jx7cw" />
+
     <style>
         /* CORE STYLES */
-        html {
-            color-scheme: dark; /* <--- ADD THIS LINE */
-        }
+        html { color-scheme: dark; } /* Mobile Date Picker Fix */
         body {
             background-color: #000;
             color: #ffffff;
@@ -26,20 +28,13 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding-bottom: 50px; /* Space for scrolling */
+            padding-bottom: 50px;
             overflow-y: auto;
             overflow-x: hidden;
         }
 
-        /* STARFIELD CANVAS */
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        /* HEADER */
         h1 {
             font-size: 2.5rem;
             text-transform: uppercase;
@@ -50,7 +45,6 @@
             text-align: center;
         }
 
-        /* MAIN CONTAINER */
         .container {
             background: rgba(11, 13, 23, 0.85); 
             padding: 2rem;
@@ -63,6 +57,33 @@
             margin-top: 1rem;
         }
 
+        /* UNIT TOGGLE SWITCH */
+        .unit-toggle-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .toggle-btn {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid #00d4ff;
+            color: #00d4ff;
+            padding: 5px 15px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: #00d4ff;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .toggle-btn:first-child { border-radius: 5px 0 0 5px; }
+        .toggle-btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
+
         /* TIME ALIVE BOX */
         .time-box {
             background: rgba(0, 0, 0, 0.6);
@@ -73,183 +94,47 @@
             text-align: center;
             box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
         }
-
-        .time-label {
-            font-size: 0.8rem;
-            color: #8892b0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-        }
-
-        .time-display {
-            font-size: 1.1rem;
-            color: #fff;
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
+        .time-label { font-size: 0.8rem; color: #8892b0; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .time-display { font-size: 1.1rem; color: #fff; font-weight: bold; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .time-unit { display: inline-block; }
         .unit-val { color: #ffd700; font-variant-numeric: tabular-nums; }
         .unit-label { font-size: 0.8em; color: #666; }
 
         /* INPUTS */
-        .input-group {
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .row {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        input {
-            background: #1a1d2e;
-            border: 1px solid #00d4ff;
-            color: white;
-            padding: 10px;
-            font-family: inherit;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        .range-container {
-            width: 100%;
-            padding: 10px;
-            background: rgba(0,0,0,0.4);
-            border-radius: 8px;
-        }
-        input[type="range"] {
-            width: 100%;
-            accent-color: #00d4ff;
-            cursor: pointer;
-        }
+        .input-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        input { background: #1a1d2e; border: 1px solid #00d4ff; color: white; padding: 10px; font-family: inherit; border-radius: 5px; outline: none; font-size: 16px; } /* iOS Zoom Fix */
+        
+        .range-container { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; }
+        input[type="range"] { width: 100%; accent-color: #00d4ff; cursor: pointer; }
 
         /* METRICS */
-        .metric {
-            margin: 10px 0;
-            padding: 12px 15px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 3px solid transparent;
-            cursor: help; /* Hint that you can hover */
-            position: relative;
-        }
-        .metric:hover {
-            background: rgba(0, 212, 255, 0.1);
-            border-left: 3px solid #00d4ff;
-        }
-
+        .metric { margin: 10px 0; padding: 12px 15px; background: rgba(0, 0, 0, 0.5); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid transparent; cursor: help; position: relative; }
+        .metric:hover { background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; }
         .label { font-size: 0.85rem; color: #8892b0; }
         .value { font-size: 1.1rem; font-weight: bold; color: #ffd700; font-variant-numeric: tabular-nums; }
         
-        .total-box {
-            background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
-            border: 1px solid #00d4ff;
-            margin-top: 20px;
-            margin-bottom: 30px;
-        }
+        .total-box { background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%); border: 1px solid #00d4ff; margin-top: 20px; margin-bottom: 30px; }
 
         /* MILESTONES */
-        .milestone-section {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .progress-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 8px;
-        }
+        .milestone-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
+        .progress-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
         .p-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: #ccc; }
         .p-bar-bg { width: 100%; height: 10px; background: #0f111a; border-radius: 5px; overflow: hidden; }
         .p-bar-fill { height: 100%; background: linear-gradient(90deg, #00d4ff, #0055ff); width: 0%; transition: width 0.5s ease; }
         .p-detail { font-size: 0.75rem; color: #8892b0; margin-top: 8px; text-align: right; }
 
-        /* FLIGHT MANUAL (DETAILS SECTION) */
-        .manual-title {
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #00d4ff;
-            margin-bottom: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 20px;
-        }
-
-        .details-grid {
-            display: grid;
-            gap: 10px;
-        }
-
-        details {
-            background: rgba(0,0,0,0.3);
-            border-radius: 5px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        details[open] {
-            background: rgba(0, 212, 255, 0.05);
-        }
-
-        summary {
-            padding: 12px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: #ccc;
-            list-style: none; /* Hide default triangle */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        summary::-webkit-details-marker { display: none; } /* Hide Chrome triangle */
-
-        summary::after {
-            content: "+";
-            color: #00d4ff;
-            font-weight: bold;
-        }
-
-        details[open] summary::after {
-            content: "-";
-        }
-
-        .info-text {
-            padding: 0 15px 15px 15px;
-            font-size: 0.8rem;
-            color: #8892b0;
-            line-height: 1.4;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            margin-top: 5px;
-            padding-top: 10px;
-        }
-
+        /* MANUAL */
+        .manual-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; color: #00d4ff; margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .details-grid { display: grid; gap: 10px; }
+        details { background: rgba(0,0,0,0.3); border-radius: 5px; overflow: hidden; transition: all 0.3s ease; }
+        details[open] { background: rgba(0, 212, 255, 0.05); }
+        summary { padding: 12px; cursor: pointer; font-size: 0.9rem; font-weight: bold; color: #ccc; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: "+"; color: #00d4ff; font-weight: bold; }
+        details[open] summary::after { content: "-"; }
+        .info-text { padding: 0 15px 15px 15px; font-size: 0.8rem; color: #8892b0; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; padding-top: 10px; }
     </style>
-    <meta name="description" content="Calculate the exact distance you have traveled through the universe since the moment you were born.">
-    <meta property="og:title" content="Cosmic Odometer">
-    <meta property="og:description" content="I have traveled billions of kilometers since birth. Check your cosmic stats here.">
-    <meta property="og:type" content="website">
-    <meta name="theme-color" content="#00d4ff">
-    <meta name="google-site-verification" content="hJkIsZVGK6SFUbbTUBl3xvLUFNqCyRkEh5sBY7jx7cw" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
 </head>
 <body>
 
@@ -258,10 +143,15 @@
     <h1>Cosmic Odometer</h1>
     <h2 style="font-size: 1rem; color: #8892b0; margin-top: -10px; font-weight: normal;">
     Space Travel Calculator & Age in Seconds
-</h2>
+    </h2>
 
     <div class="container">
         
+        <div class="unit-toggle-container">
+            <button class="toggle-btn active" id="btn-km" onclick="setUnit('km')">KM</button>
+            <button class="toggle-btn" id="btn-mi" onclick="setUnit('mi')">MILES</button>
+        </div>
+
         <div class="input-group">
             <div class="row">
                 <input type="date" id="birthDate">
@@ -325,44 +215,11 @@
 
         <h3 class="manual-title">Flight Manual</h3>
         <div class="details-grid">
-            <details>
-                <summary>1. What is "Rotated"?</summary>
-                <div class="info-text">
-                    This is the distance your body has moved due to the Earth spinning on its axis. 
-                    <br><br>
-                    At the equator, you spin at 1,600 km/h. At the poles, you spin at 0 km/h. We calculate this based on your Latitude setting.
-                </div>
-            </details>
-
-            <details>
-                <summary>2. What is "Orbited Sun"?</summary>
-                <div class="info-text">
-                    Earth races around the Sun at ~107,000 km/h (30 km/s). This measures the distance of your yearly laps around the star.
-                </div>
-            </details>
-
-            <details>
-                <summary>3. What is "Solar Travel"?</summary>
-                <div class="info-text">
-                    Our entire Solar System is not sitting still! The Sun drags all the planets in a massive orbit around the center of the Milky Way galaxy at ~792,000 km/h.
-                </div>
-            </details>
-
-            <details>
-                <summary>4. What is "Galactic Travel"?</summary>
-                <div class="info-text">
-                    This is the big one. Our Galaxy itself is moving through the Universe at 2.1 million km/h relative to the Cosmic Background Radiation. We are falling towards "The Great Attractor."
-                </div>
-            </details>
-
-            <details>
-                <summary>How is Total Distance calculated?</summary>
-                <div class="info-text">
-                    Imagine walking on a train. You have your walking speed + the train speed + the rotation of the Earth... 
-                    <br><br>
-                    We add all these speeds together to show the total path length you have physically traveled through the cosmos since birth.
-                </div>
-            </details>
+            <details><summary>1. What is "Rotated"?</summary><div class="info-text">Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.</div></details>
+            <details><summary>2. What is "Orbited Sun"?</summary><div class="info-text">Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.</div></details>
+            <details><summary>3. What is "Solar Travel"?</summary><div class="info-text">The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).</div></details>
+            <details><summary>4. What is "Galactic Travel"?</summary><div class="info-text">Our Galaxy moves at 2.1 million km/h (1.3 million mph) relative to the Cosmic Background.</div></details>
+            <details><summary>Total Distance?</summary><div class="info-text">The sum of all these speeds combined into one total path length since you were born.</div></details>
         </div>
 
     </div>
@@ -377,21 +234,47 @@
         const SPEED_SOLAR = 220;
         const SPEED_GALAXY = 600;
         const MAX_ROTATION_SPEED = 0.4651;
+        const KM_TO_MILES = 0.621371;
 
         const dateInput = document.getElementById('birthDate');
         const timeInput = document.getElementById('birthTime');
         const latRange = document.getElementById('latRange');
         const timeDisplayText = document.getElementById('time-display-text');
         
+        // State
         let currentRotationSpeed = MAX_ROTATION_SPEED;
+        let useMiles = false; // Default to KM
+
         dateInput.valueAsDate = new Date();
+
+        // Toggle Function
+        function setUnit(unit) {
+            useMiles = (unit === 'mi');
+            // Update Buttons
+            document.getElementById('btn-km').classList.toggle('active', !useMiles);
+            document.getElementById('btn-mi').classList.toggle('active', useMiles);
+            
+            // Trigger update immediately
+            updateRotation(); 
+            updateDashboard();
+        }
 
         function updateRotation() {
             const lat = latRange.value;
             document.getElementById('latDisplay').innerText = lat;
             const radians = lat * (Math.PI / 180);
             currentRotationSpeed = MAX_ROTATION_SPEED * Math.cos(radians);
-            document.getElementById('rot-speed-display').innerText = currentRotationSpeed.toFixed(3) + " km/s";
+            
+            // Update Speed Display (KM or Miles)
+            let speedDisplay = currentRotationSpeed;
+            let unitLabel = "km/s";
+            
+            if (useMiles) {
+                speedDisplay = currentRotationSpeed * KM_TO_MILES;
+                unitLabel = "mi/s";
+            }
+            
+            document.getElementById('rot-speed-display').innerText = speedDisplay.toFixed(3) + " " + unitLabel;
         }
 
         function calculatePreciseAge(birth, now) {
@@ -451,6 +334,7 @@
                 document.getElementById('dist-galaxy').innerText = format(dGalaxy);
                 document.getElementById('dist-total').innerText = format(dTotal);
 
+                // Milestones (Ratios don't change based on units)
                 const moonTrips = dTotal / DIST_MOON_ROUNDTRIP;
                 document.getElementById('txt-moon').innerText = Math.floor(moonTrips).toLocaleString();
 
@@ -466,7 +350,18 @@
             }
         }
 
-        function format(num) { return Math.floor(num).toLocaleString() + " km"; }
+        // Format Helper that handles conversion
+        function format(numInKm) {
+            let val = numInKm;
+            let unit = " km";
+            
+            if (useMiles) {
+                val = numInKm * KM_TO_MILES;
+                unit = " mi";
+            }
+            
+            return Math.floor(val).toLocaleString() + unit;
+        }
 
         latRange.addEventListener('input', updateRotation);
         dateInput.addEventListener('change', updateDashboard);
@@ -497,8 +392,4 @@
         animateStars();
     </script>
 </body>
-
 </html>
-
-
-
