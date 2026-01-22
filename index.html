@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Odometer: Ultimate Edition</title>
+    <style>
+        /* CORE STYLES */
+        body {
+            background-color: #000;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 50px; /* Space for scrolling */
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* STARFIELD CANVAS */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* HEADER */
+        h1 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #00d4ff;
+            margin: 2rem 0 0.5rem 0;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+            text-align: center;
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            background: rgba(11, 13, 23, 0.85); 
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(0,0,0,0.6);
+            margin-top: 1rem;
+        }
+
+        /* TIME ALIVE BOX */
+        .time-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #00d4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+        }
+
+        .time-label {
+            font-size: 0.8rem;
+            color: #8892b0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .time-display {
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .time-unit { display: inline-block; }
+        .unit-val { color: #ffd700; font-variant-numeric: tabular-nums; }
+        .unit-label { font-size: 0.8em; color: #666; }
+
+        /* INPUTS */
+        .input-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        input {
+            background: #1a1d2e;
+            border: 1px solid #00d4ff;
+            color: white;
+            padding: 10px;
+            font-family: inherit;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .range-container {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+        }
+        input[type="range"] {
+            width: 100%;
+            accent-color: #00d4ff;
+            cursor: pointer;
+        }
+
+        /* METRICS */
+        .metric {
+            margin: 10px 0;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid transparent;
+            cursor: help; /* Hint that you can hover */
+            position: relative;
+        }
+        .metric:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid #00d4ff;
+        }
+
+        .label { font-size: 0.85rem; color: #8892b0; }
+        .value { font-size: 1.1rem; font-weight: bold; color: #ffd700; font-variant-numeric: tabular-nums; }
+        
+        .total-box {
+            background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+            border: 1px solid #00d4ff;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* MILESTONES */
+        .milestone-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .progress-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .p-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: #ccc; }
+        .p-bar-bg { width: 100%; height: 10px; background: #0f111a; border-radius: 5px; overflow: hidden; }
+        .p-bar-fill { height: 100%; background: linear-gradient(90deg, #00d4ff, #0055ff); width: 0%; transition: width 0.5s ease; }
+        .p-detail { font-size: 0.75rem; color: #8892b0; margin-top: 8px; text-align: right; }
+
+        /* FLIGHT MANUAL (DETAILS SECTION) */
+        .manual-title {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+        }
+
+        .details-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        details {
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        details[open] {
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        summary {
+            padding: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #ccc;
+            list-style: none; /* Hide default triangle */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        summary::-webkit-details-marker { display: none; } /* Hide Chrome triangle */
+
+        summary::after {
+            content: "+";
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        details[open] summary::after {
+            content: "-";
+        }
+
+        .info-text {
+            padding: 0 15px 15px 15px;
+            font-size: 0.8rem;
+            color: #8892b0;
+            line-height: 1.4;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 5px;
+            padding-top: 10px;
+        }
+
+    </style>
+    <meta name="description" content="Calculate the exact distance you have traveled through the universe since the moment you were born.">
+    <meta property="og:title" content="Cosmic Odometer">
+    <meta property="og:description" content="I have traveled billions of kilometers since birth. Check your cosmic stats here.">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#00d4ff">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
+</head>
+<body>
+
+    <canvas id="starfield"></canvas>
+
+    <h1>Cosmic Odometer</h1>
+
+    <div class="container">
+        
+        <div class="input-group">
+            <div class="row">
+                <input type="date" id="birthDate">
+                <input type="time" id="birthTime" value="12:00">
+            </div>
+            
+            <div class="range-container">
+                <div class="label" style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span>Latitude: <span id="latDisplay" style="color:#00d4ff">0</span>°</span>
+                    <span id="rot-speed-display" style="color:#ffd700">0.465 km/s</span>
+                </div>
+                <input type="range" id="latRange" min="0" max="90" value="0" step="1">
+            </div>
+        </div>
+
+        <div class="time-box">
+            <div class="time-label">Mission Duration</div>
+            <div class="time-display" id="time-display-text">Calculating...</div>
+        </div>
+
+        <div class="metric">
+            <div class="label">1. Rotated (Spin)</div>
+            <div class="value" id="dist-rot">0 km</div>
+        </div>
+        <div class="metric">
+            <div class="label">2. Orbited Sun</div>
+            <div class="value" id="dist-orbit">0 km</div>
+        </div>
+        <div class="metric">
+            <div class="label">3. Solar System Travel</div>
+            <div class="value" id="dist-solar">0 km</div>
+        </div>
+        <div class="metric">
+            <div class="label">4. Galactic Travel</div>
+            <div class="value" id="dist-galaxy">0 km</div>
+        </div>
+
+        <div class="metric total-box">
+            <div>
+                <div class="label" style="color: white">TOTAL DISTANCE</div>
+            </div>
+            <div class="value" id="dist-total" style="color: #00d4ff; font-size: 1.3rem;">0 km</div>
+        </div>
+
+        <div class="milestone-section">
+            <div class="progress-card">
+                <div class="p-header"><span>Moon Round Trips</span><span id="txt-moon" style="color:#ffd700">0</span></div>
+                <div class="p-detail">Enough distance to fly to the Moon and back.</div>
+            </div>
+            <div class="progress-card">
+                <div class="p-header"><span>Passed Pluto</span><span id="txt-pluto" style="color:#ffd700">0x</span></div>
+                <div class="p-bar-bg"><div class="p-bar-fill" id="bar-pluto"></div></div>
+                <div class="p-detail">Laps of the entire Solar System.</div>
+            </div>
+            <div class="progress-card">
+                <div class="p-header"><span>Progress to 1 Light Year</span><span id="txt-light" style="color:#ffd700">0%</span></div>
+                <div class="p-bar-bg"><div class="p-bar-fill" id="bar-light" style="background: linear-gradient(90deg, #ff0055, #ff5500);"></div></div>
+                <div class="p-detail">You are <span id="light-years-raw">0</span> LY away.</div>
+            </div>
+        </div>
+
+        <h3 class="manual-title">Flight Manual</h3>
+        <div class="details-grid">
+            <details>
+                <summary>1. What is "Rotated"?</summary>
+                <div class="info-text">
+                    This is the distance your body has moved due to the Earth spinning on its axis. 
+                    <br><br>
+                    At the equator, you spin at 1,600 km/h. At the poles, you spin at 0 km/h. We calculate this based on your Latitude setting.
+                </div>
+            </details>
+
+            <details>
+                <summary>2. What is "Orbited Sun"?</summary>
+                <div class="info-text">
+                    Earth races around the Sun at ~107,000 km/h (30 km/s). This measures the distance of your yearly laps around the star.
+                </div>
+            </details>
+
+            <details>
+                <summary>3. What is "Solar Travel"?</summary>
+                <div class="info-text">
+                    Our entire Solar System is not sitting still! The Sun drags all the planets in a massive orbit around the center of the Milky Way galaxy at ~792,000 km/h.
+                </div>
+            </details>
+
+            <details>
+                <summary>4. What is "Galactic Travel"?</summary>
+                <div class="info-text">
+                    This is the big one. Our Galaxy itself is moving through the Universe at 2.1 million km/h relative to the Cosmic Background Radiation. We are falling towards "The Great Attractor."
+                </div>
+            </details>
+
+            <details>
+                <summary>How is Total Distance calculated?</summary>
+                <div class="info-text">
+                    Imagine walking on a train. You have your walking speed + the train speed + the rotation of the Earth... 
+                    <br><br>
+                    We add all these speeds together to show the total path length you have physically traveled through the cosmos since birth.
+                </div>
+            </details>
+        </div>
+
+    </div>
+
+    <script>
+        /* --- LOGIC --- */
+        const DIST_MOON_ROUNDTRIP = 768800; 
+        const DIST_PLUTO = 5900000000;
+        const DIST_LIGHT_YEAR = 9460730472580;
+
+        const SPEED_ORBIT = 29.78;
+        const SPEED_SOLAR = 220;
+        const SPEED_GALAXY = 600;
+        const MAX_ROTATION_SPEED = 0.4651;
+
+        const dateInput = document.getElementById('birthDate');
+        const timeInput = document.getElementById('birthTime');
+        const latRange = document.getElementById('latRange');
+        const timeDisplayText = document.getElementById('time-display-text');
+        
+        let currentRotationSpeed = MAX_ROTATION_SPEED;
+        dateInput.valueAsDate = new Date();
+
+        function updateRotation() {
+            const lat = latRange.value;
+            document.getElementById('latDisplay').innerText = lat;
+            const radians = lat * (Math.PI / 180);
+            currentRotationSpeed = MAX_ROTATION_SPEED * Math.cos(radians);
+            document.getElementById('rot-speed-display').innerText = currentRotationSpeed.toFixed(3) + " km/s";
+        }
+
+        function calculatePreciseAge(birth, now) {
+            let years = now.getFullYear() - birth.getFullYear();
+            let months = now.getMonth() - birth.getMonth();
+            let days = now.getDate() - birth.getDate();
+            let hours = now.getHours() - birth.getHours();
+            let mins = now.getMinutes() - birth.getMinutes();
+            let secs = now.getSeconds() - birth.getSeconds();
+
+            if (secs < 0) { secs += 60; mins--; }
+            if (mins < 0) { mins += 60; hours--; }
+            if (hours < 0) { hours += 24; days--; }
+            if (days < 0) {
+                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+                days += prevMonth;
+                months--;
+            }
+            if (months < 0) { months += 12; years--; }
+
+            return { years, months, days, hours, mins, secs };
+        }
+
+        function updateDashboard() {
+            const birthStr = `${dateInput.value}T${timeInput.value}`;
+            const birthDate = new Date(birthStr);
+            const now = new Date();
+            
+            if (birthDate < now) {
+                const age = calculatePreciseAge(birthDate, now);
+                const timeStr = `
+                    <span class="time-unit"><span class="unit-val">${age.years}</span><span class="unit-label">y</span></span>
+                    <span class="time-unit"><span class="unit-val">${age.months}</span><span class="unit-label">m</span></span>
+                    <span class="time-unit"><span class="unit-val">${age.days}</span><span class="unit-label">d</span></span>
+                    <span class="time-unit" style="margin-left:10px; color:#aaa">|</span>
+                    <span class="time-unit" style="margin-left:10px"><span class="unit-val">${String(age.hours).padStart(2, '0')}</span><span class="unit-label">h</span></span> :
+                    <span class="time-unit"><span class="unit-val">${String(age.mins).padStart(2, '0')}</span><span class="unit-label">m</span></span> :
+                    <span class="time-unit"><span class="unit-val">${String(age.secs).padStart(2, '0')}</span><span class="unit-label">s</span></span>
+                `;
+                timeDisplayText.innerHTML = timeStr;
+            } else {
+                timeDisplayText.innerHTML = "Welcome, Time Traveler";
+            }
+
+            const secondsAlive = (now - birthDate) / 1000;
+
+            if (secondsAlive > 0) {
+                const dRot = secondsAlive * currentRotationSpeed;
+                const dOrbit = secondsAlive * SPEED_ORBIT;
+                const dSolar = secondsAlive * SPEED_SOLAR;
+                const dGalaxy = secondsAlive * SPEED_GALAXY;
+                const dTotal = dRot + dOrbit + dSolar + dGalaxy;
+
+                document.getElementById('dist-rot').innerText = format(dRot);
+                document.getElementById('dist-orbit').innerText = format(dOrbit);
+                document.getElementById('dist-solar').innerText = format(dSolar);
+                document.getElementById('dist-galaxy').innerText = format(dGalaxy);
+                document.getElementById('dist-total').innerText = format(dTotal);
+
+                const moonTrips = dTotal / DIST_MOON_ROUNDTRIP;
+                document.getElementById('txt-moon').innerText = Math.floor(moonTrips).toLocaleString();
+
+                const plutoTrips = dTotal / DIST_PLUTO;
+                document.getElementById('txt-pluto').innerText = Math.floor(plutoTrips).toLocaleString() + "x";
+                const plutoProgress = (plutoTrips % 1) * 100;
+                document.getElementById('bar-pluto').style.width = plutoProgress + "%";
+
+                const lyProgress = (dTotal / DIST_LIGHT_YEAR) * 100;
+                document.getElementById('txt-light').innerText = lyProgress.toFixed(4) + "%";
+                document.getElementById('bar-light').style.width = Math.min(lyProgress, 100) + "%";
+                document.getElementById('light-years-raw').innerText = (dTotal / DIST_LIGHT_YEAR).toFixed(5);
+            }
+        }
+
+        function format(num) { return Math.floor(num).toLocaleString() + " km"; }
+
+        latRange.addEventListener('input', updateRotation);
+        dateInput.addEventListener('change', updateDashboard);
+        timeInput.addEventListener('change', updateDashboard);
+        setInterval(updateDashboard, 50);
+        updateRotation(); 
+
+        /* --- STARFIELD --- */
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+        const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; ctx.translate(w / 2, h / 2); };
+        window.addEventListener('resize', resize);
+        resize();
+        const stars = Array(800).fill().map(() => ({ x: (Math.random() - 0.5) * w * 2, y: (Math.random() - 0.5) * h * 2, z: Math.random() * w, pz: 0 }));
+        function animateStars() {
+            ctx.clearRect(-w/2, -h/2, w, h);
+            stars.forEach(s => {
+                s.z -= 25; 
+                if (s.z <= 0) { s.z = w; s.x = (Math.random() - 0.5) * w * 2; s.y = (Math.random() - 0.5) * h * 2; s.pz = s.z; }
+                const x = (s.x / s.z) * w; const y = (s.y / s.z) * h;
+                if (s.pz === 0) s.pz = s.z; 
+                const px = (s.x / (s.z + 25)) * w; const py = (s.y / (s.z + 25)) * h;
+                ctx.beginPath(); ctx.strokeStyle = `rgba(255, 255, 255, ${1 - s.z/w})`; ctx.lineWidth = 1.5; ctx.moveTo(x, y); ctx.lineTo(px, py); ctx.stroke();
+            });
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+    </script>
+</body>
+</html>
