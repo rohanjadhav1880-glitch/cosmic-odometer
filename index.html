@@ -18,7 +18,7 @@
 
     <style>
         /* CORE STYLES */
-        html { color-scheme: dark; } /* Mobile Date Picker Fix */
+        html { color-scheme: dark; }
         body {
             background-color: #000;
             color: #ffffff;
@@ -103,7 +103,7 @@
         /* INPUTS */
         .input-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 15px; align-items: center; }
         .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        input { background: #1a1d2e; border: 1px solid #00d4ff; color: white; padding: 10px; font-family: inherit; border-radius: 5px; outline: none; font-size: 16px; } /* iOS Zoom Fix */
+        input { background: #1a1d2e; border: 1px solid #00d4ff; color: white; padding: 10px; font-family: inherit; border-radius: 5px; outline: none; font-size: 16px; }
         
         .range-container { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; }
         input[type="range"] { width: 100%; accent-color: #00d4ff; cursor: pointer; }
@@ -115,6 +115,14 @@
         .value { font-size: 1.1rem; font-weight: bold; color: #ffd700; font-variant-numeric: tabular-nums; }
         
         .total-box { background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%); border: 1px solid #00d4ff; margin-top: 20px; margin-bottom: 30px; }
+        
+        /* NEW: Highlight the speed in the total box */
+        .total-speed-highlight {
+            font-size: 0.8rem;
+            color: #00d4ff;
+            margin-top: 5px;
+            font-weight: bold;
+        }
 
         /* MILESTONES */
         .milestone-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
@@ -192,6 +200,7 @@
         <div class="metric total-box">
             <div>
                 <div class="label" style="color: white">TOTAL DISTANCE</div>
+                <div class="total-speed-highlight" id="total-speed-display">Traveling at: 0 km/s</div>
             </div>
             <div class="value" id="dist-total" style="color: #00d4ff; font-size: 1.3rem;">0 km</div>
         </div>
@@ -275,6 +284,24 @@
             }
             
             document.getElementById('rot-speed-display').innerText = speedDisplay.toFixed(3) + " " + unitLabel;
+            
+            // Update TOTAL Speed Display (New Feature)
+            updateTotalSpeedDisplay();
+        }
+        
+        function updateTotalSpeedDisplay() {
+            const totalSpeedKm = currentRotationSpeed + SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY;
+            
+            let displayVal = totalSpeedKm;
+            let unit = "km/s";
+            
+            if (useMiles) {
+                displayVal = totalSpeedKm * KM_TO_MILES;
+                unit = "mi/s";
+            }
+            
+            // Update the new element
+            document.getElementById('total-speed-display').innerText = "Traveling at: " + displayVal.toFixed(2) + " " + unit;
         }
 
         function calculatePreciseAge(birth, now) {
