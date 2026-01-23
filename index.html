@@ -6,21 +6,18 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-5M98MBQCEM');
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosmic Odometer - Calculate Your Distance Traveled in Space</title>
+    <title>Cosmic Odometer - Space Travel Calculator</title>
     
-    <meta name="description" content="Calculate the exact distance you have traveled through the universe since the moment you were born.">
+    <meta name="description" content="Calculate the exact distance you have traveled through the universe since birth.">
     <meta property="og:title" content="Cosmic Odometer">
     <meta property="og:description" content="I have traveled billions of kilometers since birth. Check your cosmic stats here.">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#00d4ff">
-    
-    <meta name="google-site-verification" content="hJkIsZVGK6SFUbbTUBl3xvLUFNqCyRkEh5sBY7jx7cw" />
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
 
@@ -51,6 +48,7 @@
             margin: 2rem 0 0.5rem 0;
             text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
             text-align: center;
+            line-height: 1.2;
         }
 
         .container {
@@ -72,6 +70,7 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 15px;
+            flex-wrap: wrap;
         }
 
         /* UNIT TOGGLE SWITCH */
@@ -102,6 +101,19 @@
 
         .icon-btn { border-radius: 5px; width: 35px; }
 
+        /* LANG SELECT */
+        select.lang-select {
+            background: rgba(0, 0, 0, 0.6);
+            color: #00d4ff;
+            border: 1px solid #00d4ff;
+            padding: 5px;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            cursor: pointer;
+            outline: none;
+        }
+
         /* SHARE TOOLTIP */
         #share-tooltip {
             position: absolute;
@@ -117,6 +129,7 @@
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
+            z-index: 100;
         }
         #share-tooltip.show { opacity: 1; }
 
@@ -148,7 +161,7 @@
         .metric { margin: 10px 0; padding: 12px 15px; background: rgba(0, 0, 0, 0.5); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid transparent; cursor: help; position: relative; }
         .metric:hover { background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; }
         .label { font-size: 0.85rem; color: #8892b0; }
-        .value { font-size: 1.1rem; font-weight: bold; color: #ffd700; font-variant-numeric: tabular-nums; }
+        .value { font-size: 1.1rem; font-weight: bold; color: #ffd700; font-variant-numeric: tabular-nums; text-align: right; }
         
         .total-box { background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%); border: 1px solid #00d4ff; margin-top: 20px; margin-bottom: 20px; }
         
@@ -159,10 +172,10 @@
             font-weight: bold;
         }
 
-        /* DISPLACEMENT CALCULATOR (RED THEME) */
+        /* DISPLACEMENT CALCULATOR */
         .displacement-box {
             margin-bottom: 30px;
-            background: rgba(255, 0, 85, 0.1); /* Red tint */
+            background: rgba(255, 0, 85, 0.1);
             border: 1px solid #ff0055;
             padding: 20px;
             border-radius: 15px;
@@ -200,14 +213,7 @@
             font-variant-numeric: tabular-nums;
         }
 
-        .d-note {
-            font-size: 0.75rem;
-            color: #ff99bb;
-            margin-top: 10px;
-            font-style: italic;
-            opacity: 0.8;
-            line-height: 1.4;
-        }
+        .d-note { font-size: 0.75rem; color: #ff99bb; margin-top: 10px; font-style: italic; opacity: 0.8; line-height: 1.4; }
 
         /* MILESTONES */
         .milestone-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
@@ -233,13 +239,13 @@
 
     <canvas id="starfield"></canvas>
 
-    <h1>Cosmic Odometer</h1>
-    <h2 style="font-size: 1rem; color: #8892b0; margin-top: -10px; font-weight: normal;">
+    <h1 data-i18n="title">Cosmic Odometer</h1>
+    <h2 data-i18n="subtitle" style="font-size: 1rem; color: #8892b0; margin-top: -10px; font-weight: normal;">
     Space Travel Calculator & Age in Seconds
     </h2>
 
     <div class="container">
-        <div id="share-tooltip">Link Copied!</div>
+        <div id="share-tooltip" data-i18n="copied">Link Copied!</div>
 
         <div class="controls-container">
             <div class="unit-toggle-group">
@@ -248,8 +254,13 @@
             </div>
             
             <button class="toggle-btn icon-btn" id="btn-motion" onclick="toggleMotion()" title="Pause Animation">⏸</button>
-            
             <button class="toggle-btn icon-btn" onclick="shareLink()" title="Copy Share Link">🔗</button>
+
+            <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="jp">日本語</option>
+            </select>
         </div>
 
         <div class="input-group">
@@ -260,7 +271,7 @@
             
             <div class="range-container">
                 <div class="label" style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span>Latitude: <span id="latDisplay" style="color:#00d4ff">0°</span></span>
+                    <span><span data-i18n="latitude">Latitude</span>: <span id="latDisplay" style="color:#00d4ff">0°</span></span>
                     <span id="rot-speed-display" style="color:#ffd700">0.465 km/s</span>
                 </div>
                 <input type="range" id="latRange" min="-90" max="90" value="0" step="1">
@@ -268,105 +279,227 @@
         </div>
 
         <div class="time-box">
-            <div class="time-label">Mission Duration</div>
+            <div class="time-label" data-i18n="mission_duration">Mission Duration</div>
             <div class="time-display" id="time-display-text">Calculating...</div>
         </div>
 
         <div class="metric">
-            <div class="label">1. Rotated (Spin)</div>
+            <div class="label" data-i18n="rotated">1. Rotated (Spin)</div>
             <div class="value" id="dist-rot">0 km</div>
         </div>
         <div class="metric">
-            <div class="label">2. Orbited Sun</div>
+            <div class="label" data-i18n="orbited">2. Orbited Sun</div>
             <div class="value" id="dist-orbit">0 km</div>
         </div>
         <div class="metric">
-            <div class="label">3. Solar System Travel</div>
+            <div class="label" data-i18n="solar_travel">3. Solar System Travel</div>
             <div class="value" id="dist-solar">0 km</div>
         </div>
         <div class="metric">
-            <div class="label">4. Galactic Travel</div>
+            <div class="label" data-i18n="galactic_travel">4. Galactic Travel</div>
             <div class="value" id="dist-galaxy">0 km</div>
         </div>
 
         <div class="metric total-box">
             <div>
-                <div class="label" style="color: white">TOTAL DISTANCE</div>
+                <div class="label" style="color: white" data-i18n="total_distance">TOTAL DISTANCE</div>
                 <div class="total-speed-highlight" id="total-speed-display">Traveling at: 0 km/s</div>
             </div>
             <div class="value" id="dist-total" style="color: #00d4ff; font-size: 1.3rem;">0 km</div>
         </div>
 
         <div class="displacement-box">
-            <div class="d-title">Straight-Line Displacement</div>
+            <div class="d-title" data-i18n="displacement_title">Straight-Line Displacement</div>
             <div class="d-value" id="dist-vector">0 km</div>
-            <div class="d-note">
+            <div class="d-note" data-i18n="displacement_desc">
                 How far you are from your birth coordinate if you flew in a straight line (ignoring circular orbits and spins).
             </div>
         </div>
 
         <div class="milestone-section">
             <div class="progress-card">
-                <div class="p-header"><span>Moon Round Trips</span><span id="txt-moon" style="color:#ffd700">0</span></div>
-                <div class="p-detail">Enough distance to fly to the Moon and back.</div>
+                <div class="p-header"><span data-i18n="moon_trips">Moon Round Trips</span><span id="txt-moon" style="color:#ffd700">0</span></div>
+                <div class="p-bar-bg"><div class="p-bar-fill" id="bar-moon" style="background: linear-gradient(90deg, #00d4ff, #ffffff);"></div></div>
+                <div class="p-detail" data-i18n="moon_desc">Enough distance to fly to the Moon and back.</div>
             </div>
             <div class="progress-card">
-                <div class="p-header"><span>Passed Pluto</span><span id="txt-pluto" style="color:#ffd700">0x</span></div>
+                <div class="p-header"><span data-i18n="passed_pluto">Passed Pluto</span><span id="txt-pluto" style="color:#ffd700">0x</span></div>
                 <div class="p-bar-bg"><div class="p-bar-fill" id="bar-pluto"></div></div>
-                <div class="p-detail">Laps of the entire Solar System.</div>
+                <div class="p-detail" data-i18n="pluto_desc">Laps of the entire Solar System.</div>
             </div>
             <div class="progress-card">
-                <div class="p-header"><span>Progress to 1 Light Year</span><span id="txt-light" style="color:#ffd700">0%</span></div>
+                <div class="p-header"><span data-i18n="light_year_prog">Progress to 1 Light Year</span><span id="txt-light" style="color:#ffd700">0%</span></div>
                 <div class="p-bar-bg"><div class="p-bar-fill" id="bar-light" style="background: linear-gradient(90deg, #ff0055, #ff5500);"></div></div>
-                <div class="p-detail">You are <span id="light-years-raw">0</span> LY away.</div>
+                <div class="p-detail"><span data-i18n="you_are">You are</span> <span id="light-years-raw">0</span> <span data-i18n="ly_away">LY away.</span></div>
             </div>
         </div>
 
-        <h3 class="manual-title">Flight Manual</h3>
+        <h3 class="manual-title" data-i18n="manual_title">Flight Manual</h3>
         <div class="details-grid">
-            <details><summary>1. What is "Rotated"?</summary><div class="info-text">Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.</div></details>
-            <details><summary>2. What is "Orbited Sun"?</summary><div class="info-text">Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.</div></details>
-            <details><summary>3. What is "Solar Travel"?</summary><div class="info-text">The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).</div></details>
-            <details><summary>4. What is "Galactic Travel"?</summary><div class="info-text">Our Galaxy moves at 2.1 million km/h (1.3 million mph) relative to the Cosmic Background.</div></details>
-            <details><summary>Total Distance?</summary><div class="info-text">The sum of all these speeds combined into one total path length since you were born.</div></details>
+            <details><summary data-i18n="faq_1_q">1. What is "Rotated"?</summary><div class="info-text" data-i18n="faq_1_a">Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.</div></details>
+            <details><summary data-i18n="faq_2_q">2. What is "Orbited Sun"?</summary><div class="info-text" data-i18n="faq_2_a">Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.</div></details>
+            <details><summary data-i18n="faq_3_q">3. What is "Solar Travel"?</summary><div class="info-text" data-i18n="faq_3_a">The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).</div></details>
+            <details><summary data-i18n="faq_4_q">4. What is "Galactic Travel"?</summary><div class="info-text" data-i18n="faq_4_a">Our Galaxy moves at 2.1 million km/h (1.3 million mph) relative to the Cosmic Background.</div></details>
+            <details><summary data-i18n="faq_5_q">Total Distance?</summary><div class="info-text" data-i18n="faq_5_a">The sum of all these speeds combined into one total path length since you were born.</div></details>
         </div>
 
         <div style="margin-top: 30px; font-size: 0.7rem; color: #555; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-            🔒 <strong>Privacy Note:</strong> This site works entirely client-side. 
-            Your birth date is processed locally on your device and is never sent to any server.
+            <span data-i18n="privacy">🔒 Privacy Note: This site works entirely client-side. Your birth date is processed locally and never sent to any server.</span>
         </div>
-
     </div>
 
     <script>
-        /* --- LOGIC --- */
+        /* --- CONSTANTS --- */
         const DIST_MOON_ROUNDTRIP = 768800; 
         const DIST_PLUTO = 5900000000;
         const DIST_LIGHT_YEAR = 9460730472580;
-
         const SPEED_ORBIT = 29.78;
         const SPEED_SOLAR = 220;
         const SPEED_GALAXY = 600;
         const MAX_ROTATION_SPEED = 0.4651;
         const KM_TO_MILES = 0.621371;
 
+        /* --- STATE --- */
+        let currentRotationSpeed = MAX_ROTATION_SPEED;
+        let useMiles = false; 
+        let isAnimating = true;
+        let currentLang = 'en';
+
+        /* --- DOM ELEMENTS --- */
         const dateInput = document.getElementById('birthDate');
         const timeInput = document.getElementById('birthTime');
         const latRange = document.getElementById('latRange');
         const timeDisplayText = document.getElementById('time-display-text');
-        
-        // State
-        let currentRotationSpeed = MAX_ROTATION_SPEED;
-        let useMiles = false; 
-        let isAnimating = true;
+        const langSelect = document.getElementById('lang-select');
 
-        // 1. INIT: Load Data (Priority: URL Params > LocalStorage > Default)
+        /* --- TRANSLATIONS --- */
+        const translations = {
+            en: {
+                title: "Cosmic Odometer",
+                subtitle: "Space Travel Calculator & Age in Seconds",
+                copied: "Link Copied!",
+                latitude: "Latitude",
+                mission_duration: "Mission Duration",
+                rotated: "1. Rotated (Spin)",
+                orbited: "2. Orbited Sun",
+                solar_travel: "3. Solar System Travel",
+                galactic_travel: "4. Galactic Travel",
+                total_distance: "TOTAL DISTANCE",
+                traveling_at: "Traveling at",
+                displacement_title: "Straight-Line Displacement",
+                displacement_desc: "How far you are from your birth coordinate if you flew in a straight line (ignoring circular orbits and spins).",
+                moon_trips: "Moon Round Trips",
+                moon_desc: "Enough distance to fly to the Moon and back.",
+                passed_pluto: "Passed Pluto",
+                pluto_desc: "Laps of the entire Solar System.",
+                light_year_prog: "Progress to 1 Light Year",
+                you_are: "You are",
+                ly_away: "LY away.",
+                manual_title: "Flight Manual",
+                faq_1_q: "1. What is \"Rotated\"?",
+                faq_1_a: "Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.",
+                faq_2_q: "2. What is \"Orbited Sun\"?",
+                faq_2_a: "Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.",
+                faq_3_q: "3. What is \"Solar Travel\"?",
+                faq_3_a: "The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).",
+                faq_4_q: "4. What is \"Galactic Travel\"?",
+                faq_4_a: "Our Galaxy moves at 2.1 million km/h (1.3 million mph) relative to the Cosmic Background.",
+                faq_5_q: "Total Distance?",
+                faq_5_a: "The sum of all these speeds combined into one total path length since you were born.",
+                privacy: "🔒 Privacy Note: This site works entirely client-side. Your birth date is processed locally and never sent to any server.",
+                unit_y: "y", unit_m: "m", unit_d: "d", unit_h: "h", unit_min: "m", unit_s: "s",
+                welcome: "Welcome, Time Traveler"
+            },
+            es: {
+                title: "Odómetro Cósmico",
+                subtitle: "Calculadora de Viaje Espacial y Edad",
+                copied: "¡Enlace Copiado!",
+                latitude: "Latitud",
+                mission_duration: "Duración de la Misión",
+                rotated: "1. Rotación (Giro)",
+                orbited: "2. Órbita Solar",
+                solar_travel: "3. Viaje Sistema Solar",
+                galactic_travel: "4. Viaje Galáctico",
+                total_distance: "DISTANCIA TOTAL",
+                traveling_at: "Viajando a",
+                displacement_title: "Desplazamiento Vectorial",
+                displacement_desc: "Distancia en línea recta desde tu nacimiento si volaras directamente (ignorando órbitas circulares).",
+                moon_trips: "Viajes a la Luna",
+                moon_desc: "Distancia suficiente para ir y volver a la Luna.",
+                passed_pluto: "Pasado Plutón",
+                pluto_desc: "Vueltas al Sistema Solar entero.",
+                light_year_prog: "Progreso a 1 Año Luz",
+                you_are: "Estás a",
+                ly_away: "Años Luz.",
+                manual_title: "Manual de Vuelo",
+                faq_1_q: "1. ¿Qué es \"Rotación\"?",
+                faq_1_a: "Distancia por el giro de la Tierra. En el ecuador: ~1,600 km/h. En los polos: 0.",
+                faq_2_q: "2. ¿Qué es \"Órbita Solar\"?",
+                faq_2_a: "La Tierra corre alrededor del Sol a ~107,000 km/h. Es tu vuelta anual.",
+                faq_3_q: "3. ¿Qué es \"Viaje Solar\"?",
+                faq_3_a: "El Sol arrastra a los planetas por la Vía Láctea a ~792,000 km/h.",
+                faq_4_q: "4. ¿Qué es \"Viaje Galáctico\"?",
+                faq_4_a: "Nuestra Galaxia se mueve a 2.1 millones km/h relativo al Fondo Cósmico.",
+                faq_5_q: "¿Distancia Total?",
+                faq_5_a: "La suma de todas estas velocidades combinadas en un solo camino desde que naciste.",
+                privacy: "🔒 Privacidad: Este sitio funciona localmente. Tu fecha de nacimiento nunca se envía a ningún servidor.",
+                unit_y: "a", unit_m: "m", unit_d: "d", unit_h: "h", unit_min: "m", unit_s: "s",
+                welcome: "Bienvenido, Viajero del Tiempo"
+            },
+            jp: {
+                title: "宇宙走行距離計",
+                subtitle: "宇宙旅行計算機 & 秒単位の年齢",
+                copied: "リンクをコピーしました!",
+                latitude: "緯度",
+                mission_duration: "ミッション経過時間",
+                rotated: "1. 自転距離",
+                orbited: "2. 公転距離",
+                solar_travel: "3. 太陽系移動距離",
+                galactic_travel: "4. 銀河系移動距離",
+                total_distance: "総移動距離",
+                traveling_at: "現在の速度",
+                displacement_title: "直線変位 (ベクトル)",
+                displacement_desc: "軌道や回転を無視して、生まれた場所から直線でどれだけ離れたか。",
+                moon_trips: "月への往復回数",
+                moon_desc: "月まで行って帰ってこれる距離。",
+                passed_pluto: "冥王星通過回数",
+                pluto_desc: "太陽系全体を何周したか。",
+                light_year_prog: "1光年への到達度",
+                you_are: "現在",
+                ly_away: "光年。",
+                manual_title: "フライトマニュアル",
+                faq_1_q: "1. 自転距離とは？",
+                faq_1_a: "地球の自転による移動。赤道付近では時速約1,600km。極点では0です。",
+                faq_2_q: "2. 公転距離とは？",
+                faq_2_a: "地球は時速約107,000kmで太陽の周りを回っています。",
+                faq_3_q: "3. 太陽系移動距離とは？",
+                faq_3_a: "太陽は惑星を引き連れて天の川銀河を時速約792,000kmで移動しています。",
+                faq_4_q: "4. 銀河系移動距離とは？",
+                faq_4_a: "私たちの銀河は、宇宙背景放射に対して時速210万kmで移動しています。",
+                faq_5_q: "総移動距離とは？",
+                faq_5_a: "これらすべての速度を合計した、あなたが生まれてからの総移動距離です。",
+                privacy: "🔒 プライバシー: このサイトは完全にクライアント側で動作します。データがサーバーに送信されることはありません。",
+                unit_y: "年", unit_m: "ヶ月", unit_d: "日", unit_h: "時間", unit_min: "分", unit_s: "秒",
+                welcome: "ようこそ、タイムトラベラー"
+            }
+        };
+
+        /* --- FUNCTIONS --- */
+
         function initData() {
             const urlParams = new URLSearchParams(window.location.search);
             const savedDate = localStorage.getItem('cosmic_date');
             const savedTime = localStorage.getItem('cosmic_time');
             const savedLat = localStorage.getItem('cosmic_lat');
             const savedUnit = localStorage.getItem('cosmic_unit');
+            const savedLang = localStorage.getItem('cosmic_lang');
+
+            // Language Priority
+            if (savedLang && translations[savedLang]) {
+                currentLang = savedLang;
+                langSelect.value = currentLang;
+            }
+            applyLanguage(currentLang);
 
             // Date Priority
             if (urlParams.has('date')) {
@@ -377,21 +510,12 @@
                 dateInput.valueAsDate = new Date();
             }
 
-            // Time Priority
-            if (urlParams.has('time')) {
-                timeInput.value = urlParams.get('time');
-            } else if (savedTime) {
-                timeInput.value = savedTime;
-            }
+            if (urlParams.has('time')) timeInput.value = urlParams.get('time');
+            else if (savedTime) timeInput.value = savedTime;
 
-            // Lat Priority
-            if (urlParams.has('lat')) {
-                latRange.value = urlParams.get('lat');
-            } else if (savedLat) {
-                latRange.value = savedLat;
-            }
+            if (urlParams.has('lat')) latRange.value = urlParams.get('lat');
+            else if (savedLat) latRange.value = savedLat;
 
-            // Unit Priority (LocalStorage only, user preference)
             if (savedUnit === 'mi') {
                 useMiles = true;
                 document.getElementById('btn-km').classList.remove('active');
@@ -399,22 +523,41 @@
             }
         }
 
-        // 2. SAVE DATA FUNCTION
         function saveData() {
             localStorage.setItem('cosmic_date', dateInput.value);
             localStorage.setItem('cosmic_time', timeInput.value);
             localStorage.setItem('cosmic_lat', latRange.value);
             localStorage.setItem('cosmic_unit', useMiles ? 'mi' : 'km');
+            localStorage.setItem('cosmic_lang', currentLang);
         }
 
-        // 3. SHARE LINK GENERATOR
+        function changeLanguage(lang) {
+            currentLang = lang;
+            saveData();
+            applyLanguage(lang);
+            updateDashboard(); 
+        }
+
+        function applyLanguage(lang) {
+            const t = translations[lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.innerText = t[key];
+            });
+            updateTotalSpeedDisplay();
+        }
+
+        // Helper to get translated string inside JS functions
+        function getT(key) {
+            return translations[currentLang][key] || key;
+        }
+
         function shareLink() {
             const baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
             const params = new URLSearchParams();
             params.set('date', dateInput.value);
             params.set('time', timeInput.value);
             params.set('lat', latRange.value);
-            
             const fullUrl = `${baseUrl}?${params.toString()}`;
             
             navigator.clipboard.writeText(fullUrl).then(() => {
@@ -424,18 +567,15 @@
             });
         }
 
-        // Toggle Unit
         function setUnit(unit) {
             useMiles = (unit === 'mi');
             document.getElementById('btn-km').classList.toggle('active', !useMiles);
             document.getElementById('btn-mi').classList.toggle('active', useMiles);
-            
             saveData(); 
             updateRotation(); 
             updateDashboard();
         }
         
-        // Toggle Motion
         function toggleMotion() {
             isAnimating = !isAnimating;
             const btn = document.getElementById('btn-motion');
@@ -449,25 +589,17 @@
             }
         }
 
-        /* --- UPDATED ROTATION FUNCTION (SOUTH/NORTH) --- */
         function updateRotation() {
             const lat = latRange.value;
-            
-            // Formatting: Show "°N" for positive, "°S" for negative, "°" for 0
             const hem = lat < 0 ? "°S" : (lat > 0 ? "°N" : "°"); 
             document.getElementById('latDisplay').innerText = Math.abs(lat) + hem;
 
-            // The Math: Math.cos() works perfectly with negative numbers
             const radians = lat * (Math.PI / 180);
             currentRotationSpeed = MAX_ROTATION_SPEED * Math.cos(radians);
             
             let speedDisplay = currentRotationSpeed;
-            let unitLabel = "km/s";
-            
-            if (useMiles) {
-                speedDisplay = currentRotationSpeed * KM_TO_MILES;
-                unitLabel = "mi/s";
-            }
+            let unitLabel = useMiles ? "mi/s" : "km/s";
+            if (useMiles) speedDisplay *= KM_TO_MILES;
             
             document.getElementById('rot-speed-display').innerText = speedDisplay.toFixed(3) + " " + unitLabel;
             updateTotalSpeedDisplay();
@@ -476,13 +608,10 @@
         function updateTotalSpeedDisplay() {
             const totalSpeedKm = currentRotationSpeed + SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY;
             let displayVal = totalSpeedKm;
-            let unit = "km/s";
-            
-            if (useMiles) {
-                displayVal = totalSpeedKm * KM_TO_MILES;
-                unit = "mi/s";
-            }
-            document.getElementById('total-speed-display').innerText = "Traveling at: " + displayVal.toFixed(2) + " " + unit;
+            let unit = useMiles ? "mi/s" : "km/s";
+            if (useMiles) displayVal *= KM_TO_MILES;
+
+            document.getElementById('total-speed-display').innerText = getT('traveling_at') + ": " + displayVal.toFixed(2) + " " + unit;
         }
 
         function calculatePreciseAge(birth, now) {
@@ -514,17 +643,17 @@
             if (birthDate < now) {
                 const age = calculatePreciseAge(birthDate, now);
                 const timeStr = `
-                    <span class="time-unit"><span class="unit-val">${age.years}</span><span class="unit-label">y</span></span>
-                    <span class="time-unit"><span class="unit-val">${age.months}</span><span class="unit-label">m</span></span>
-                    <span class="time-unit"><span class="unit-val">${age.days}</span><span class="unit-label">d</span></span>
+                    <span class="time-unit"><span class="unit-val">${age.years}</span><span class="unit-label">${getT('unit_y')}</span></span>
+                    <span class="time-unit"><span class="unit-val">${age.months}</span><span class="unit-label">${getT('unit_m')}</span></span>
+                    <span class="time-unit"><span class="unit-val">${age.days}</span><span class="unit-label">${getT('unit_d')}</span></span>
                     <span class="time-unit" style="margin-left:10px; color:#aaa">|</span>
-                    <span class="time-unit" style="margin-left:10px"><span class="unit-val">${String(age.hours).padStart(2, '0')}</span><span class="unit-label">h</span></span> :
-                    <span class="time-unit"><span class="unit-val">${String(age.mins).padStart(2, '0')}</span><span class="unit-label">m</span></span> :
-                    <span class="time-unit"><span class="unit-val">${String(age.secs).padStart(2, '0')}</span><span class="unit-label">s</span></span>
+                    <span class="time-unit" style="margin-left:10px"><span class="unit-val">${String(age.hours).padStart(2, '0')}</span><span class="unit-label">${getT('unit_h')}</span></span> :
+                    <span class="time-unit"><span class="unit-val">${String(age.mins).padStart(2, '0')}</span><span class="unit-label">${getT('unit_min')}</span></span> :
+                    <span class="time-unit"><span class="unit-val">${String(age.secs).padStart(2, '0')}</span><span class="unit-label">${getT('unit_s')}</span></span>
                 `;
                 timeDisplayText.innerHTML = timeStr;
             } else {
-                timeDisplayText.innerHTML = "Welcome, Time Traveler";
+                timeDisplayText.innerHTML = getT('welcome');
             }
 
             const secondsAlive = (now - birthDate) / 1000;
@@ -535,19 +664,20 @@
                 const dSolar = secondsAlive * SPEED_SOLAR;
                 const dGalaxy = secondsAlive * SPEED_GALAXY;
                 const dTotal = dRot + dOrbit + dSolar + dGalaxy;
+                const dVector = secondsAlive * (SPEED_GALAXY + SPEED_SOLAR);
 
                 document.getElementById('dist-rot').innerText = format(dRot);
                 document.getElementById('dist-orbit').innerText = format(dOrbit);
                 document.getElementById('dist-solar').innerText = format(dSolar);
                 document.getElementById('dist-galaxy').innerText = format(dGalaxy);
                 document.getElementById('dist-total').innerText = format(dTotal);
-
-                /* --- VECTOR CALCULATION --- */
-                const dVector = secondsAlive * (SPEED_GALAXY + SPEED_SOLAR);
                 document.getElementById('dist-vector').innerText = format(dVector);
 
+                /* --- UPDATED MOON LOGIC --- */
                 const moonTrips = dTotal / DIST_MOON_ROUNDTRIP;
                 document.getElementById('txt-moon').innerText = Math.floor(moonTrips).toLocaleString();
+                const moonProgress = (moonTrips % 1) * 100;
+                document.getElementById('bar-moon').style.width = moonProgress + "%";
 
                 const plutoTrips = dTotal / DIST_PLUTO;
                 document.getElementById('txt-pluto').innerText = Math.floor(plutoTrips).toLocaleString() + "x";
