@@ -63,7 +63,7 @@
             width: 90%;
             box-shadow: 0 0 50px rgba(0,0,0,0.6);
             margin-top: 1rem;
-            position: relative; /* For tooltip positioning */
+            position: relative; 
         }
 
         /* CONTROLS CONTAINER */
@@ -260,10 +260,10 @@
             
             <div class="range-container">
                 <div class="label" style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span>Latitude: <span id="latDisplay" style="color:#00d4ff">0</span>°</span>
+                    <span>Latitude: <span id="latDisplay" style="color:#00d4ff">0°</span></span>
                     <span id="rot-speed-display" style="color:#ffd700">0.465 km/s</span>
                 </div>
-                <input type="range" id="latRange" min="0" max="90" value="0" step="1">
+                <input type="range" id="latRange" min="-90" max="90" value="0" step="1">
             </div>
         </div>
 
@@ -449,9 +449,15 @@
             }
         }
 
+        /* --- UPDATED ROTATION FUNCTION (SOUTH/NORTH) --- */
         function updateRotation() {
             const lat = latRange.value;
-            document.getElementById('latDisplay').innerText = lat;
+            
+            // Formatting: Show "°N" for positive, "°S" for negative, "°" for 0
+            const hem = lat < 0 ? "°S" : (lat > 0 ? "°N" : "°"); 
+            document.getElementById('latDisplay').innerText = Math.abs(lat) + hem;
+
+            // The Math: Math.cos() works perfectly with negative numbers
             const radians = lat * (Math.PI / 180);
             currentRotationSpeed = MAX_ROTATION_SPEED * Math.cos(radians);
             
@@ -536,9 +542,7 @@
                 document.getElementById('dist-galaxy').innerText = format(dGalaxy);
                 document.getElementById('dist-total').innerText = format(dTotal);
 
-                /* --- NEW: VECTOR CALCULATION --- */
-                // We count Galaxy (600) and Solar (220) as linear vectors.
-                // We ignore Orbit (30) and Rotation (0.4) because they loop back on themselves.
+                /* --- VECTOR CALCULATION --- */
                 const dVector = secondsAlive * (SPEED_GALAXY + SPEED_SOLAR);
                 document.getElementById('dist-vector').innerText = format(dVector);
 
@@ -573,7 +577,7 @@
         timeInput.addEventListener('change', () => { updateDashboard(); saveData(); });
         
         // INIT
-        initData(); // Replaced loadSavedData with initData to handle URL params
+        initData(); 
         updateRotation();
         setInterval(updateDashboard, 50);
 
