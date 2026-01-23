@@ -14,8 +14,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cosmic Odometer - Calculate Your Distance Traveled in Space</title>
     
+    <meta name="description" content="Calculate the exact distance you have traveled through the universe since the moment you were born.">
+    <meta property="og:title" content="Cosmic Odometer">
+    <meta property="og:description" content="I have traveled billions of kilometers since birth. Check your cosmic stats here.">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#00d4ff">
+    
     <meta name="google-site-verification" content="hJkIsZVGK6SFUbbTUBl3xvLUFNqCyRkEh5sBY7jx7cw" />
+    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
+
     <style>
         /* CORE STYLES */
         html { color-scheme: dark; }
@@ -57,11 +65,17 @@
             margin-top: 1rem;
         }
 
-        /* UNIT TOGGLE SWITCH */
-        .unit-toggle-container {
+        /* CONTROLS CONTAINER */
+        .controls-container {
             display: flex;
             justify-content: center;
+            gap: 15px;
             margin-bottom: 15px;
+        }
+
+        /* UNIT TOGGLE SWITCH */
+        .unit-toggle-group {
+            display: flex;
         }
         
         .toggle-btn {
@@ -73,6 +87,9 @@
             font-family: inherit;
             font-size: 0.8rem;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .toggle-btn.active {
@@ -81,8 +98,15 @@
             font-weight: bold;
         }
 
-        .toggle-btn:first-child { border-radius: 5px 0 0 5px; }
-        .toggle-btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
+        /* Rounding for the group */
+        .unit-toggle-group .toggle-btn:first-child { border-radius: 5px 0 0 5px; }
+        .unit-toggle-group .toggle-btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
+
+        /* Motion Button */
+        .motion-btn {
+            border-radius: 5px;
+            width: 35px; /* Square-ish */
+        }
 
         /* TIME ALIVE BOX */
         .time-box {
@@ -116,7 +140,6 @@
         
         .total-box { background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%); border: 1px solid #00d4ff; margin-top: 20px; margin-bottom: 30px; }
         
-        /* NEW: Highlight the speed in the total box */
         .total-speed-highlight {
             font-size: 0.8rem;
             color: #00d4ff;
@@ -155,9 +178,13 @@
 
     <div class="container">
         
-        <div class="unit-toggle-container">
-            <button class="toggle-btn active" id="btn-km" onclick="setUnit('km')">KM</button>
-            <button class="toggle-btn" id="btn-mi" onclick="setUnit('mi')">MILES</button>
+        <div class="controls-container">
+            <div class="unit-toggle-group">
+                <button class="toggle-btn active" id="btn-km" onclick="setUnit('km')">KM</button>
+                <button class="toggle-btn" id="btn-mi" onclick="setUnit('mi')">MILES</button>
+            </div>
+            
+            <button class="toggle-btn motion-btn" id="btn-motion" onclick="toggleMotion()" title="Pause Animation">⏸</button>
         </div>
 
         <div class="input-group">
@@ -231,6 +258,11 @@
             <details><summary>Total Distance?</summary><div class="info-text">The sum of all these speeds combined into one total path length since you were born.</div></details>
         </div>
 
+        <div style="margin-top: 30px; font-size: 0.7rem; color: #555; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+            🔒 <strong>Privacy Note:</strong> This site works entirely client-side. 
+            Your birth date is processed locally on your device and is never sent to any server.
+        </div>
+
     </div>
 
     <script>
@@ -252,20 +284,61 @@
         
         // State
         let currentRotationSpeed = MAX_ROTATION_SPEED;
-        let useMiles = false; // Default to KM
+        let useMiles = false; 
+        let isAnimating = true;
 
-        dateInput.valueAsDate = new Date();
+        // 1. LOAD SAVED DATA
+        function loadSavedData() {
+            const savedDate = localStorage.getItem('cosmic_date');
+            const savedTime = localStorage.getItem('cosmic_time');
+            const savedLat = localStorage.getItem('cosmic_lat');
+            const savedUnit = localStorage.getItem('cosmic_unit');
 
-        // Toggle Function
+            if (savedDate) dateInput.value = savedDate;
+            else dateInput.valueAsDate = new Date(); 
+
+            if (savedTime) timeInput.value = savedTime;
+            if (savedLat) latRange.value = savedLat;
+            
+            if (savedUnit === 'mi') {
+                useMiles = true;
+                document.getElementById('btn-km').classList.remove('active');
+                document.getElementById('btn-mi').classList.add('active');
+            }
+        }
+
+        // 2. SAVE DATA FUNCTION
+        function saveData() {
+            localStorage.setItem('cosmic_date', dateInput.value);
+            localStorage.setItem('cosmic_time', timeInput.value);
+            localStorage.setItem('cosmic_lat', latRange.value);
+            localStorage.setItem('cosmic_unit', useMiles ? 'mi' : 'km');
+        }
+
+        // Toggle Unit
         function setUnit(unit) {
             useMiles = (unit === 'mi');
-            // Update Buttons
             document.getElementById('btn-km').classList.toggle('active', !useMiles);
             document.getElementById('btn-mi').classList.toggle('active', useMiles);
             
-            // Trigger update immediately
+            saveData(); 
             updateRotation(); 
             updateDashboard();
+        }
+        
+        // Toggle Motion
+        function toggleMotion() {
+            isAnimating = !isAnimating;
+            const btn = document.getElementById('btn-motion');
+            if (isAnimating) {
+                btn.innerText = "⏸";
+                btn.title = "Pause Animation";
+                animateStars(); // Restart loop
+            } else {
+                btn.innerText = "▶";
+                btn.title = "Play Animation";
+                // Loop stops automatically because check is inside animateStars
+            }
         }
 
         function updateRotation() {
@@ -274,7 +347,6 @@
             const radians = lat * (Math.PI / 180);
             currentRotationSpeed = MAX_ROTATION_SPEED * Math.cos(radians);
             
-            // Update Speed Display (KM or Miles)
             let speedDisplay = currentRotationSpeed;
             let unitLabel = "km/s";
             
@@ -284,14 +356,11 @@
             }
             
             document.getElementById('rot-speed-display').innerText = speedDisplay.toFixed(3) + " " + unitLabel;
-            
-            // Update TOTAL Speed Display (New Feature)
             updateTotalSpeedDisplay();
         }
         
         function updateTotalSpeedDisplay() {
             const totalSpeedKm = currentRotationSpeed + SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY;
-            
             let displayVal = totalSpeedKm;
             let unit = "km/s";
             
@@ -299,8 +368,6 @@
                 displayVal = totalSpeedKm * KM_TO_MILES;
                 unit = "mi/s";
             }
-            
-            // Update the new element
             document.getElementById('total-speed-display').innerText = "Traveling at: " + displayVal.toFixed(2) + " " + unit;
         }
 
@@ -361,7 +428,6 @@
                 document.getElementById('dist-galaxy').innerText = format(dGalaxy);
                 document.getElementById('dist-total').innerText = format(dTotal);
 
-                // Milestones (Ratios don't change based on units)
                 const moonTrips = dTotal / DIST_MOON_ROUNDTRIP;
                 document.getElementById('txt-moon').innerText = Math.floor(moonTrips).toLocaleString();
 
@@ -377,24 +443,25 @@
             }
         }
 
-        // Format Helper that handles conversion
         function format(numInKm) {
             let val = numInKm;
             let unit = " km";
-            
             if (useMiles) {
                 val = numInKm * KM_TO_MILES;
                 unit = " mi";
             }
-            
             return Math.floor(val).toLocaleString() + unit;
         }
 
-        latRange.addEventListener('input', updateRotation);
-        dateInput.addEventListener('change', updateDashboard);
-        timeInput.addEventListener('change', updateDashboard);
+        // LISTENERS
+        latRange.addEventListener('input', () => { updateRotation(); saveData(); });
+        dateInput.addEventListener('change', () => { updateDashboard(); saveData(); });
+        timeInput.addEventListener('change', () => { updateDashboard(); saveData(); });
+        
+        // INIT
+        loadSavedData(); 
+        updateRotation();
         setInterval(updateDashboard, 50);
-        updateRotation(); 
 
         /* --- STARFIELD --- */
         const canvas = document.getElementById('starfield');
@@ -405,6 +472,8 @@
         resize();
         const stars = Array(800).fill().map(() => ({ x: (Math.random() - 0.5) * w * 2, y: (Math.random() - 0.5) * h * 2, z: Math.random() * w, pz: 0 }));
         function animateStars() {
+            if (!isAnimating) return; // Stop if paused
+
             ctx.clearRect(-w/2, -h/2, w, h);
             stars.forEach(s => {
                 s.z -= 25; 
@@ -420,4 +489,3 @@
     </script>
 </body>
 </html>
-
