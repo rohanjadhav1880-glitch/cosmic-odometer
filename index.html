@@ -150,15 +150,16 @@
         .unit-label { font-size: 0.8em; color: #666; }
 
         /* INPUTS */
-        .input-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .input-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 10px; align-items: center; }
         .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
         input { background: #1a1d2e; border: 1px solid #00d4ff; color: white; padding: 10px; font-family: inherit; border-radius: 5px; outline: none; font-size: 16px; }
         
-        .range-container { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; }
+        .range-container { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; margin-top: 5px; }
         input[type="range"] { width: 100%; accent-color: #00d4ff; cursor: pointer; }
 
         /* METRICS */
-        .metric { margin: 10px 0; padding: 12px 15px; background: rgba(0, 0, 0, 0.5); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid transparent; cursor: help; position: relative; }
+        /* FIXED: Changed cursor from 'help' to 'default' to avoid confusion */
+        .metric { margin: 10px 0; padding: 12px 15px; background: rgba(0, 0, 0, 0.5); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid transparent; cursor: default; position: relative; }
         .metric:hover { background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; }
         .label { font-size: 0.85rem; color: #8892b0; }
         .value { font-size: 1.1rem; font-weight: bold; color: #ffd700; font-variant-numeric: tabular-nums; text-align: right; }
@@ -264,6 +265,8 @@
         </div>
 
         <div class="input-group">
+            <div style="color: #00d4ff; font-size: 0.9rem; font-weight: bold; text-transform: uppercase;">ENTER BIRTH DATE:</div>
+            
             <div class="row">
                 <input type="date" id="birthDate">
                 <input type="time" id="birthTime" value="12:00">
@@ -743,4 +746,3 @@
 </div>
 </body>
 </html>
-
