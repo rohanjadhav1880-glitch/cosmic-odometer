@@ -745,7 +745,7 @@
         initData();
         updateRotation();
         updateDashboard();
-        setInterval(updateDashboard, 250); // was 50ms; much lighter on CPU
+        setInterval(updateDashboard, 100);
 
         /* --- STARFIELD --- */
         const canvas = document.getElementById('starfield');
@@ -812,3 +812,4 @@
 
 </body>
 </html>
+
