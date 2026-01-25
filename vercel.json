@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "cosmic-odometer.vercel.app"
+        }
+      ],
+      "destination": "https://cosmicodometer.space/:path*",
+      "permanent": true
+    }
+  ]
+}
