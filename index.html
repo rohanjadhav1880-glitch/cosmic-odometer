@@ -24,7 +24,6 @@
     <meta name="twitter:description" content="Calculate the distance you’ve traveled through space since birth.">
     <meta name="twitter:image" content="https://fav.farm/🪐">
 
-
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
 
     <style>
@@ -228,6 +227,56 @@
         summary::after { content: "+"; color: #00d4ff; font-weight: bold; }
         details[open] summary::after { content: "-"; }
         .info-text { padding: 0 15px 15px 15px; font-size: 0.8rem; color: #8892b0; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; padding-top: 10px; }
+
+        /* --- NEW FOOTER STYLES --- */
+        .footer-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .privacy-text {
+            font-size: 0.7rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .coffee-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ccc;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .coffee-btn:hover {
+            background: rgba(255, 221, 0, 0.15); /* Subtle yellow tint */
+            color: #ffd700;
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .author-link {
+            font-size: 0.8rem;
+            color: #00d4ff;
+            text-decoration: none;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .author-link:hover { opacity: 1; }
+
     </style>
 </head>
 <body>
@@ -341,22 +390,20 @@
             <details><summary data-i18n="faq_5_q">Total Distance?</summary><div class="info-text" data-i18n="faq_5_a">The sum of these speeds into one total path length since you were born (fun approximation).</div></details>
         </div>
 
-        <div style="margin-top: 30px; font-size: 0.7rem; color: #555; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-            <span data-i18n="privacy">🔒 Privacy Note: Your birth date/time are processed locally and are not sent to our server. This site uses analytics for basic traffic stats.</span>
-        </div>
-    </div>
+        <div class="footer-section">
+            <div class="privacy-text" data-i18n="privacy">
+                🔒 Privacy Note: Your birth date/time are processed locally and are not sent to our server. This site uses analytics for basic traffic stats.
+            </div>
 
-    <div style="position: fixed; bottom: 15px; right: 15px; z-index: 9999; font-family: sans-serif; font-size: 14px; opacity: 0.8; text-align: right; line-height: 1.4;">
-        <div style="margin-bottom: 5px;">
-            <a href="mailto:solura.social@gmail.com" style="color: rgba(255, 255, 255, 0.6); text-decoration: none; border-bottom: 1px dotted rgba(255, 255, 255, 0.3);">
+            <a href="https://www.buymeacoffee.com/nemo7299" target="_blank" rel="noopener noreferrer" class="coffee-btn">
+                <span>🚀</span> Keep the odometer spinning
+            </a>
+
+            <a href="mailto:solura.social@gmail.com" class="author-link">
                 Created by @nemo7299
             </a>
         </div>
-        <div>
-            <a href="https://www.buymeacoffee.com/nemo7299" target="_blank" style="color: #00d4ff; text-decoration: none; font-weight: bold; border-bottom: 1px dotted #00d4ff;">
-                Keep the odometer spinning ☕
-            </a>
-        </div>
+
     </div>
 
     <script>
