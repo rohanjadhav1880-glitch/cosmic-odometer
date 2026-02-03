@@ -820,7 +820,7 @@
         const resize = () => {
             w = canvas.width = window.innerWidth;
             h = canvas.height = window.innerHeight;
-            // FIX: reset transform so translate doesn't stack on every resize
+            
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.translate(w / 2, h / 2);
         };
