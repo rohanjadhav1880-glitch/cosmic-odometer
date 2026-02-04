@@ -299,6 +299,7 @@
 
             <button class="toggle-btn icon-btn" id="btn-motion" onclick="toggleMotion()" title="Pause Animation">⏸</button>
             <button class="toggle-btn icon-btn" onclick="shareLink()" title="Copy Share Link">🔗</button>
+            <button class="toggle-btn icon-btn" onclick="generateReceipt()" title="Download Travel Log">🧾</button>
 
             <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
                 <option value="en">English</option>
@@ -799,6 +800,122 @@
                 unit = " mi";
             }
             return Math.floor(val).toLocaleString() + unit;
+        }
+
+        /* --- NEW FUNCTION: GENERATE RECEIPT --- */
+        function generateReceipt() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set resolution for a vertical social story (1080x1920 scaled down slightly for receipt look)
+            const width = 600;
+            const height = 1000;
+            canvas.width = width;
+            canvas.height = height;
+
+            // 1. Draw Background (Dark Hex from your CSS)
+            ctx.fillStyle = '#0b0d17';
+            ctx.fillRect(0, 0, width, height);
+
+            // Add faint grid for sci-fi texture
+            ctx.strokeStyle = '#1a1d2e';
+            ctx.lineWidth = 1;
+            for(let i=0; i<width; i+=40) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,height); ctx.stroke(); }
+            for(let i=0; i<height; i+=40) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(width,i); ctx.stroke(); }
+
+            // 2. Text Setup
+            const margin = 50;
+            let cursorY = 100;
+            const distTotal = document.getElementById('dist-total').innerText;
+            const birthDateStr = dateInput.value || "UNKNOWN";
+            // Extract just the speed number/unit
+            const speedTextFull = document.getElementById('total-speed-display').innerText;
+            const speedVal = speedTextFull.includes(': ') ? speedTextFull.split(': ')[1] : speedTextFull;
+
+            ctx.textAlign = 'center';
+            
+            // Header
+            ctx.fillStyle = '#00d4ff'; // Your theme cyan
+            ctx.font = 'bold 40px "Courier New", monospace';
+            ctx.fillText("COSMIC ODOMETER", width / 2, cursorY);
+            
+            cursorY += 50;
+            ctx.fillStyle = '#8892b0';
+            ctx.font = '24px "Courier New", monospace';
+            ctx.fillText("OFFICIAL TRAVEL LOG", width / 2, cursorY);
+
+            // Divider
+            cursorY += 40;
+            ctx.strokeStyle = '#00d4ff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin, cursorY);
+            ctx.lineTo(width - margin, cursorY);
+            ctx.stroke();
+
+            // Stats
+            cursorY += 60;
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#8892b0'; // Label color
+            ctx.font = '20px "Courier New", monospace';
+            ctx.fillText("PASSENGER ORIGIN:", margin, cursorY);
+            
+            cursorY += 35;
+            ctx.fillStyle = '#ffffff'; // Value color
+            ctx.font = 'bold 30px "Courier New", monospace';
+            ctx.fillText("EARTH / " + birthDateStr, margin, cursorY);
+
+            cursorY += 70;
+            ctx.fillStyle = '#8892b0';
+            ctx.font = '20px "Courier New", monospace';
+            ctx.fillText("CURRENT STATUS:", margin, cursorY);
+            
+            cursorY += 35;
+            ctx.fillStyle = '#ffd700'; // Gold/Yellow
+            ctx.fillText("DRIFTING THROUGH VOID", margin, cursorY);
+
+            cursorY += 70;
+            ctx.fillStyle = '#8892b0';
+            ctx.font = '20px "Courier New", monospace';
+            ctx.fillText("TOTAL DISTANCE:", margin, cursorY);
+
+            cursorY += 50;
+            ctx.fillStyle = '#00d4ff'; // Cyan
+            ctx.font = 'bold 48px "Courier New", monospace';
+            // Scale text if it's too long
+            if(distTotal.length > 15) ctx.font = 'bold 36px "Courier New", monospace';
+            ctx.fillText(distTotal, margin, cursorY);
+
+            cursorY += 70;
+            ctx.fillStyle = '#8892b0'; // Label color
+            ctx.font = '20px "Courier New", monospace';
+            ctx.fillText("VELOCITY:", margin, cursorY);
+
+            cursorY += 35;
+            ctx.fillStyle = '#ff0055'; // Pink accent
+            ctx.font = 'bold 30px "Courier New", monospace';
+            ctx.fillText(speedVal, margin, cursorY);
+
+            // Footer / URL
+            cursorY = height - 120;
+            ctx.strokeStyle = '#333';
+            ctx.beginPath(); ctx.moveTo(margin, cursorY); ctx.lineTo(width-margin, cursorY); ctx.stroke();
+            
+            cursorY += 60;
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#fff';
+            ctx.font = '20px "Courier New", monospace';
+            ctx.fillText("cosmicodometer.space", width/2, cursorY);
+
+            // Download
+            try {
+                const link = document.createElement('a');
+                link.download = 'cosmic-receipt.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch(e) {
+                alert("Could not download image. Browser restriction?");
+            }
         }
 
         // LISTENERS
