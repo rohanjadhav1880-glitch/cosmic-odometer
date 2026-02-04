@@ -14,14 +14,13 @@
     <title>Cosmic Odometer - Space Travel Calculator</title>
     <link rel="canonical" href="https://cosmicodometer.space" />
 
-    <meta name="description" content="Calculate the distance you’ve traveled through space since birth (fun, simplified averages).">
+    <meta name="description" content="Calculate the distance you’ve traveled through space since birth.">
     <meta property="og:title" content="Cosmic Odometer">
     <meta property="og:description" content="I have traveled billions of kilometers since birth. Check your cosmic stats here.">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#00d4ff">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Cosmic Odometer - Space Travel Calculator">
-    <meta name="twitter:description" content="Calculate the distance you’ve traveled through space since birth.">
+    <meta name="twitter:title" content="Cosmic Odometer">
     <meta name="twitter:image" content="https://fav.farm/🪐">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
@@ -193,22 +192,8 @@
             border-radius: 13px 0 10px 0;
         }
 
-        .d-title {
-            color: #ff0055;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .d-value {
-            color: #fff;
-            font-size: 1.4rem;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
-            font-variant-numeric: tabular-nums;
-        }
-
+        .d-title { color: #ff0055; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+        .d-value { color: #fff; font-size: 1.4rem; font-weight: bold; text-shadow: 0 0 10px rgba(255, 0, 85, 0.5); font-variant-numeric: tabular-nums; }
         .d-note { font-size: 0.75rem; color: #ff99bb; margin-top: 10px; font-style: italic; opacity: 0.8; line-height: 1.4; }
 
         .milestone-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
@@ -217,6 +202,48 @@
         .p-bar-bg { width: 100%; height: 10px; background: #0f111a; border-radius: 5px; overflow: hidden; }
         .p-bar-fill { height: 100%; background: linear-gradient(90deg, #00d4ff, #0055ff); width: 0%; transition: width 0.5s ease; }
         .p-detail { font-size: 0.75rem; color: #8892b0; margin-top: 8px; text-align: right; }
+
+        /* --- MULTIPLAYER BOX STYLES --- */
+        .multiplayer-box {
+            border: 1px solid #9d4edd;
+            background: rgba(157, 78, 221, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+        .multiplayer-box h3 {
+            margin: 0 0 15px 0;
+            color: #e0aaff;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .friend-input-wrapper {
+            display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px;
+        }
+        .compare-btn {
+            background: rgba(157, 78, 221, 0.2);
+            border: 1px solid #9d4edd;
+            color: #e0aaff;
+            width: 100%;
+            padding: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: 0.2s;
+            border-radius: 5px;
+        }
+        .compare-btn:hover { background: #9d4edd; color: #000; }
+        .result-row { 
+            margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(157, 78, 221, 0.3); display: none;
+        }
+        .result-row.active { display: block; animation: fadeIn 0.5s; }
+        .res-label { font-size: 0.8rem; color: #c77dff; margin-bottom: 5px; }
+        .res-val { font-size: 1.2rem; font-weight: bold; color: #fff; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         .manual-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; color: #00d4ff; margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
         .details-grid { display: grid; gap: 10px; }
@@ -228,53 +255,11 @@
         details[open] summary::after { content: "-"; }
         .info-text { padding: 0 15px 15px 15px; font-size: 0.8rem; color: #8892b0; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; padding-top: 10px; }
 
-        /* --- NEW FOOTER STYLES --- */
-        .footer-section {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .privacy-text {
-            font-size: 0.7rem;
-            color: #555;
-            line-height: 1.4;
-        }
-
-        .coffee-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #ccc;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .coffee-btn:hover {
-            background: rgba(255, 221, 0, 0.15); /* Subtle yellow tint */
-            color: #ffd700;
-            border-color: #ffd700;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .author-link {
-            font-size: 0.8rem;
-            color: #00d4ff;
-            text-decoration: none;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
+        .footer-section { margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .privacy-text { font-size: 0.7rem; color: #555; line-height: 1.4; }
+        .coffee-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); color: #ccc; padding: 10px 20px; border-radius: 30px; font-size: 0.9rem; transition: all 0.3s ease; }
+        .coffee-btn:hover { background: rgba(255, 221, 0, 0.15); color: #ffd700; border-color: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); transform: translateY(-2px); }
+        .author-link { font-size: 0.8rem; color: #00d4ff; text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
         .author-link:hover { opacity: 1; }
 
     </style>
@@ -363,17 +348,42 @@
                 A simple estimate that ignores circular paths (spin/orbit). Not a true “from birth point” vector.
             </div>
         </div>
+        
+        <div class="multiplayer-box">
+            <h3>👩‍🚀 Cosmic Connection</h3>
+            <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Compare your flight path with a friend.</div>
+            
+            <div class="friend-input-wrapper">
+                <input type="date" id="friendDate" style="border-color: #9d4edd; background: rgba(0,0,0,0.3);">
+                <button class="compare-btn" onclick="calculateConnection()">CALCULATE GAP</button>
+            </div>
+
+            <div id="connection-results" class="result-row">
+                <div style="margin-bottom: 20px;">
+                    <div class="res-label">DISTANCE APART AT BIRTH</div>
+                    <div class="res-val" id="res-gap">0 km</div>
+                    <div style="font-size:0.7rem; color:#9d4edd; margin-top:3px;">
+                        The distance Earth traveled between your two birthdays.
+                    </div>
+                </div>
+                <div>
+                    <div class="res-label">SHARED JOURNEY</div>
+                    <div class="res-val" id="res-shared">0 km</div>
+                    <div style="font-size:0.7rem; color:#9d4edd; margin-top:3px;">
+                        Distance traveled together since you both existed.
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="milestone-section">
             <div class="progress-card">
                 <div class="p-header"><span data-i18n="moon_trips">Moon Round Trips</span><span id="txt-moon" style="color:#ffd700">0</span></div>
                 <div class="p-bar-bg"><div class="p-bar-fill" id="bar-moon" style="background: linear-gradient(90deg, #00d4ff, #ffffff);"></div></div>
-                <div class="p-detail" data-i18n="moon_desc">Enough distance to fly to the Moon and back.</div>
             </div>
             <div class="progress-card">
                 <div class="p-header"><span data-i18n="passed_pluto">Passed Pluto</span><span id="txt-pluto" style="color:#ffd700">0x</span></div>
                 <div class="p-bar-bg"><div class="p-bar-fill" id="bar-pluto"></div></div>
-                <div class="p-detail" data-i18n="pluto_desc">Laps of the entire Solar System.</div>
             </div>
             <div class="progress-card">
                 <div class="p-header"><span data-i18n="light_year_prog">Progress to 1 Light Year</span><span id="txt-light" style="color:#ffd700">0%</span></div>
@@ -384,27 +394,22 @@
 
         <h3 class="manual-title" data-i18n="manual_title">Flight Manual</h3>
         <div class="details-grid">
-            <details><summary data-i18n="faq_1_q">1. What is "Rotated"?</summary><div class="info-text" data-i18n="faq_1_a">Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.</div></details>
-            <details><summary data-i18n="faq_2_q">2. What is "Orbited Sun"?</summary><div class="info-text" data-i18n="faq_2_a">Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.</div></details>
-            <details><summary data-i18n="faq_3_q">3. What is "Solar Travel"?</summary><div class="info-text" data-i18n="faq_3_a">The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).</div></details>
-            <details><summary data-i18n="faq_4_q">4. What is "Galactic Travel"?</summary><div class="info-text" data-i18n="faq_4_a">Our Galaxy moves at ~600 km/s (simplified) relative to the cosmic background.</div></details>
-            <details><summary data-i18n="faq_5_q">Total Distance?</summary><div class="info-text" data-i18n="faq_5_a">The sum of these speeds into one total path length since you were born (fun approximation).</div></details>
+            <details><summary>1. What is "Distance Apart"?</summary><div class="info-text">Because the Galaxy is moving at 2.1 million km/h, the Earth was in a completely different part of the universe when your friend was born compared to when you were born.</div></details>
+            <details><summary data-i18n="faq_1_q">2. What is "Rotated"?</summary><div class="info-text" data-i18n="faq_1_a">Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.</div></details>
+            <details><summary data-i18n="faq_2_q">3. What is "Orbited Sun"?</summary><div class="info-text" data-i18n="faq_2_a">Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.</div></details>
+            <details><summary data-i18n="faq_3_q">4. What is "Solar Travel"?</summary><div class="info-text" data-i18n="faq_3_a">The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).</div></details>
+            <details><summary data-i18n="faq_4_q">5. What is "Galactic Travel"?</summary><div class="info-text" data-i18n="faq_4_a">Our Galaxy moves at ~600 km/s (simplified) relative to the cosmic background.</div></details>
         </div>
 
         <div class="footer-section">
             <div class="privacy-text" data-i18n="privacy">
-                🔒 Privacy Note: Your birth date/time are processed locally and are not sent to our server. This site uses analytics for basic traffic stats.
+                🔒 Privacy Note: Your birth date/time are processed locally.
             </div>
-
             <a href="https://www.buymeacoffee.com/nemo7299" target="_blank" rel="noopener noreferrer" class="coffee-btn">
                 <span>🚀</span> Keep the odometer spinning 🧋
             </a>
-
-            <a href="https://github.com/rohanjadhav1880-glitch/cosmic-odometer" class="author-link">
-                Created by @nemo7299
-            </a>
+            <a href="https://github.com/rohanjadhav1880-glitch/cosmic-odometer" class="author-link">Created by @nemo7299</a>
         </div>
-
     </div>
 
     <script>
@@ -468,7 +473,7 @@
                 faq_4_a: "Our Galaxy moves at ~600 km/s (simplified) relative to the cosmic background.",
                 faq_5_q: "Total Distance?",
                 faq_5_a: "The sum of these speeds into one total path length since you were born (fun approximation).",
-                privacy: "🔒 Privacy Note: Your birth date/time are processed locally and are not sent to our server. This site uses analytics for basic traffic stats.",
+                privacy: "🔒 Privacy Note: Your birth date/time are processed locally and are not sent to our server.",
                 unit_y: "y", unit_mo: "mo", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
                 welcome: "Welcome, Time Traveler"
             },
@@ -504,7 +509,7 @@
                 faq_4_a: "Notre galaxie se déplace à ~600 km/s (simplifié) par rapport au fond cosmique.",
                 faq_5_q: "Distance totale ?",
                 faq_5_a: "Somme des vitesses en une longueur totale (approximation).",
-                privacy: "🔒 Confidentialité : la date/heure de naissance est traitée localement et non envoyée à notre serveur. Le site utilise des analytics.",
+                privacy: "🔒 Confidentialité : la date/heure de naissance est traitée localement.",
                 unit_y: "a", unit_mo: "mo", unit_d: "j", unit_h: "h", unit_min: "min", unit_s: "s",
                 welcome: "Bienvenue"
             },
@@ -540,7 +545,7 @@
                 faq_4_a: "Nuestra galaxia se mueve a ~600 km/s (simplificado) relativo al fondo cósmico.",
                 faq_5_q: "¿Distancia total?",
                 faq_5_a: "Suma de velocidades como una longitud total (aprox.).",
-                privacy: "🔒 Privacidad: fecha/hora procesadas localmente y no enviadas a nuestro servidor. El sitio usa analytics.",
+                privacy: "🔒 Privacidad: fecha/hora procesadas localmente.",
                 unit_y: "a", unit_mo: "mo", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
                 welcome: "Bienvenido"
             },
@@ -576,7 +581,7 @@
                 faq_4_a: "銀河は宇宙背景に対して約600km/s（簡易）で移動します。",
                 faq_5_q: "総移動距離とは？",
                 faq_5_a: "速度を合計した総距離（概算）です。",
-                privacy: "🔒 プライバシー：誕生日/時刻はローカル処理され、当サイトのサーバーには送信されません。アクセス解析を使用します。",
+                privacy: "🔒 プライバシー：誕生日/時刻はローカル処理され、当サイトのサーバーには送信されません。",
                 unit_y: "年", unit_mo: "ヶ月", unit_d: "日", unit_h: "時間", unit_min: "分", unit_s: "秒",
                 welcome: "ようこそ、タイムトラベラー"
             }
@@ -596,7 +601,6 @@
             const savedUnit = localStorage.getItem('cosmic_unit');
             const savedLang = localStorage.getItem('cosmic_lang');
 
-            // Language priority: URL -> localStorage -> default
             const urlLang = urlParams.get('lang');
             if (urlLang && translations[urlLang]) {
                 currentLang = urlLang;
@@ -606,7 +610,6 @@
             langSelect.value = currentLang;
             applyLanguage(currentLang);
 
-            // Date priority: URL -> storage -> today
             if (urlParams.has('date')) dateInput.value = urlParams.get('date');
             else if (savedDate) dateInput.value = savedDate;
             else dateInput.valueAsDate = new Date();
@@ -617,7 +620,6 @@
             if (urlParams.has('lat')) latRange.value = urlParams.get('lat');
             else if (savedLat) latRange.value = savedLat;
 
-            // Unit priority: URL -> storage -> default
             const urlUnit = urlParams.get('unit');
             const effectiveUnit = urlUnit || savedUnit || 'km';
             useMiles = (effectiveUnit === 'mi');
@@ -737,6 +739,45 @@
             return { years, months, days, hours, mins, secs };
         }
 
+        /* --- NEW FUNCTION: COSMIC CONNECTION --- */
+        function calculateConnection() {
+            const myDate = new Date(dateInput.value + "T12:00");
+            const friendDateStr = document.getElementById('friendDate').value;
+            
+            if (!friendDateStr) {
+                alert("Please enter a friend's birth date!");
+                return;
+            }
+            const friendDate = new Date(friendDateStr + "T12:00");
+            
+            // 1. Calculate Gap (Distance apart at birth)
+            // Use absolute time difference
+            const diffMs = Math.abs(myDate - friendDate);
+            const diffSeconds = diffMs / 1000;
+            
+            // Total system velocity (Orbit + Solar + Galaxy)
+            // We ignore rotation because that's local
+            const systemVelocity = SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY; 
+            
+            const gapDistance = diffSeconds * systemVelocity;
+            
+            // 2. Calculate Shared Journey (Time since younger person was born)
+            // Younger person = Later date (larger value)
+            const youngerDate = (myDate > friendDate) ? myDate : friendDate;
+            const now = new Date();
+            
+            let sharedDistance = 0;
+            if (now > youngerDate) {
+                const sharedSeconds = (now - youngerDate) / 1000;
+                sharedDistance = sharedSeconds * (currentRotationSpeed + systemVelocity);
+            }
+
+            // Display
+            document.getElementById('connection-results').classList.add('active');
+            document.getElementById('res-gap').innerText = format(gapDistance);
+            document.getElementById('res-shared').innerText = format(sharedDistance);
+        }
+
         function updateDashboard() {
             const birthStr = `${dateInput.value}T${timeInput.value}`;
             const birthDate = new Date(birthStr);
@@ -767,7 +808,6 @@
                 const dGalaxy = secondsAlive * SPEED_GALAXY;
                 const dTotal = dRot + dOrbit + dSolar + dGalaxy;
 
-                // Honest name: linear estimate ignoring circular paths.
                 const dLinear = secondsAlive * (SPEED_GALAXY + SPEED_SOLAR);
 
                 document.getElementById('dist-rot').innerText = format(dRot);
@@ -802,40 +842,31 @@
             return Math.floor(val).toLocaleString() + unit;
         }
 
-        /* --- NEW FUNCTION: GENERATE RECEIPT --- */
         function generateReceipt() {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             
-            // Set resolution for a vertical social story (1080x1920 scaled down slightly for receipt look)
             const width = 600;
             const height = 1000;
             canvas.width = width;
             canvas.height = height;
 
-            // 1. Draw Background (Dark Hex from your CSS)
             ctx.fillStyle = '#0b0d17';
             ctx.fillRect(0, 0, width, height);
-
-            // Add faint grid for sci-fi texture
             ctx.strokeStyle = '#1a1d2e';
             ctx.lineWidth = 1;
             for(let i=0; i<width; i+=40) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,height); ctx.stroke(); }
             for(let i=0; i<height; i+=40) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(width,i); ctx.stroke(); }
 
-            // 2. Text Setup
             const margin = 50;
             let cursorY = 100;
             const distTotal = document.getElementById('dist-total').innerText;
             const birthDateStr = dateInput.value || "UNKNOWN";
-            // Extract just the speed number/unit
             const speedTextFull = document.getElementById('total-speed-display').innerText;
             const speedVal = speedTextFull.includes(': ') ? speedTextFull.split(': ')[1] : speedTextFull;
 
             ctx.textAlign = 'center';
-            
-            // Header
-            ctx.fillStyle = '#00d4ff'; // Your theme cyan
+            ctx.fillStyle = '#00d4ff'; 
             ctx.font = 'bold 40px "Courier New", monospace';
             ctx.fillText("COSMIC ODOMETER", width / 2, cursorY);
             
@@ -844,7 +875,6 @@
             ctx.font = '24px "Courier New", monospace';
             ctx.fillText("OFFICIAL TRAVEL LOG", width / 2, cursorY);
 
-            // Divider
             cursorY += 40;
             ctx.strokeStyle = '#00d4ff';
             ctx.lineWidth = 2;
@@ -853,15 +883,14 @@
             ctx.lineTo(width - margin, cursorY);
             ctx.stroke();
 
-            // Stats
             cursorY += 60;
             ctx.textAlign = 'left';
-            ctx.fillStyle = '#8892b0'; // Label color
+            ctx.fillStyle = '#8892b0'; 
             ctx.font = '20px "Courier New", monospace';
             ctx.fillText("PASSENGER ORIGIN:", margin, cursorY);
             
             cursorY += 35;
-            ctx.fillStyle = '#ffffff'; // Value color
+            ctx.fillStyle = '#ffffff'; 
             ctx.font = 'bold 30px "Courier New", monospace';
             ctx.fillText("EARTH / " + birthDateStr, margin, cursorY);
 
@@ -871,7 +900,7 @@
             ctx.fillText("CURRENT STATUS:", margin, cursorY);
             
             cursorY += 35;
-            ctx.fillStyle = '#ffd700'; // Gold/Yellow
+            ctx.fillStyle = '#ffd700'; 
             ctx.fillText("DRIFTING THROUGH VOID", margin, cursorY);
 
             cursorY += 70;
@@ -880,23 +909,21 @@
             ctx.fillText("TOTAL DISTANCE:", margin, cursorY);
 
             cursorY += 50;
-            ctx.fillStyle = '#00d4ff'; // Cyan
+            ctx.fillStyle = '#00d4ff'; 
             ctx.font = 'bold 48px "Courier New", monospace';
-            // Scale text if it's too long
             if(distTotal.length > 15) ctx.font = 'bold 36px "Courier New", monospace';
             ctx.fillText(distTotal, margin, cursorY);
 
             cursorY += 70;
-            ctx.fillStyle = '#8892b0'; // Label color
+            ctx.fillStyle = '#8892b0'; 
             ctx.font = '20px "Courier New", monospace';
             ctx.fillText("VELOCITY:", margin, cursorY);
 
             cursorY += 35;
-            ctx.fillStyle = '#ff0055'; // Pink accent
+            ctx.fillStyle = '#ff0055'; 
             ctx.font = 'bold 30px "Courier New", monospace';
             ctx.fillText(speedVal, margin, cursorY);
 
-            // Footer / URL
             cursorY = height - 120;
             ctx.strokeStyle = '#333';
             ctx.beginPath(); ctx.moveTo(margin, cursorY); ctx.lineTo(width-margin, cursorY); ctx.stroke();
@@ -907,7 +934,6 @@
             ctx.font = '20px "Courier New", monospace';
             ctx.fillText("cosmicodometer.space", width/2, cursorY);
 
-            // Download
             try {
                 const link = document.createElement('a');
                 link.download = 'cosmic-receipt.png';
@@ -918,18 +944,15 @@
             }
         }
 
-        // LISTENERS
         latRange.addEventListener('input', () => { updateRotation(); saveData(); });
         dateInput.addEventListener('change', () => { updateDashboard(); saveData(); });
         timeInput.addEventListener('change', () => { updateDashboard(); saveData(); });
 
-        // INIT
         initData();
         updateRotation();
         updateDashboard();
         setInterval(updateDashboard, 100);
 
-        /* --- STARFIELD --- */
         const canvas = document.getElementById('starfield');
         const ctx = canvas.getContext('2d');
         let w, h;
