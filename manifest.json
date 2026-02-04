@@ -1,0 +1,21 @@
+{
+  "name": "Cosmic Odometer",
+  "short_name": "CosmicOdometer",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00d4ff",
+  "description": "Track your travel through the universe.",
+  "icons": [
+    {
+      "src": "https://fav.farm/🪐",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://fav.farm/🪐",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
