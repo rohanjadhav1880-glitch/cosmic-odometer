@@ -13,6 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cosmic Odometer - Space Travel Calculator</title>
     <link rel="canonical" href="https://cosmicodometer.space" />
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://fav.farm/🪐">
 
     <meta name="description" content="Calculate the distance you’ve traveled through space since birth.">
     <meta property="og:title" content="Cosmic Odometer">
@@ -88,7 +91,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 5px; /* Added radius for all btns */
         }
+        
+        .toggle-btn:hover { background: rgba(0, 212, 255, 0.2); }
 
         .toggle-btn.active {
             background: #00d4ff;
@@ -96,10 +102,15 @@
             font-weight: bold;
         }
 
+        .unit-toggle-group .toggle-btn { border-radius: 0; } /* Reset for group */
         .unit-toggle-group .toggle-btn:first-child { border-radius: 5px 0 0 5px; }
         .unit-toggle-group .toggle-btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
 
         .icon-btn { border-radius: 5px; width: 35px; }
+        
+        /* NEW: Install Button (Hidden by default) */
+        #installBtn { display: none; border-color: #00ff41; color: #00ff41; font-weight: bold; }
+        #installBtn:hover { background: rgba(0, 255, 65, 0.2); }
         
         /* Social Button Colors */
         .btn-x { border-color: #fff; color: #fff; }
@@ -165,6 +176,15 @@
         .value { font-size: 1.1rem; font-weight: bold; color: #ffd700; font-variant-numeric: tabular-nums; text-align: right; }
 
         .total-box { background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%); border: 1px solid #00d4ff; margin-top: 20px; margin-bottom: 20px; }
+
+        /* NEW: Session Box Styles */
+        .session-box {
+            background: linear-gradient(90deg, rgba(0, 255, 65, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+            border: 1px solid #00ff41;
+            margin-bottom: 30px;
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border { 0% { border-color: #00ff41; } 50% { border-color: #00661a; } 100% { border-color: #00ff41; } }
 
         .total-speed-highlight {
             font-size: 0.8rem;
@@ -261,6 +281,8 @@
         <div id="share-tooltip" data-i18n="copied">Link Copied!</div>
 
         <div class="controls-container">
+            <button class="toggle-btn" id="installBtn" onclick="installPWA()">📲 INSTALL APP</button>
+            
             <div class="unit-toggle-group">
                 <button class="toggle-btn active" id="btn-km" onclick="setUnit('km')">KM</button>
                 <button class="toggle-btn" id="btn-mi" onclick="setUnit('mi')">MILES</button>
@@ -300,6 +322,14 @@
         <div class="time-box">
             <div class="time-label" data-i18n="mission_duration">Mission Duration</div>
             <div class="time-display" id="time-display-text">Calculating...</div>
+        </div>
+        
+        <div class="metric session-box">
+            <div>
+                <div class="label" style="color: #00ff41">DISTANCE THIS SESSION</div>
+                <div class="label" style="font-size:0.7rem;">(Since opening this page)</div>
+            </div>
+            <div class="value" id="dist-session" style="color: #00ff41; font-size: 1.3rem;">0 km</div>
         </div>
 
         <div class="metric">
@@ -416,6 +446,9 @@
         let useMiles = false;
         let isAnimating = true;
         let currentLang = 'en';
+        
+        // NEW: Live Session Timer
+        const sessionStartTime = Date.now();
 
         /* --- DOM ELEMENTS --- */
         const dateInput = document.getElementById('birthDate');
@@ -423,6 +456,34 @@
         const latRange = document.getElementById('latRange');
         const timeDisplayText = document.getElementById('time-display-text');
         const langSelect = document.getElementById('lang-select');
+        
+        /* --- PWA INSTALL LOGIC --- */
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').style.display = 'block';
+        });
+
+        async function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    deferredPrompt = null;
+                }
+            }
+        }
+        
+        /* --- REGISTER SERVICE WORKER --- */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(
+                    (registration) => console.log('SW registered: ', registration),
+                    (err) => console.log('SW registration failed: ', err)
+                );
+            });
+        }
 
         /* --- TRANSLATIONS --- */
         const translations = {
@@ -808,6 +869,9 @@
             }
 
             const secondsAlive = (now - birthDate) / 1000;
+            
+            // Calculate total speed for current moment
+            const totalSpeed = currentRotationSpeed + SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY;
 
             if (secondsAlive > 0) {
                 const dRot = secondsAlive * currentRotationSpeed;
@@ -838,6 +902,11 @@
                 document.getElementById('bar-light').style.width = Math.min(lyProgress, 100) + "%";
                 document.getElementById('light-years-raw').innerText = (dTotal / DIST_LIGHT_YEAR).toFixed(5);
             }
+            
+            // NEW: UPDATE SESSION ODOMETER
+            const sessionSeconds = (Date.now() - sessionStartTime) / 1000;
+            const sessionDistance = sessionSeconds * totalSpeed;
+            document.getElementById('dist-session').innerText = format(sessionDistance);
         }
 
         function format(numInKm) {
