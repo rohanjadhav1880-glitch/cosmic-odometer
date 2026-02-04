@@ -16,11 +16,10 @@
 
     <meta name="description" content="Calculate the distance you’ve traveled through space since birth.">
     <meta property="og:title" content="Cosmic Odometer">
-    <meta property="og:description" content="I have traveled billions of kilometers since birth. Check your cosmic stats here.">
+    <meta property="og:description" content="Calculate how far you have traveled through the universe since you were born.">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#00d4ff">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Cosmic Odometer">
     <meta name="twitter:image" content="https://fav.farm/🪐">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
@@ -101,6 +100,12 @@
         .unit-toggle-group .toggle-btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
 
         .icon-btn { border-radius: 5px; width: 35px; }
+        
+        /* Social Button Colors */
+        .btn-x { border-color: #fff; color: #fff; }
+        .btn-x:hover { background: rgba(255,255,255,0.2); }
+        .btn-wa { border-color: #25D366; color: #25D366; }
+        .btn-wa:hover { background: rgba(37, 211, 102, 0.2); }
 
         select.lang-select {
             background: rgba(0, 0, 0, 0.6);
@@ -203,7 +208,7 @@
         .p-bar-fill { height: 100%; background: linear-gradient(90deg, #00d4ff, #0055ff); width: 0%; transition: width 0.5s ease; }
         .p-detail { font-size: 0.75rem; color: #8892b0; margin-top: 8px; text-align: right; }
 
-        /* --- MULTIPLAYER BOX STYLES --- */
+        /* MULTIPLAYER */
         .multiplayer-box {
             border: 1px solid #9d4edd;
             background: rgba(157, 78, 221, 0.05);
@@ -213,32 +218,11 @@
             text-align: center;
             position: relative;
         }
-        .multiplayer-box h3 {
-            margin: 0 0 15px 0;
-            color: #e0aaff;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .friend-input-wrapper {
-            display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px;
-        }
-        .compare-btn {
-            background: rgba(157, 78, 221, 0.2);
-            border: 1px solid #9d4edd;
-            color: #e0aaff;
-            width: 100%;
-            padding: 10px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: bold;
-            transition: 0.2s;
-            border-radius: 5px;
-        }
+        .multiplayer-box h3 { margin: 0 0 15px 0; color: #e0aaff; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
+        .friend-input-wrapper { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px; }
+        .compare-btn { background: rgba(157, 78, 221, 0.2); border: 1px solid #9d4edd; color: #e0aaff; width: 100%; padding: 10px; cursor: pointer; font-family: inherit; font-weight: bold; transition: 0.2s; border-radius: 5px; }
         .compare-btn:hover { background: #9d4edd; color: #000; }
-        .result-row { 
-            margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(157, 78, 221, 0.3); display: none;
-        }
+        .result-row { margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(157, 78, 221, 0.3); display: none; }
         .result-row.active { display: block; animation: fadeIn 0.5s; }
         .res-label { font-size: 0.8rem; color: #c77dff; margin-bottom: 5px; }
         .res-val { font-size: 1.2rem; font-weight: bold; color: #fff; }
@@ -282,9 +266,11 @@
                 <button class="toggle-btn" id="btn-mi" onclick="setUnit('mi')">MILES</button>
             </div>
 
+            <button class="toggle-btn icon-btn btn-x" onclick="shareSocial('twitter')" title="Tweet Stats">𝕏</button>
+            <button class="toggle-btn icon-btn btn-wa" onclick="shareSocial('whatsapp')" title="Share on WhatsApp">💬</button>
+            <button class="toggle-btn icon-btn" onclick="shareSocial('native')" title="Share Link">🔗</button>
             <button class="toggle-btn icon-btn" id="btn-motion" onclick="toggleMotion()" title="Pause Animation">⏸</button>
-            <button class="toggle-btn icon-btn" onclick="shareLink()" title="Copy Share Link">🔗</button>
-            <button class="toggle-btn icon-btn" onclick="generateReceipt()" title="Download Travel Log">🧾</button>
+            <button class="toggle-btn icon-btn" onclick="generateReceipt()" title="Download Receipt">🧾</button>
 
             <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
                 <option value="en">English</option>
@@ -418,12 +404,11 @@
         const DIST_PLUTO = 5900000000;
         const DIST_LIGHT_YEAR = 9460730472580;
 
-        // Speeds in km/s (simple averages)
         const SPEED_ORBIT = 29.78;
         const SPEED_SOLAR = 220;
         const SPEED_GALAXY = 600;
 
-        const MAX_ROTATION_SPEED = 0.4651; // km/s at equator
+        const MAX_ROTATION_SPEED = 0.4651;
         const KM_TO_MILES = 0.621371;
 
         /* --- STATE --- */
@@ -652,22 +637,55 @@
             updateTotalSpeedDisplay();
         }
 
-        function shareLink() {
+        /* --- NEW SHARE FUNCTIONALITY (V3) --- */
+        function getShareData() {
             const baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
             const params = new URLSearchParams();
             params.set('date', dateInput.value);
-            params.set('time', timeInput.value);
-            params.set('lat', latRange.value);
             params.set('unit', useMiles ? 'mi' : 'km');
             params.set('lang', currentLang);
 
             const fullUrl = `${baseUrl}?${params.toString()}`;
+            const totalDist = document.getElementById('dist-total').innerText;
+            
+            // Check if we are comparing
+            const friendDist = document.getElementById('res-shared').innerText;
+            const isComparing = document.getElementById('connection-results').classList.contains('active');
 
-            navigator.clipboard.writeText(fullUrl).then(() => {
-                const tooltip = document.getElementById('share-tooltip');
-                tooltip.classList.add('show');
-                setTimeout(() => tooltip.classList.remove('show'), 2000);
-            });
+            let text = `I have traveled ${totalDist} through the universe since birth. 🚀`;
+            if (isComparing) {
+                text = `My friend and I have traveled ${friendDist} together through the cosmos. 👯‍♀️`;
+            }
+            text += `\nCheck your cosmic mileage here:`;
+
+            return { title: "Cosmic Odometer", text: text, url: fullUrl };
+        }
+
+        function shareSocial(platform) {
+            const data = getShareData();
+            
+            if (platform === 'twitter') {
+                const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(data.text)}&url=${encodeURIComponent(data.url)}`;
+                window.open(tweetUrl, '_blank');
+            } else if (platform === 'whatsapp') {
+                const waUrl = `https://wa.me/?text=${encodeURIComponent(data.text + " " + data.url)}`;
+                window.open(waUrl, '_blank');
+            } else if (platform === 'native') {
+                if (navigator.share) {
+                    navigator.share({
+                        title: data.title,
+                        text: data.text,
+                        url: data.url
+                    }).catch(console.error);
+                } else {
+                    // Fallback to clipboard
+                    navigator.clipboard.writeText(data.url).then(() => {
+                        const tooltip = document.getElementById('share-tooltip');
+                        tooltip.classList.add('show');
+                        setTimeout(() => tooltip.classList.remove('show'), 2000);
+                    });
+                }
+            }
         }
 
         function setUnit(unit) {
@@ -739,7 +757,6 @@
             return { years, months, days, hours, mins, secs };
         }
 
-        /* --- NEW FUNCTION: COSMIC CONNECTION --- */
         function calculateConnection() {
             const myDate = new Date(dateInput.value + "T12:00");
             const friendDateStr = document.getElementById('friendDate').value;
@@ -750,19 +767,11 @@
             }
             const friendDate = new Date(friendDateStr + "T12:00");
             
-            // 1. Calculate Gap (Distance apart at birth)
-            // Use absolute time difference
             const diffMs = Math.abs(myDate - friendDate);
             const diffSeconds = diffMs / 1000;
-            
-            // Total system velocity (Orbit + Solar + Galaxy)
-            // We ignore rotation because that's local
             const systemVelocity = SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY; 
-            
             const gapDistance = diffSeconds * systemVelocity;
             
-            // 2. Calculate Shared Journey (Time since younger person was born)
-            // Younger person = Later date (larger value)
             const youngerDate = (myDate > friendDate) ? myDate : friendDate;
             const now = new Date();
             
@@ -772,7 +781,6 @@
                 sharedDistance = sharedSeconds * (currentRotationSpeed + systemVelocity);
             }
 
-            // Display
             document.getElementById('connection-results').classList.add('active');
             document.getElementById('res-gap').innerText = format(gapDistance);
             document.getElementById('res-shared').innerText = format(sharedDistance);
