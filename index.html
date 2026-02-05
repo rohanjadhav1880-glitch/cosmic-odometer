@@ -266,6 +266,26 @@
         .author-link { font-size: 0.8rem; color: #00d4ff; text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
         .author-link:hover { opacity: 1; }
 
+        /* --- MOBILE RESPONSIVE FIX --- */
+        @media screen and (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .container { width: 95%; padding: 15px; }
+            
+            /* Force long numbers to wrap so they don't break the layout */
+            .value, .d-value, .res-val, #dist-total {
+                font-size: 1.1rem !important; /* Smaller font for mobile */
+                word-break: break-all;      /* Break long numbers */
+                white-space: normal;
+            }
+
+            /* Stack flex containers if needed */
+            .controls-container { gap: 5px; }
+            .toggle-btn { padding: 5px 8px; font-size: 0.7rem; }
+            
+            /* Ensure the total box handles the big number */
+            .total-box { overflow: hidden; }
+        }
+
     </style>
 </head>
 <body>
@@ -793,7 +813,7 @@
             let unit = useMiles ? "mi/s" : "km/s";
             if (useMiles) displayVal *= KM_TO_MILES;
 
-            document.getElementById('total-speed-display').innerText =
+            document.getElementById('total-speed-display').innerText = 
                 getT('traveling_at') + ": " + displayVal.toFixed(2) + " " + unit;
         }
 
