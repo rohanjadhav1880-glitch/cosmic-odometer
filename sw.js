@@ -1,18 +1,52 @@
-const CACHE_NAME = 'cosmic-v3';
+const CACHE_NAME = "cosmic-v4";
+
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+  "/",
+  "/index.html",
+  "/manifest.json",
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
-});
+self.addEventListener("install", (event) => {
 
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => response || fetch(e.request))
+  self.skipWaiting();
+
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
-
 });
 
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+
+      await clients.claim();
+
+
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames.map((name) => {
+          if (name !== CACHE_NAME) return caches.delete(name);
+          return Promise.resolve();
+        })
+      );
+    })()
+  );
+});
+
+
+self.addEventListener("fetch", (event) => {
+  const req = event.request;
+
+  
+  if (req.method !== "GET") return;
+
+  const url = new URL(req.url);
+
+  
+  if (url.origin !== self.location.origin) return;
+
+  event.respondWith(
+    caches.match(req).then((cached) => cached || fetch(req))
+  );
+});
