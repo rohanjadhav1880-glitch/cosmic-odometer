@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cosmic-v1';
+const CACHE_NAME = 'cosmic-v2';
 const ASSETS = [
   '/',
   '/index.html',
@@ -13,4 +13,5 @@ self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.match(e.request).then((response) => response || fetch(e.request))
   );
+
 });
