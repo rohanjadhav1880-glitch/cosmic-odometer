@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cosmic-v2';
+const CACHE_NAME = 'cosmic-v3';
 const ASSETS = [
   '/',
   '/index.html',
@@ -15,3 +15,4 @@ self.addEventListener('fetch', (e) => {
   );
 
 });
+
