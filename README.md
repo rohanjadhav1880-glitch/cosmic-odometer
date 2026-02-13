@@ -20,7 +20,7 @@ By calculating Earth’s rotation, its orbit around the Sun, the Solar System's 
   - **Birth Date:** Time-travel mode. Enter your birthday and watch the planets snap to the exact coordinates they were at when you were born.
 - **Real-Time Earth Tracking:** In "Today" mode, click **Track Earth** to lock the camera onto a low-poly Earth. The planet rotates exactly 360° every 24 hours based on your device's live UTC time, rendering real-time sunrise and sunset terminator lines.
 - **3D Orbit Controls:** Fully interactive canvas. Drag to pan, scroll to zoom, and explore the solar system from any angle.
-- **not yet implemented for mobiles yet** 
+- **not implemented for mobiles or small screens yet** 
 
 ### 🧮 The Cosmic Calculator
 - **Personalized Telemetry:** Live tracking of distance traveled via Earth's Spin, Solar Orbit, Solar System Travel, and Galactic Travel.
