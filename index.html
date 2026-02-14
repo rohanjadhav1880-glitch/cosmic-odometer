@@ -43,7 +43,7 @@
             overflow-x: hidden;
         }
 
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        canvas#starfield { position: fixed; top: 0; left: 0; z-index: -1; }
 
         h1 {
             font-size: 2.5rem;
@@ -267,19 +267,20 @@
         /* --- 3D SOLAR SYSTEM CONTAINER --- */
         #solar-system-container {
             position: fixed;
-            top: 25vh;        
-            left: 2vw;        
+            top: 10vh;        
+            left: 0vw;        
             width: 450px;     
-            height: 75vh;     
+            height: 65vh;     
             z-index: 0;
-            pointer-events: none; 
+            pointer-events: auto; /* 💡 FIXED: Ensures canvas captures mouse events on load */
         }
 
         /* The Mode Buttons */
         #solar-controls {
             position: absolute;
-            top: 280px;       
-            left: 50%;
+            bottom: -20px;     
+            top: auto;        
+            left: 40%;
             transform: translateX(-50%);
             display: flex;
             gap: 5px;
@@ -302,15 +303,73 @@
             border-radius: 2px;
         }
 
-        /* Hide it on smaller screens */
-        @media screen and (max-width: 1200px) { 
-            #solar-system-container { display: none; }
+        /* --- NEW: MOBILE TOGGLE BUTTON --- */
+        #mobile-toggle-btn {
+            display: none;
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 30px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            cursor: pointer;
+            white-space: nowrap;
         }
 
-        /* --- MOBILE RESPONSIVE FIX --- */
+        /* --- MOBILE RESPONSIVE LOGIC --- */
+        @media screen and (max-width: 1200px) { 
+            #mobile-toggle-btn {
+                display: block;
+            }
+            #solar-system-container { 
+                display: none; 
+            }
+            .container {
+                margin-bottom: 80px; 
+            }
+
+            body.show-3d-on-mobile .container,
+            body.show-3d-on-mobile h1,
+            body.show-3d-on-mobile h2,
+            body.show-3d-on-mobile canvas#starfield {
+                display: none; 
+            }
+            body.show-3d-on-mobile #solar-system-container {
+                display: block; 
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: #000;
+                z-index: 100;
+            }
+            body.show-3d-on-mobile #solar-controls {
+                top: 50px;       
+                bottom: auto;    
+                left: 50%;
+                width: 90%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            body.show-3d-on-mobile #mobile-toggle-btn {
+                z-index: 1001; 
+            }
+            #focus-separator {
+                display: none !important; 
+            }
+        }
+
         @media screen and (max-width: 600px) {
             h1 { font-size: 1.8rem; }
-            .container { width: 95%; padding: 15px; }
+            .container { width: 95%; padding: 15px; margin-top: 140px; }
             
             .value, .d-value, .res-val, #dist-total {
                 font-size: 1.1rem !important; 
@@ -329,6 +388,8 @@
 <body>
 
     <canvas id="starfield"></canvas>
+
+    <button id="mobile-toggle-btn" onclick="toggleMobileView()">🌌 VIEW SOLAR SYSTEM</button>
 
     <div id="solar-system-container">
         <div id="solar-controls">
@@ -498,6 +559,22 @@
     </div>
 
     <script>
+        /* --- MOBILE VIEW TOGGLE LOGIC --- */
+        let is3DViewVisibleOnMobile = false;
+        function toggleMobileView() {
+            is3DViewVisibleOnMobile = !is3DViewVisibleOnMobile;
+            const btn = document.getElementById('mobile-toggle-btn');
+            
+            if (is3DViewVisibleOnMobile) {
+                document.body.classList.add('show-3d-on-mobile');
+                btn.innerHTML = '🔙 BACK TO CALCULATOR';
+                setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
+            } else {
+                document.body.classList.remove('show-3d-on-mobile');
+                btn.innerHTML = '🌌 VIEW SOLAR SYSTEM';
+            }
+        }
+
         /* --- GLOBAL ORBIT MODE & PANNING TOGGLE --- */
         window.orbitMode = 'cinematic';
         window.isTrackingEarth = false;
@@ -511,11 +588,17 @@
             const focusBtn = document.getElementById('btn-focus');
             const focusSep = document.getElementById('focus-separator');
 
+            // Static Live trails
             if (window.trailGroup) {
                 window.trailGroup.visible = (mode === 'live');
                 if (mode === 'live' && window.update3DTrails) {
                     window.update3DTrails(); 
                 }
+            }
+
+            // 💡 DYNAMIC CINEMATIC TRAILS TOGGLE
+            if (window.cinematicTrailGroup) {
+                window.cinematicTrailGroup.visible = (mode === 'cinematic');
             }
 
             const container = document.getElementById('solar-system-container');
@@ -527,7 +610,28 @@
                     
                     focusBtn.style.display = 'block';
                     focusSep.style.display = 'block';
+                    
+                    window.solarCamera.position.set(0, 5, 130);
+                    window.solarControls.target.set(0, 5, 0);
+                    window.solarControls.update();
+                } else if (mode === 'cinematic') {
+                    // 💡 ENABLED 3D CONTROLS FOR CINEMATIC!
+                    window.solarControls.enabled = true;
+                    container.style.pointerEvents = 'auto'; 
+                    container.style.cursor = 'grab';
+                    
+                    focusBtn.style.display = 'none';
+                    focusSep.style.display = 'none';
+                    
+                    window.isTrackingEarth = false;
+                    focusBtn.innerText = "🌍 TRACK EARTH";
+                    focusBtn.classList.remove('active');
+                    
+                    window.solarCamera.position.set(0, 5, 130);
+                    window.solarControls.target.set(0, 5, 0); 
+                    window.solarControls.update();
                 } else {
+                    // Birth Date Mode (Static)
                     window.solarControls.enabled = false;
                     container.style.pointerEvents = 'none'; 
                     container.style.cursor = 'default';
@@ -539,8 +643,8 @@
                     focusBtn.innerText = "🌍 TRACK EARTH";
                     focusBtn.classList.remove('active');
                     
-                    window.solarCamera.position.set(0, 0, 90);
-                    window.solarControls.target.set(0, 18, 0);
+                    window.solarCamera.position.set(0, 5, 130);
+                    window.solarControls.target.set(0, 5, 0); 
                     window.solarControls.update();
                 }
             }
@@ -557,7 +661,7 @@
                 if(window.earthMesh) {
                     const earthPos = new THREE.Vector3();
                     window.earthMesh.getWorldPosition(earthPos);
-                    const sunPos = new THREE.Vector3(0, 18, 0);
+                    const sunPos = new THREE.Vector3(0, 5, 0);
                     const directionToSun = new THREE.Vector3().subVectors(sunPos, earthPos).normalize();
                     const idealCameraPos = earthPos.clone().add(directionToSun.multiplyScalar(6)).add(new THREE.Vector3(0, 3, 0));
                     window.solarCamera.position.copy(idealCameraPos);
@@ -565,7 +669,7 @@
             } else {
                 btn.innerText = "🌍 TRACK EARTH";
                 btn.classList.remove('active');
-                window.solarCamera.position.set(0, 0, 90);
+                window.solarCamera.position.set(0, 5, 130);
             }
         }
 
@@ -837,7 +941,6 @@
             updateTotalSpeedDisplay();
         }
 
-        /* --- NEW SHARE FUNCTIONALITY (V3) --- */
         function getShareData() {
             const baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
             const params = new URLSearchParams();
@@ -1234,25 +1337,27 @@
     <script>
         function init3DSolarSystem() {
             const container = document.getElementById('solar-system-container');
-            if (window.innerWidth <= 1200) return; 
 
             const scene = new THREE.Scene();
             scene.rotation.x = 0.6; 
-            scene.position.y = 18; 
+            scene.position.y = 5; 
 
-            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.z = 90; 
+            let initWidth = container.clientWidth || window.innerWidth;
+            let initHeight = container.clientHeight || window.innerHeight;
+            const camera = new THREE.PerspectiveCamera(45, initWidth / initHeight, 0.1, 1000);
+            camera.position.z = 130; 
             window.solarCamera = camera;
 
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setSize(initWidth, initHeight);
             container.appendChild(renderer.domElement);
 
             window.solarControls = new THREE.OrbitControls(camera, renderer.domElement);
-            window.solarControls.target.set(0, 18, 0); 
+            window.solarControls.target.set(0, 5, 0); 
             window.solarControls.enableDamping = true; 
             window.solarControls.dampingFactor = 0.05;
-            window.solarControls.enabled = false; 
+            // 💡 FIXED: Enabled by default since Cinematic is the default starting mode!
+            window.solarControls.enabled = true; 
 
             const ambientLight = new THREE.AmbientLight(0x333333); 
             scene.add(ambientLight);
@@ -1334,7 +1439,48 @@
                 planetMeshes.push({ pivot: pivot, mesh: mesh, data: p });
             });
 
-            // --- VORTEX GENERATOR ---
+            // --- 🌀 DYNAMIC CINEMATIC VORTEX SETUP ---
+            window.cinematicTrailGroup = new THREE.Group();
+            window.cinematicTrailGroup.visible = true; // Visible by default
+            scene.add(window.cinematicTrailGroup);
+
+            const cinematicTrails = [];
+            const cinematicSegments = 800;
+            const cinematicDaysToDraw = 8000;
+            const cinematicGalacticSpeed = 0.018; 
+
+            planetMeshes.forEach(p => {
+                const geo = new THREE.BufferGeometry();
+                const positions = new Float32Array((cinematicSegments + 1) * 3);
+                const colors = new Float32Array((cinematicSegments + 1) * 3);
+                const baseColor = new THREE.Color(p.data.color);
+
+                for (let i = 0; i <= cinematicSegments; i++) {
+                    const intensity = 0.5 + 0.5 * Math.pow(1.0 - (i / cinematicSegments), 1.2); 
+                    colors[i*3] = baseColor.r * intensity;
+                    colors[i*3+1] = baseColor.g * intensity;
+                    colors[i*3+2] = baseColor.b * intensity;
+                }
+
+                geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                
+                const mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, linewidth: 2 });
+                const line = new THREE.Line(geo, mat);
+                window.cinematicTrailGroup.add(line);
+                cinematicTrails.push({ line, data: p.data });
+            });
+
+            const sunGeoC = new THREE.BufferGeometry();
+            const sunPosC = new Float32Array(6);
+            const sunColC = new Float32Array([1,0.8,0,  0,0,0]);
+            sunGeoC.setAttribute('position', new THREE.BufferAttribute(sunPosC, 3));
+            sunGeoC.setAttribute('color', new THREE.BufferAttribute(sunColC, 3));
+            const sunMatC = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.9 });
+            const sunLineC = new THREE.Line(sunGeoC, sunMatC);
+            window.cinematicTrailGroup.add(sunLineC);
+            // ----------------------------------------------
+
             window.update3DTrails = function() {
                 while(window.trailGroup.children.length > 0){ 
                     window.trailGroup.remove(window.trailGroup.children[0]); 
@@ -1403,13 +1549,13 @@
                 requestAnimationFrame(animate3D);
                 sun.rotation.y += 0.005; 
                 
-                // 📡 CAMERA TRACKING SYSTEM
                 if (window.solarControls && window.solarControls.enabled) {
                     if (window.isTrackingEarth && window.earthMesh) {
                         const earthPos = new THREE.Vector3();
                         window.earthMesh.getWorldPosition(earthPos);
                         window.solarControls.target.lerp(earthPos, 0.1); 
-                    }
+                    } 
+                    // 💡 FIXED: Removed forced snapping back to the Sun. Now you can Pan freely!
                     window.solarControls.update(); 
                 }
 
@@ -1422,22 +1568,42 @@
                         p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
                         p.mesh.rotation.y += 0.01; 
                     });
+
+                    // 🌀 REAL-TIME CORKSCREW ANIMATION UPDATE
+                    cinematicTrails.forEach(ct => {
+                        const positions = ct.line.geometry.attributes.position.array;
+                        for (let i = 0; i <= cinematicSegments; i++) {
+                            const t_ago = cinematicDaysToDraw * (i / cinematicSegments);
+                            const historicalDays = cinematicDaysElapsed - t_ago;
+                            
+                            const orbits = historicalDays / ct.data.period;
+                            const theta = (orbits * 2 * Math.PI) + ct.data.offset;
+
+                            positions[i*3] = ct.data.dist * Math.cos(theta);
+                            positions[i*3+1] = -t_ago * cinematicGalacticSpeed;
+                            positions[i*3+2] = -ct.data.dist * Math.sin(theta);
+                        }
+                        ct.line.geometry.attributes.position.needsUpdate = true;
+                    });
+
+                    const sunPosArray = sunLineC.geometry.attributes.position.array;
+                    sunPosArray[0] = 0; sunPosArray[1] = 0; sunPosArray[2] = 0;
+                    sunPosArray[3] = 0; sunPosArray[4] = -cinematicDaysToDraw * cinematicGalacticSpeed; sunPosArray[5] = 0;
+                    sunLineC.geometry.attributes.position.needsUpdate = true;
                 } 
                 else if (window.orbitMode === 'live') {
                     cinematicDaysElapsed = nowDays; 
                     
-                    // 🌍 REAL-TIME UTC SPIN
                     const now = new Date();
-                    const utcHours = now.getUTCHours() + (now.getUTCMinutes() / 60) + (now.getUTCSeconds() / 3600);
-                    const timeFraction = utcHours / 24; 
+                    const utcTimeMs = now.getTime() % 86400000; 
+                    const timeFraction = utcTimeMs / 86400000;
                     
                     planetMeshes.forEach(p => {
                         const orbits = nowDays / p.data.period;
                         p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
                         
                         if (p.data.isEarth) {
-                            const spinAngle = (timeFraction * Math.PI * 2) + (Math.PI / 2);
-                            p.mesh.rotation.y = spinAngle - p.pivot.rotation.y;
+                            p.mesh.rotation.y = (timeFraction * Math.PI * 2) + (Math.PI / 2);
                         } else {
                             p.mesh.rotation.y += 0.01; 
                         }
@@ -1460,10 +1626,19 @@
             animate3D();
 
             window.addEventListener('resize', () => {
-                if (window.innerWidth <= 1200) return;
-                camera.aspect = container.clientWidth / container.clientHeight;
+                let currentWidth = container.clientWidth || window.innerWidth;
+                let currentHeight = container.clientHeight || window.innerHeight;
+                
+                if (window.innerWidth <= 1200 && document.body.classList.contains('show-3d-on-mobile')) {
+                    currentWidth = window.innerWidth;
+                    currentHeight = window.innerHeight;
+                }
+                
+                if (currentWidth === 0 || currentHeight === 0) return;
+                
+                camera.aspect = currentWidth / currentHeight;
                 camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
+                renderer.setSize(currentWidth, currentHeight);
             });
         }
 
