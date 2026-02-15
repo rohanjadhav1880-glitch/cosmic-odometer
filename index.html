@@ -272,7 +272,7 @@
             width: 450px;     
             height: 65vh;     
             z-index: 0;
-            pointer-events: auto; /* 💡 FIXED: Ensures canvas captures mouse events on load */
+            pointer-events: auto; 
         }
 
         /* The Mode Buttons */
@@ -280,7 +280,7 @@
             position: absolute;
             bottom: -20px;     
             top: auto;        
-            left: 40%;
+            left: 50%;        
             transform: translateX(-50%);
             display: flex;
             gap: 5px;
@@ -290,6 +290,11 @@
             border: 1px solid #00d4ff;
             pointer-events: auto; 
             z-index: 10;
+            width: max-content; 
+            max-width: 100%;  
+            box-sizing: border-box;
+            flex-wrap: wrap;  
+            justify-content: center; 
         }
         #solar-controls .toggle-btn {
             font-size: 0.65rem;
@@ -303,7 +308,80 @@
             border-radius: 2px;
         }
 
-        /* --- NEW: MOBILE TOGGLE BUTTON --- */
+        /* --- MILKY WAY RIGHT PANEL --- */
+        .right-panel {
+            position: fixed;
+            top: 10vh;
+            right: 2vw;
+            width: 320px;
+            background: rgba(11, 13, 23, 0.85);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 50px rgba(0,0,0,0.6);
+            z-index: 5;
+            color: white;
+            text-align: center;
+        }
+
+        .right-panel h3 {
+            color: #9d4edd;
+            margin-top: 0;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        /* 💡 NEW: 3D Galaxy Container CSS */
+        .galaxy-map {
+            width: 100%;
+            height: 200px;
+            background: #000; /* Replaced the 2D image with a clean black background for 3D */
+            border-radius: 10px;
+            position: relative;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            overflow: hidden; /* Keeps the 3D canvas inside the box */
+        }
+
+        /* The 3D canvas will attach to this ID */
+        #galaxy-3d-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            cursor: grab; /* Shows you can interact with it */
+        }
+        #galaxy-3d-container:active { cursor: grabbing; }
+
+        .you-are-here-label {
+            position: absolute;
+            top: 85%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            color: #00ff41;
+            font-weight: bold;
+            white-space: nowrap;
+            text-shadow: 1px 1px 2px #000, -1px -1px 2px #000;
+            pointer-events: none; /* Let clicks pass through to the 3D canvas */
+        }
+
+        .gal-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .gal-stat .gal-label { color: #8892b0; }
+        .gal-stat .gal-val { color: #ffd700; font-weight: bold; font-variant-numeric: tabular-nums; }
+
+        /* --- MOBILE TOGGLE BUTTON --- */
         #mobile-toggle-btn {
             display: none;
             position: fixed;
@@ -333,10 +411,21 @@
                 display: none; 
             }
             .container {
+                margin-bottom: 20px; 
+            }
+            
+            .right-panel {
+                position: relative;
+                top: 0;
+                right: 0;
+                width: 90%;
+                max-width: 600px;
+                margin-top: 10px;
                 margin-bottom: 80px; 
             }
 
             body.show-3d-on-mobile .container,
+            body.show-3d-on-mobile .right-panel,
             body.show-3d-on-mobile h1,
             body.show-3d-on-mobile h2,
             body.show-3d-on-mobile canvas#starfield {
@@ -354,7 +443,7 @@
             body.show-3d-on-mobile #solar-controls {
                 top: 50px;       
                 bottom: auto;    
-                left: 50%;
+                left: 50%;       
                 width: 90%;
                 flex-wrap: wrap;
                 justify-content: center;
@@ -370,6 +459,7 @@
         @media screen and (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             .container { width: 95%; padding: 15px; margin-top: 140px; }
+            .right-panel { width: 95%; padding: 15px; }
             
             .value, .d-value, .res-val, #dist-total {
                 font-size: 1.1rem !important; 
@@ -558,6 +648,28 @@
         </div>
     </div>
 
+    <div class="right-panel" id="milky-way-panel">
+        <h3>🌌 GALACTIC CONTEXT</h3>
+        
+        <div class="galaxy-map" id="galaxy-map">
+            <div id="galaxy-3d-container"></div>
+            <div class="you-are-here-label">YOU ARE HERE</div>
+        </div>
+
+        <div class="gal-stat">
+            <span class="gal-label">Galactic Speed</span>
+            <span class="gal-val">2.1M km/h</span>
+        </div>
+        <div class="gal-stat">
+            <span class="gal-label">Dist. to Center</span>
+            <span class="gal-val">26,000 LY</span>
+        </div>
+        <div class="gal-stat" style="border-bottom: none; margin-bottom: 0;">
+            <span class="gal-label">Cosmic Orbit Complete</span>
+            <span class="gal-val" id="cosmic-orbit-val" style="color: #00ff41;">0.0000%</span>
+        </div>
+    </div>
+
     <script>
         /* --- MOBILE VIEW TOGGLE LOGIC --- */
         let is3DViewVisibleOnMobile = false;
@@ -596,7 +708,7 @@
                 }
             }
 
-            // 💡 DYNAMIC CINEMATIC TRAILS TOGGLE
+            // DYNAMIC CINEMATIC TRAILS TOGGLE
             if (window.cinematicTrailGroup) {
                 window.cinematicTrailGroup.visible = (mode === 'cinematic');
             }
@@ -615,7 +727,6 @@
                     window.solarControls.target.set(0, 5, 0);
                     window.solarControls.update();
                 } else if (mode === 'cinematic') {
-                    // 💡 ENABLED 3D CONTROLS FOR CINEMATIC!
                     window.solarControls.enabled = true;
                     container.style.pointerEvents = 'auto'; 
                     container.style.cursor = 'grab';
@@ -631,7 +742,6 @@
                     window.solarControls.target.set(0, 5, 0); 
                     window.solarControls.update();
                 } else {
-                    // Birth Date Mode (Static)
                     window.solarControls.enabled = false;
                     container.style.pointerEvents = 'none'; 
                     container.style.cursor = 'default';
@@ -1140,6 +1250,14 @@
                 document.getElementById('txt-light').innerText = lyProgress.toFixed(4) + "%";
                 document.getElementById('bar-light').style.width = Math.min(lyProgress, 100) + "%";
                 document.getElementById('light-years-raw').innerText = (dTotal / DIST_LIGHT_YEAR).toFixed(5);
+
+                // 🌌 LIVE COSMIC ORBIT CALCULATOR
+                const cosmicOrbitVal = document.getElementById('cosmic-orbit-val');
+                if (cosmicOrbitVal) {
+                    const ageInYears = secondsAlive / (365.25 * 24 * 3600);
+                    const orbitPercent = (ageInYears / 225000000) * 100; 
+                    cosmicOrbitVal.innerText = orbitPercent.toFixed(8) + "%";
+                }
             }
             
             const sessionSeconds = (Date.now() - sessionStartTime) / 1000;
@@ -1335,17 +1453,18 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     
     <script>
+        // --- 1. THE SOLAR SYSTEM ENGINE ---
         function init3DSolarSystem() {
             const container = document.getElementById('solar-system-container');
 
             const scene = new THREE.Scene();
             scene.rotation.x = 0.6; 
-            scene.position.y = 5; 
+            scene.position.y = 10; 
 
             let initWidth = container.clientWidth || window.innerWidth;
             let initHeight = container.clientHeight || window.innerHeight;
             const camera = new THREE.PerspectiveCamera(45, initWidth / initHeight, 0.1, 1000);
-            camera.position.z = 130; 
+            camera.position.z = 90; 
             window.solarCamera = camera;
 
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -1353,10 +1472,9 @@
             container.appendChild(renderer.domElement);
 
             window.solarControls = new THREE.OrbitControls(camera, renderer.domElement);
-            window.solarControls.target.set(0, 5, 0); 
+            window.solarControls.target.set(0, 10, 0); 
             window.solarControls.enableDamping = true; 
             window.solarControls.dampingFactor = 0.05;
-            // 💡 FIXED: Enabled by default since Cinematic is the default starting mode!
             window.solarControls.enabled = true; 
 
             const ambientLight = new THREE.AmbientLight(0x333333); 
@@ -1439,9 +1557,8 @@
                 planetMeshes.push({ pivot: pivot, mesh: mesh, data: p });
             });
 
-            // --- 🌀 DYNAMIC CINEMATIC VORTEX SETUP ---
             window.cinematicTrailGroup = new THREE.Group();
-            window.cinematicTrailGroup.visible = true; // Visible by default
+            window.cinematicTrailGroup.visible = true; 
             scene.add(window.cinematicTrailGroup);
 
             const cinematicTrails = [];
@@ -1479,7 +1596,6 @@
             const sunMatC = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.9 });
             const sunLineC = new THREE.Line(sunGeoC, sunMatC);
             window.cinematicTrailGroup.add(sunLineC);
-            // ----------------------------------------------
 
             window.update3DTrails = function() {
                 while(window.trailGroup.children.length > 0){ 
@@ -1555,7 +1671,6 @@
                         window.earthMesh.getWorldPosition(earthPos);
                         window.solarControls.target.lerp(earthPos, 0.1); 
                     } 
-                    // 💡 FIXED: Removed forced snapping back to the Sun. Now you can Pan freely!
                     window.solarControls.update(); 
                 }
 
@@ -1569,7 +1684,6 @@
                         p.mesh.rotation.y += 0.01; 
                     });
 
-                    // 🌀 REAL-TIME CORKSCREW ANIMATION UPDATE
                     cinematicTrails.forEach(ct => {
                         const positions = ct.line.geometry.attributes.position.array;
                         for (let i = 0; i <= cinematicSegments; i++) {
@@ -1595,15 +1709,16 @@
                     cinematicDaysElapsed = nowDays; 
                     
                     const now = new Date();
-                    const utcTimeMs = now.getTime() % 86400000; 
-                    const timeFraction = utcTimeMs / 86400000;
+                    const utcHours = now.getUTCHours() + (now.getUTCMinutes() / 60) + (now.getUTCSeconds() / 3600);
+                    const timeFraction = utcHours / 24; 
                     
                     planetMeshes.forEach(p => {
                         const orbits = nowDays / p.data.period;
                         p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
                         
                         if (p.data.isEarth) {
-                            p.mesh.rotation.y = (timeFraction * Math.PI * 2) + (Math.PI / 2);
+                            const TEXTURE_OFFSET = -Math.PI / 2;
+                            p.mesh.rotation.y = (timeFraction * Math.PI * 2) + TEXTURE_OFFSET;
                         } else {
                             p.mesh.rotation.y += 0.01; 
                         }
@@ -1642,7 +1757,134 @@
             });
         }
 
-        setTimeout(init3DSolarSystem, 500); 
+        // --- 2. NEW 3D GALAXY ENGINE (RIGHT PANEL) ---
+        let galaxyScene, galaxyCamera, galaxyRenderer, galaxyParticles, earthMarker;
+
+        function init3DGalaxy() {
+            const container = document.getElementById('galaxy-3d-container');
+            if(!container) return;
+
+            galaxyScene = new THREE.Scene();
+            
+            // Looking slightly down at the galaxy
+            galaxyCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            galaxyCamera.position.set(0, 45, 60); 
+            galaxyCamera.lookAt(0, 0, 0);
+
+            galaxyRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            galaxyRenderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(galaxyRenderer.domElement);
+
+            // Galactic Core Glow
+            const coreGeo = new THREE.SphereGeometry(3, 32, 32);
+            const coreMat = new THREE.MeshBasicMaterial({ color: 0xffeebb, transparent: true, opacity: 0.9 });
+            const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+            galaxyScene.add(coreMesh);
+
+            // Generate Galaxy Particles (Spiral Arms)
+            const particleGeo = new THREE.BufferGeometry();
+            const particleCount = 6000;
+            const posArray = new Float32Array(particleCount * 3);
+            const colorArray = new Float32Array(particleCount * 3);
+            
+            const colorInside = new THREE.Color(0xffddaa); // Warm yellow/white core
+            const colorOutside = new THREE.Color(0x2277ff); // Cold blue outer edges
+
+            for(let i=0; i<particleCount; i++) {
+                const i3 = i * 3;
+                
+                // Exponential radius pushes more stars to the dense center
+                const radius = Math.pow(Math.random(), 1.5) * 28; 
+                const spinAngle = radius * 0.4; // How tightly wound the spiral is
+                const branchAngle = ((i % 3) / 3) * Math.PI * 2; // 3 spiral arms
+                
+                // Cloud Randomness
+                const randomX = Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1) * 3;
+                const randomY = Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1) * 1.5;
+                const randomZ = Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1) * 3;
+
+                const x = Math.cos(branchAngle + spinAngle) * radius + randomX;
+                const y = randomY;
+                const z = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+                posArray[i3] = x;
+                posArray[i3+1] = y;
+                posArray[i3+2] = z;
+
+                // Color mapping based on distance from core
+                const mixedColor = colorInside.clone().lerp(colorOutside, radius / 28);
+                colorArray[i3] = mixedColor.r;
+                colorArray[i3+1] = mixedColor.g;
+                colorArray[i3+2] = mixedColor.b;
+            }
+
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particleGeo.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+
+            const particleMat = new THREE.PointsMaterial({
+                size: 0.25,
+                vertexColors: true,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.8,
+                depthWrite: false
+            });
+
+            galaxyParticles = new THREE.Points(particleGeo, particleMat);
+            galaxyParticles.rotation.x = 0.2; // Slight tilt for perspective
+            galaxyScene.add(galaxyParticles);
+
+            // "You Are Here" Marker (The Solar System)
+            const markerGeo = new THREE.SphereGeometry(0.8, 16, 16);
+            const markerMat = new THREE.MeshBasicMaterial({ color: 0x00ff41 });
+            earthMarker = new THREE.Mesh(markerGeo, markerMat);
+            
+            // Placed precisely in the Orion Arm
+            const earthRadius = 16;
+            const earthSpin = earthRadius * 0.4;
+            const earthBranch = (0 / 3) * Math.PI * 2; 
+            earthMarker.position.x = Math.cos(earthBranch + earthSpin) * earthRadius;
+            earthMarker.position.z = Math.sin(earthBranch + earthSpin) * earthRadius;
+            
+            galaxyParticles.add(earthMarker); // Attach to particle group so it orbits!
+
+            // Orbit controls for the galaxy map (Zooming disabled to prevent breaking the UI box)
+            window.galaxyControls = new THREE.OrbitControls(galaxyCamera, galaxyRenderer.domElement);
+            window.galaxyControls.enableDamping = true;
+            window.galaxyControls.enableZoom = false; 
+
+            // Animation Loop for the Galaxy
+            function animateGalaxy() {
+                requestAnimationFrame(animateGalaxy);
+                
+                // Slow galactic spin
+                galaxyParticles.rotation.y -= 0.001; 
+                
+                // Pulsate the green marker
+                const pulse = 1 + Math.sin(Date.now() * 0.005) * 0.3;
+                earthMarker.scale.set(pulse, pulse, pulse);
+
+                window.galaxyControls.update();
+                galaxyRenderer.render(galaxyScene, galaxyCamera);
+            }
+            animateGalaxy();
+
+            // Resize Handler for Right Panel
+            window.addEventListener('resize', () => {
+                const mapDiv = document.getElementById('galaxy-map');
+                if(!mapDiv || mapDiv.clientWidth === 0) return;
+                
+                galaxyCamera.aspect = mapDiv.clientWidth / mapDiv.clientHeight;
+                galaxyCamera.updateProjectionMatrix();
+                galaxyRenderer.setSize(mapDiv.clientWidth, mapDiv.clientHeight);
+            });
+        }
+
+        // Initialize both engines!
+        setTimeout(() => {
+            init3DSolarSystem();
+            init3DGalaxy();
+        }, 500); 
     </script>
 </body>
 </html>
