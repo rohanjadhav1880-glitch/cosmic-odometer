@@ -1857,7 +1857,7 @@
             function animateGalaxy() {
                 requestAnimationFrame(animateGalaxy);
                 
-                galaxyParticles.rotation.y -= 0.001; 
+                galaxyParticles.rotation.y += 0.001; 
                 
                 const pulse = 1 + Math.sin(Date.now() * 0.005) * 0.3;
                 earthMarker.scale.set(pulse, pulse, pulse);
