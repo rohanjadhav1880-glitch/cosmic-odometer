@@ -11,5 +11,16 @@
       "destination": "https://cosmicodometer.space/:path*",
       "permanent": true
     }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=31536000, max-age=31536000, immutable"
+        }
+      ]
+    }
   ]
 }
