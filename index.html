@@ -1,11 +1,4 @@
 <!DOCTYPE html>
-<!--
-  Cosmic Odometer (single-file build)
-  Notes:
-  - Everything here runs client-side. Birth date/time never leaves the browser.
-  - External libs are loaded from CDNs (Three.js + OrbitControls).
-  - Service worker is expected at /sw.js (PWA/offline bits).
--->
 <html lang="en">
 <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M98MBQCEM"></script>
@@ -1495,6 +1488,8 @@
             scene.add(window.trailGroup);
 
             const systemGroup = new THREE.Group();
+            
+            systemGroup.rotation.x = 0; 
             scene.add(systemGroup);
 
             const sunGeo = new THREE.SphereGeometry(3.5, 32, 32);
@@ -1637,11 +1632,15 @@
                         const orbits = historicalDays / p.data.period;
                         const theta = (orbits * 2 * Math.PI) + p.data.offset;
 
-                        const px = p.data.dist * Math.cos(theta);
-                        const pz = -p.data.dist * Math.sin(theta);
-                        const py = -t_ago * visualGalacticSpeed; 
+                        const rawX = p.data.dist * Math.cos(theta);
+                        const rawZ = -p.data.dist * Math.sin(theta);
 
-                        points.push(new THREE.Vector3(px, py, pz));
+                       
+                        const angle = Math.PI / 3; 
+                        const trailX = -t_ago * visualGalacticSpeed * Math.cos(angle);
+                        const trailY = -t_ago * visualGalacticSpeed * Math.sin(angle);
+
+                        points.push(new THREE.Vector3(rawX + trailX, trailY, rawZ));
 
                         const intensity = 0.5 + 0.5 * Math.pow(1.0 - (i / segments), 1.2); 
                         colors.push(baseColor.r * intensity, baseColor.g * intensity, baseColor.b * intensity);
@@ -1654,9 +1653,15 @@
                     window.trailGroup.add(line);
                 });
 
+                
+                const angle = Math.PI / 3;
                 const sunPoints = [
                     new THREE.Vector3(0, 0, 0),
-                    new THREE.Vector3(0, -daysToDraw * visualGalacticSpeed, 0)
+                    new THREE.Vector3(
+                        -daysToDraw * visualGalacticSpeed * Math.cos(angle), 
+                        -daysToDraw * visualGalacticSpeed * Math.sin(angle), 
+                        0
+                    )
                 ];
                 const sunColors = [1,0.8,0,  0,0,0];
                 const sunTrailGeo = new THREE.BufferGeometry().setFromPoints(sunPoints);
@@ -1700,16 +1705,28 @@
                             const orbits = historicalDays / ct.data.period;
                             const theta = (orbits * 2 * Math.PI) + ct.data.offset;
 
-                            positions[i*3] = ct.data.dist * Math.cos(theta);
-                            positions[i*3+1] = -t_ago * cinematicGalacticSpeed;
-                            positions[i*3+2] = -ct.data.dist * Math.sin(theta);
+                            const rawX = ct.data.dist * Math.cos(theta);
+                            const rawZ = -ct.data.dist * Math.sin(theta);
+                            
+                            
+                            const angle = Math.PI / 3;
+                            const trailX = -t_ago * cinematicGalacticSpeed * Math.cos(angle);
+                            const trailY = -t_ago * cinematicGalacticSpeed * Math.sin(angle);
+
+                            positions[i*3] = rawX + trailX;
+                            positions[i*3+1] = trailY;
+                            positions[i*3+2] = rawZ;
                         }
                         ct.line.geometry.attributes.position.needsUpdate = true;
                     });
 
+                    
+                    const angle = Math.PI / 3;
                     const sunPosArray = sunLineC.geometry.attributes.position.array;
                     sunPosArray[0] = 0; sunPosArray[1] = 0; sunPosArray[2] = 0;
-                    sunPosArray[3] = 0; sunPosArray[4] = -cinematicDaysToDraw * cinematicGalacticSpeed; sunPosArray[5] = 0;
+                    sunPosArray[3] = -cinematicDaysToDraw * cinematicGalacticSpeed * Math.cos(angle); 
+                    sunPosArray[4] = -cinematicDaysToDraw * cinematicGalacticSpeed * Math.sin(angle); 
+                    sunPosArray[5] = 0;
                     sunLineC.geometry.attributes.position.needsUpdate = true;
                 } 
                 else if (window.orbitMode === 'live') {
