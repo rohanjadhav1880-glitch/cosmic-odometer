@@ -484,6 +484,9 @@
     <div id="solar-system-container">
         <div id="solar-controls">
             <button class="toggle-btn active" id="mode-cinematic" onclick="setOrbitMode('cinematic')">CINEMATIC</button>
+            
+            <button class="toggle-btn" id="btn-ff" onclick="toggleFastForward()" style="border-color:#ffd700; color:#ffd700;">⏩ 10X SPEED</button>
+
             <button class="toggle-btn" id="mode-live" onclick="setOrbitMode('live')">TODAY (VORTEX)</button>
             <button class="toggle-btn" id="mode-birth" onclick="setOrbitMode('birth')">BIRTH DATE</button>
             
@@ -699,6 +702,7 @@
             
             const focusBtn = document.getElementById('btn-focus');
             const focusSep = document.getElementById('focus-separator');
+            const ffBtn = document.getElementById('btn-ff'); 
 
             // Static live trails
             if (window.trailGroup) {
@@ -722,6 +726,7 @@
                     
                     focusBtn.style.display = 'block';
                     focusSep.style.display = 'block';
+                    if (ffBtn) ffBtn.style.display = 'none'; 
                     
                     window.solarCamera.position.set(0, 5, 130);
                     window.solarControls.target.set(0, 5, 0);
@@ -733,6 +738,7 @@
                     
                     focusBtn.style.display = 'none';
                     focusSep.style.display = 'none';
+                    if (ffBtn) ffBtn.style.display = 'block'; 
                     
                     window.isTrackingEarth = false;
                     focusBtn.innerText = "🌍 TRACK EARTH";
@@ -748,6 +754,7 @@
                     
                     focusBtn.style.display = 'none';
                     focusSep.style.display = 'none';
+                    if (ffBtn) ffBtn.style.display = 'none'; 
                     
                     window.isTrackingEarth = false;
                     focusBtn.innerText = "🌍 TRACK EARTH";
@@ -780,6 +787,23 @@
                 btn.innerText = "🌍 TRACK EARTH";
                 btn.classList.remove('active');
                 window.solarCamera.position.set(0, 5, 130);
+            }
+        }
+
+        // NEW: Fast Forward Logic
+        window.cinematicSpeedMult = 1;
+        window.toggleFastForward = function() {
+            window.cinematicSpeedMult = (window.cinematicSpeedMult === 1) ? 10 : 1;
+            const btn = document.getElementById('btn-ff');
+            
+            if (window.cinematicSpeedMult > 1) {
+                btn.classList.add('active');
+                btn.style.backgroundColor = '#ffd700';
+                btn.style.color = '#000';
+            } else {
+                btn.classList.remove('active');
+                btn.style.backgroundColor = 'transparent';
+                btn.style.color = '#ffd700';
             }
         }
 
@@ -1250,7 +1274,6 @@
                 document.getElementById('bar-light').style.width = Math.min(lyProgress, 100) + "%";
                 document.getElementById('light-years-raw').innerText = (dTotal / DIST_LIGHT_YEAR).toFixed(5);
 
-                // "Cosmic orbit": % of one Milky Way orbit completed (very tiny number).
                 const cosmicOrbitVal = document.getElementById('cosmic-orbit-val');
                 if (cosmicOrbitVal) {
                     const ageInYears = secondsAlive / (365.25 * 24 * 3600);
@@ -1390,7 +1413,6 @@
         initData();
         updateRotation();
         updateDashboard();
-        // Update the counters ~10x/sec so it feels "alive" without melting CPUs.
         setInterval(updateDashboard, 100);
 
         const canvas = document.getElementById('starfield');
@@ -1488,7 +1510,6 @@
             scene.add(window.trailGroup);
 
             const systemGroup = new THREE.Group();
-            
             systemGroup.rotation.x = 0; 
             scene.add(systemGroup);
 
@@ -1633,9 +1654,8 @@
                         const theta = (orbits * 2 * Math.PI) + p.data.offset;
 
                         const rawX = p.data.dist * Math.cos(theta);
-                        const rawZ = -p.data.dist * Math.sin(theta);
+                        const rawZ = -p.data.dist * Math.dist * Math.sin(theta);
 
-                       
                         const angle = Math.PI / 3; 
                         const trailX = -t_ago * visualGalacticSpeed * Math.cos(angle);
                         const trailY = -t_ago * visualGalacticSpeed * Math.sin(angle);
@@ -1653,7 +1673,6 @@
                     window.trailGroup.add(line);
                 });
 
-                
                 const angle = Math.PI / 3;
                 const sunPoints = [
                     new THREE.Vector3(0, 0, 0),
@@ -1689,7 +1708,9 @@
                 const nowDays = (Date.now() - J2000) / (1000 * 60 * 60 * 24);
 
                 if (window.orbitMode === 'cinematic') {
-                    cinematicDaysElapsed += 0.5; 
+                    
+                    cinematicDaysElapsed += (0.5 * window.cinematicSpeedMult); 
+                    
                     planetMeshes.forEach(p => {
                         const orbits = cinematicDaysElapsed / p.data.period;
                         p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
@@ -1708,7 +1729,6 @@
                             const rawX = ct.data.dist * Math.cos(theta);
                             const rawZ = -ct.data.dist * Math.sin(theta);
                             
-                            
                             const angle = Math.PI / 3;
                             const trailX = -t_ago * cinematicGalacticSpeed * Math.cos(angle);
                             const trailY = -t_ago * cinematicGalacticSpeed * Math.sin(angle);
@@ -1720,7 +1740,6 @@
                         ct.line.geometry.attributes.position.needsUpdate = true;
                     });
 
-                    
                     const angle = Math.PI / 3;
                     const sunPosArray = sunLineC.geometry.attributes.position.array;
                     sunPosArray[0] = 0; sunPosArray[1] = 0; sunPosArray[2] = 0;
