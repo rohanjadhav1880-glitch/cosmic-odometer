@@ -1272,8 +1272,7 @@
                 const lyProgress = (dTotal / DIST_LIGHT_YEAR) * 100;
                 document.getElementById('txt-light').innerText = lyProgress.toFixed(4) + "%";
                 document.getElementById('bar-light').style.width = Math.min(lyProgress, 100) + "%";
-                document.getElementById('light-years-raw').innerText = (dTotal / DIST_LIGHT_YEAR).toFixed(5);
-
+                document.getElementById('light-years-raw').innerText = Math.max(0, 1 - (dTotal / DIST_LIGHT_YEAR)).toFixed(5);
                 const cosmicOrbitVal = document.getElementById('cosmic-orbit-val');
                 if (cosmicOrbitVal) {
                     const ageInYears = secondsAlive / (365.25 * 24 * 3600);
