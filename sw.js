@@ -1,4 +1,4 @@
-const CACHE_NAME = "cosmic-v9";
+const CACHE_NAME = "cosmic-v10";
 
 const ASSETS = [
   "/",
@@ -7,21 +7,21 @@ const ASSETS = [
 ];
 
 self.addEventListener("install", (event) => {
-
   self.skipWaiting();
 
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then((cache) => {
+      
+      const freshAssets = ASSETS.map(url => new Request(url, { cache: "reload" }));
+      return cache.addAll(freshAssets);
+    })
   );
 });
-
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
-
       await clients.claim();
-
 
       const cacheNames = await caches.keys();
       await Promise.all(
@@ -34,24 +34,16 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-
 self.addEventListener("fetch", (event) => {
   const req = event.request;
 
-  
   if (req.method !== "GET") return;
 
   const url = new URL(req.url);
 
-  
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
     caches.match(req).then((cached) => cached || fetch(req))
   );
 });
-
-
-
-
-
