@@ -1654,7 +1654,7 @@
                         const theta = (orbits * 2 * Math.PI) + p.data.offset;
 
                         const rawX = p.data.dist * Math.cos(theta);
-                        const rawZ = -p.data.dist * Math.dist * Math.sin(theta);
+                        const rawZ = -p.data.dist * Math.sin(theta);
 
                         const angle = Math.PI / 3; 
                         const trailX = -t_ago * visualGalacticSpeed * Math.cos(angle);
