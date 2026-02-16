@@ -484,9 +484,7 @@
     <div id="solar-system-container">
         <div id="solar-controls">
             <button class="toggle-btn active" id="mode-cinematic" onclick="setOrbitMode('cinematic')">CINEMATIC</button>
-            
             <button class="toggle-btn" id="btn-ff" onclick="toggleFastForward()" style="border-color:#ffd700; color:#ffd700;">⏩ 10X SPEED</button>
-
             <button class="toggle-btn" id="mode-live" onclick="setOrbitMode('live')">TODAY (VORTEX)</button>
             <button class="toggle-btn" id="mode-birth" onclick="setOrbitMode('birth')">BIRTH DATE</button>
             
@@ -702,9 +700,8 @@
             
             const focusBtn = document.getElementById('btn-focus');
             const focusSep = document.getElementById('focus-separator');
-            const ffBtn = document.getElementById('btn-ff'); 
+            const ffBtn = document.getElementById('btn-ff');
 
-            // Static live trails
             if (window.trailGroup) {
                 window.trailGroup.visible = (mode === 'live');
                 if (mode === 'live' && window.update3DTrails) {
@@ -712,7 +709,6 @@
                 }
             }
 
-            // Cinematic trails toggle
             if (window.cinematicTrailGroup) {
                 window.cinematicTrailGroup.visible = (mode === 'cinematic');
             }
@@ -726,7 +722,7 @@
                     
                     focusBtn.style.display = 'block';
                     focusSep.style.display = 'block';
-                    if (ffBtn) ffBtn.style.display = 'none'; 
+                    if (ffBtn) ffBtn.style.display = 'none';
                     
                     window.solarCamera.position.set(0, 5, 130);
                     window.solarControls.target.set(0, 5, 0);
@@ -738,7 +734,7 @@
                     
                     focusBtn.style.display = 'none';
                     focusSep.style.display = 'none';
-                    if (ffBtn) ffBtn.style.display = 'block'; 
+                    if (ffBtn) ffBtn.style.display = 'block';
                     
                     window.isTrackingEarth = false;
                     focusBtn.innerText = "🌍 TRACK EARTH";
@@ -754,7 +750,7 @@
                     
                     focusBtn.style.display = 'none';
                     focusSep.style.display = 'none';
-                    if (ffBtn) ffBtn.style.display = 'none'; 
+                    if (ffBtn) ffBtn.style.display = 'none';
                     
                     window.isTrackingEarth = false;
                     focusBtn.innerText = "🌍 TRACK EARTH";
@@ -790,7 +786,6 @@
             }
         }
 
-        // NEW: Fast Forward Logic
         window.cinematicSpeedMult = 1;
         window.toggleFastForward = function() {
             window.cinematicSpeedMult = (window.cinematicSpeedMult === 1) ? 10 : 1;
@@ -807,7 +802,6 @@
             }
         }
 
-        // Constants (units: km, km/s, seconds)
         const DIST_MOON_ROUNDTRIP = 768800;
         const DIST_PLUTO = 5900000000;
         const DIST_LIGHT_YEAR = 9460730472580;
@@ -819,7 +813,6 @@
         const MAX_ROTATION_SPEED = 0.4651;
         const KM_TO_MILES = 0.621371;
 
-        // App state
         let currentRotationSpeed = MAX_ROTATION_SPEED;
         let useMiles = false;
         let isAnimating = true;
@@ -827,14 +820,12 @@
         
         const sessionStartTime = Date.now();
 
-        // Cached DOM nodes
         const dateInput = document.getElementById('birthDate');
         const timeInput = document.getElementById('birthTime');
         const latRange = document.getElementById('latRange');
         const timeDisplayText = document.getElementById('time-display-text');
         const langSelect = document.getElementById('lang-select');
         
-        // PWA install prompt
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -852,7 +843,6 @@
             }
         }
         
-        // Register the service worker (if available)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js').then(
@@ -862,7 +852,6 @@
             });
         }
 
-        // Lightweight i18n dictionary
         const translations = {
             en: {
                 title: "Cosmic Odometer",
@@ -1010,7 +999,6 @@
             }
         };
 
-        // Helpers / UI update functions
         function getT(key) {
             return (translations[currentLang] && translations[currentLang][key]) ? translations[currentLang][key] : key;
         }
@@ -1272,7 +1260,10 @@
                 const lyProgress = (dTotal / DIST_LIGHT_YEAR) * 100;
                 document.getElementById('txt-light').innerText = lyProgress.toFixed(4) + "%";
                 document.getElementById('bar-light').style.width = Math.min(lyProgress, 100) + "%";
+                
+                // FIXED: Now displays distance remaining!
                 document.getElementById('light-years-raw').innerText = Math.max(0, 1 - (dTotal / DIST_LIGHT_YEAR)).toFixed(5);
+
                 const cosmicOrbitVal = document.getElementById('cosmic-orbit-val');
                 if (cosmicOrbitVal) {
                     const ageInYears = secondsAlive / (365.25 * 24 * 3600);
@@ -1544,22 +1535,39 @@
                 systemGroup.add(pivot); 
 
                 const geo = new THREE.SphereGeometry(p.size, 32, 32);
-                let mat;
+                let mat, mesh;
                 
                 if (p.isEarth) {
                     mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8 });
                     mat.map = textureLoader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@master/examples/textures/planets/earth_atmos_2048.jpg');
-                } else {
-                    mat = new THREE.MeshStandardMaterial({ color: p.color, roughness: 0.7, metalness: 0.1 });
-                }
+                    
+                    // NEW: Earth + Moon container
+                    const earthSystemGroup = new THREE.Group();
+                    earthSystemGroup.position.x = p.dist; 
+                    pivot.add(earthSystemGroup);
 
-                const mesh = new THREE.Mesh(geo, mat);
-                mesh.position.x = p.dist; 
-                pivot.add(mesh);
+                    mesh = new THREE.Mesh(geo, mat);
+                    earthSystemGroup.add(mesh);
 
-                if (p.isEarth) {
+                    // NEW: Moon Pivot (rotates exactly relative to Earth)
+                    const moonPivot = new THREE.Group();
+                    earthSystemGroup.add(moonPivot);
+
+                    const moonGeo = new THREE.SphereGeometry(0.2, 16, 16);
+                    const moonMat = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 0.9 });
+                    const moonMesh = new THREE.Mesh(moonGeo, moonMat);
+                    moonMesh.position.x = 1.2; 
+                    moonPivot.add(moonMesh);
+
                     window.earthMesh = mesh;
                     window.earthPivot = pivot;
+                    window.moonPivot = moonPivot;
+
+                } else {
+                    mat = new THREE.MeshStandardMaterial({ color: p.color, roughness: 0.7, metalness: 0.1 });
+                    mesh = new THREE.Mesh(geo, mat);
+                    mesh.position.x = p.dist; 
+                    pivot.add(mesh);
                 }
 
                 if (p.hasRings) {
@@ -1652,6 +1660,7 @@
                         const orbits = historicalDays / p.data.period;
                         const theta = (orbits * 2 * Math.PI) + p.data.offset;
 
+                        // FIXED: Removed the extra Math.dist typo!
                         const rawX = p.data.dist * Math.cos(theta);
                         const rawZ = -p.data.dist * Math.sin(theta);
 
@@ -1707,9 +1716,11 @@
                 const nowDays = (Date.now() - J2000) / (1000 * 60 * 60 * 24);
 
                 if (window.orbitMode === 'cinematic') {
-                    
                     cinematicDaysElapsed += (0.5 * window.cinematicSpeedMult); 
                     
+                    // NEW: Moon synced perfectly to cinematic days elapsed (period = 27.322 days)
+                    if (window.moonPivot) window.moonPivot.rotation.y = (cinematicDaysElapsed / 27.322) * 2 * Math.PI;
+
                     planetMeshes.forEach(p => {
                         const orbits = cinematicDaysElapsed / p.data.period;
                         p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
@@ -1750,6 +1761,9 @@
                 else if (window.orbitMode === 'live') {
                     cinematicDaysElapsed = nowDays; 
                     
+                    // NEW: Moon synced perfectly to real-life "now" days elapsed
+                    if (window.moonPivot) window.moonPivot.rotation.y = (nowDays / 27.322) * 2 * Math.PI;
+
                     const now = new Date();
                     const utcHours = now.getUTCHours() + (now.getUTCMinutes() / 60) + (now.getUTCSeconds() / 3600);
                     const timeFraction = utcHours / 24; 
@@ -1770,6 +1784,9 @@
                     const birthVal = document.getElementById('birthDate').value;
                     const targetMs = birthVal ? new Date(birthVal + "T12:00").getTime() : Date.now();
                     const birthDays = (targetMs - J2000) / (1000 * 60 * 60 * 24);
+
+                    // NEW: Moon snaps perfectly to the exact birth date phase!
+                    if (window.moonPivot) window.moonPivot.rotation.y = (birthDays / 27.322) * 2 * Math.PI;
 
                     planetMeshes.forEach(p => {
                         const orbits = birthDays / p.data.period;
@@ -1816,13 +1833,11 @@
             galaxyRenderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(galaxyRenderer.domElement);
 
-            // Galactic core glow
             const coreGeo = new THREE.SphereGeometry(3, 32, 32);
             const coreMat = new THREE.MeshBasicMaterial({ color: 0xffeebb, transparent: true, opacity: 0.9 });
             const coreMesh = new THREE.Mesh(coreGeo, coreMat);
             galaxyScene.add(coreMesh);
 
-            // Galaxy particles (spiral-ish)
             const particleGeo = new THREE.BufferGeometry();
             const particleCount = 6000;
             const posArray = new Float32Array(particleCount * 3);
@@ -1872,7 +1887,6 @@
             galaxyParticles.rotation.x = 0.2;
             galaxyScene.add(galaxyParticles);
 
-            // "You are here" marker
             const markerGeo = new THREE.SphereGeometry(0.8, 16, 16);
             const markerMat = new THREE.MeshBasicMaterial({ color: 0x00ff41 });
             earthMarker = new THREE.Mesh(markerGeo, markerMat);
@@ -1912,7 +1926,6 @@
             });
         }
 
-        // Kick everything off once the DOM has settled.
         setTimeout(() => {
             init3DSolarSystem();
             init3DGalaxy();
