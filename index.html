@@ -744,9 +744,10 @@
                     window.solarControls.target.set(0, 5, 0); 
                     window.solarControls.update();
                 } else {
-                    window.solarControls.enabled = false;
-                    container.style.pointerEvents = 'none'; 
-                    container.style.cursor = 'default';
+                   
+                    window.solarControls.enabled = true;
+                    container.style.pointerEvents = 'auto'; 
+                    container.style.cursor = 'grab';
                     
                     focusBtn.style.display = 'none';
                     focusSep.style.display = 'none';
@@ -755,6 +756,7 @@
                     window.isTrackingEarth = false;
                     focusBtn.innerText = "🌍 TRACK EARTH";
                     focusBtn.classList.remove('active');
+                    
                     
                     window.solarCamera.position.set(0, 5, 130);
                     window.solarControls.target.set(0, 5, 0); 
