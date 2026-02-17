@@ -613,6 +613,28 @@
             </div>
         </div>
 
+        <div class="multiplayer-box" style="border-color: #00d4ff; background: rgba(0, 212, 255, 0.05);">
+            <h3 style="color: #00d4ff;">🚀 Party Predictor</h3>
+            <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Predict the exact day you will cross a major cosmic milestone.</div>
+            
+            <div class="friend-input-wrapper">
+                <select id="milestone-target" style="background: rgba(0,0,0,0.3); color: #fff; padding: 10px; border: 1px solid #00d4ff; border-radius: 5px; font-family: inherit; font-size: 0.9rem; outline: none;">
+                    <option value="100000000000">100 Billion</option>
+                    <option value="500000000000">500 Billion</option>
+                    <option value="1000000000000" selected>1 Trillion</option>
+                    <option value="5000000000000">5 Trillion</option>
+                </select>
+                <button class="compare-btn" style="border-color: #00d4ff; color: #00d4ff;" onclick="calculateFutureMilestone()" onmouseover="this.style.background='#00d4ff'; this.style.color='#000';" onmouseout="this.style.background='rgba(0, 212, 255, 0.2)'; this.style.color='#00d4ff';">PREDICT DATE</button>
+            </div>
+
+            <div id="milestone-result-container" class="result-row" style="border-color: rgba(0, 212, 255, 0.3);">
+                <div class="res-val" id="milestone-result" style="font-size: 1.1rem; color: #fff;"></div>
+                <a id="share-x-btn" href="#" target="_blank" style="display: none; margin-top: 15px; background: #1DA1F2; color: #fff; padding: 8px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem; border: 1px solid #1DA1F2;">
+                    🐦 Share Date to X
+                </a>
+            </div>
+        </div>
+
         <div class="milestone-section">
             <div class="progress-card">
                 <div class="p-header"><span data-i18n="moon_trips">Moon Round Trips</span><span id="txt-moon" style="color:#ffd700">0</span></div>
@@ -1210,6 +1232,70 @@
             document.getElementById('res-gap').innerText = format(gapDistance);
             document.getElementById('res-shared').innerText = format(sharedDistance);
         }
+
+        // --- NEW PREDICTOR FUNCTION ADDED HERE ---
+        function calculateFutureMilestone() {
+            const birthDateInput = document.getElementById('birthDate').value; 
+            const birthTimeInput = document.getElementById('birthTime').value || "12:00";
+            
+            // Show the result container
+            document.getElementById('milestone-result-container').classList.add('active');
+
+            if (!birthDateInput) {
+                document.getElementById('milestone-result').innerHTML = "<span style='color: #ff4444;'>Please enter your birth date first!</span>";
+                document.getElementById('share-x-btn').style.display = 'none';
+                return;
+            }
+
+            const targetVal = parseFloat(document.getElementById('milestone-target').value);
+            // Grab the EXACT speed the user is traveling based on latitude
+            const averageCosmicSpeedKmPerSec = currentRotationSpeed + SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY; 
+            
+            // Make the target value correspond to their currently selected unit
+            let targetKm = targetVal;
+            if (useMiles) {
+                targetKm = targetVal / KM_TO_MILES; 
+            }
+            
+            const birthDate = new Date(birthDateInput + "T" + birthTimeInput);
+            const now = new Date();
+            const secondsAlive = (now - birthDate) / 1000;
+            const currentKm = secondsAlive * averageCosmicSpeedKmPerSec;
+
+            let unitLabel = useMiles ? "Miles" : "Kilometers";
+
+            if (currentKm >= targetKm) {
+                document.getElementById('milestone-result').innerHTML = "You already passed this milestone! <br><span style='font-size: 0.8rem; color: #888; font-weight: normal; margin-top: 5px; display: inline-block;'>(Pick a bigger target)</span>";
+                document.getElementById('share-x-btn').style.display = 'none';
+                return;
+            }
+
+            const kmRemaining = targetKm - currentKm;
+            const secondsRemaining = kmRemaining / averageCosmicSpeedKmPerSec;
+            const futureDate = new Date(now.getTime() + (secondsRemaining * 1000));
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = futureDate.toLocaleDateString(undefined, options);
+            
+            document.getElementById('milestone-result').innerHTML = `You will cross this milestone on:<br><span style='color: #00d4ff; font-size: 1.4rem; display: block; margin-top: 10px;'>${formattedDate} 🪐</span>`;
+            
+            let targetFormatted;
+            if (targetVal >= 1000000000000) {
+                targetFormatted = (targetVal / 1000000000000) + " Trillion";
+            } else {
+                targetFormatted = (targetVal / 1000000000) + " Billion";
+            }
+            
+            const tweetText = `I will officially travel ${targetFormatted} ${unitLabel} through the universe on ${formattedDate}. You're all invited to my space party. 🚀 Calculate yours on Cosmic Odometer:`;
+            const siteUrl = "https://cosmicodometer.space/";
+            
+            const xIntentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(siteUrl)}`;
+            
+            const shareBtn = document.getElementById('share-x-btn');
+            shareBtn.href = xIntentUrl;
+            shareBtn.style.display = 'inline-block'; 
+        }
+        // -----------------------------------------
 
         function updateDashboard() {
             const birthStr = `${dateInput.value}T${timeInput.value}`;
