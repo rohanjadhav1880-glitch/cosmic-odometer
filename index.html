@@ -1,2023 +1,2351 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M98MBQCEM"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-5M98MBQCEM');
-    </script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M98MBQCEM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-5M98MBQCEM');
+  </script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosmic Odometer - Space Travel Calculator</title>
-    <link rel="canonical" href="https://cosmicodometer.space" />
-    
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://fav.farm/🪐">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmic Odometer - Space Travel Calculator</title>
+  <link rel="canonical" href="https://cosmicodometer.space" />
 
-    <meta name="description" content="Calculate the distance you’ve traveled through space since birth.">
-    <meta property="og:title" content="Cosmic Odometer">
-    <meta property="og:description" content="Calculate how far you have traveled through the universe since you were born.">
-    <meta property="og:type" content="website">
-    <meta name="theme-color" content="#00d4ff">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://fav.farm/🪐">
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="https://fav.farm/🪐" />
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>">
+  <!-- SEO / Social -->
+  <meta name="description" content="Calculate the distance you’ve traveled through space since birth." />
+  <meta property="og:title" content="Cosmic Odometer" />
+  <meta property="og:description" content="Calculate how far you have traveled through the universe since you were born." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#00d4ff" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://fav.farm/🪐" />
 
-    <style>
-        html { color-scheme: dark; }
-        body {
-            background-color: #000;
-            color: #ffffff;
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding-bottom: 50px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
+  <!-- Emoji favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>" />
 
-        canvas#starfield { position: fixed; top: 0; left: 0; z-index: -1; }
+  <style>
+    html { color-scheme: dark; }
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: "Courier New", Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding-bottom: 50px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
 
-        h1 {
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            color: #00d4ff;
-            margin: 2rem 0 0.5rem 0;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
-            text-align: center;
-            line-height: 1.2;
-        }
+    canvas#starfield { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        .container {
-            background: rgba(11, 13, 23, 0.85);
-            padding: 2rem;
-            border-radius: 15px;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 0 50px rgba(0,0,0,0.6);
-            margin-top: 1rem;
-            position: relative;
-            z-index: 5;
-        }
+    h1 {
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      color: #00d4ff;
+      margin: 2rem 0 0.5rem 0;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+      text-align: center;
+      line-height: 1.2;
+    }
 
-        .controls-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
+    .container {
+      background: rgba(11, 13, 23, 0.85);
+      padding: 2rem;
+      border-radius: 15px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
+      margin-top: 1rem;
+      position: relative;
+      z-index: 5;
+    }
 
-        .unit-toggle-group { display: flex; }
+    .controls-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
 
-        .toggle-btn {
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid #00d4ff;
-            color: #00d4ff;
-            padding: 5px 15px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.8rem;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 5px;
-        }
-        
-        .toggle-btn:hover { background: rgba(0, 212, 255, 0.2); }
+    .unit-toggle-group { display: flex; }
 
-        .toggle-btn.active {
-            background: #00d4ff;
-            color: #000;
-            font-weight: bold;
-        }
+    .toggle-btn {
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid #00d4ff;
+      color: #00d4ff;
+      padding: 5px 15px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      user-select: none;
+    }
+    .toggle-btn:hover { background: rgba(0, 212, 255, 0.2); }
+    .toggle-btn.active { background: #00d4ff; color: #000; font-weight: bold; }
 
-        .unit-toggle-group .toggle-btn { border-radius: 0; }
-        .unit-toggle-group .toggle-btn:first-child { border-radius: 5px 0 0 5px; }
-        .unit-toggle-group .toggle-btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
+    .unit-toggle-group .toggle-btn { border-radius: 0; }
+    .unit-toggle-group .toggle-btn:first-child { border-radius: 5px 0 0 5px; }
+    .unit-toggle-group .toggle-btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
 
-        .icon-btn { border-radius: 5px; width: 35px; }
-        
-        #installBtn { display: none; border-color: #00ff41; color: #00ff41; font-weight: bold; }
-        #installBtn:hover { background: rgba(0, 255, 65, 0.2); }
-        
-        .btn-x { border-color: #fff; color: #fff; }
-        .btn-x:hover { background: rgba(255,255,255,0.2); }
-        .btn-wa { border-color: #25D366; color: #25D366; }
-        .btn-wa:hover { background: rgba(37, 211, 102, 0.2); }
+    .icon-btn { border-radius: 5px; width: 35px; }
 
-        select.lang-select {
-            background: rgba(0, 0, 0, 0.6);
-            color: #00d4ff;
-            border: 1px solid #00d4ff;
-            padding: 5px;
-            border-radius: 5px;
-            font-family: inherit;
-            font-size: 0.8rem;
-            cursor: pointer;
-            outline: none;
-        }
+    #installBtn { display: none; border-color: #00ff41; color: #00ff41; font-weight: bold; }
+    #installBtn:hover { background: rgba(0, 255, 65, 0.2); }
 
-        #share-tooltip {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #00d4ff;
-            color: #000;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-            z-index: 100;
-        }
-        #share-tooltip.show { opacity: 1; }
+    .btn-x { border-color: #fff; color: #fff; }
+    .btn-x:hover { background: rgba(255, 255, 255, 0.2); }
+    .btn-wa { border-color: #25D366; color: #25D366; }
+    .btn-wa:hover { background: rgba(37, 211, 102, 0.2); }
 
-        .time-box {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #00d4ff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
-        }
-        .time-label { font-size: 0.8rem; color: #8892b0; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
-        .time-display { font-size: 1.1rem; color: #fff; font-weight: bold; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .time-unit { display: inline-block; }
-        .unit-val { color: #ffd700; font-variant-numeric: tabular-nums; }
-        .unit-label { font-size: 0.8em; color: #666; }
+    select.lang-select {
+      background: rgba(0, 0, 0, 0.6);
+      color: #00d4ff;
+      border: 1px solid #00d4ff;
+      padding: 5px;
+      border-radius: 5px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+      outline: none;
+    }
 
-        .input-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 10px; align-items: center; }
-        .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        input { background: #1a1d2e; border: 1px solid #00d4ff; color: white; padding: 10px; font-family: inherit; border-radius: 5px; outline: none; font-size: 16px; }
+    #share-tooltip {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #00d4ff;
+      color: #000;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 100;
+    }
+    #share-tooltip.show { opacity: 1; }
 
-        .range-container { width: 100%; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; margin-top: 5px; }
-        input[type="range"] { width: 100%; accent-color: #00d4ff; cursor: pointer; }
+    .time-box {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid #00d4ff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+    }
+    .time-label {
+      font-size: 0.8rem;
+      color: #8892b0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+    .time-display {
+      font-size: 1.1rem;
+      color: #fff;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .time-unit { display: inline-block; }
+    .unit-val { color: #ffd700; font-variant-numeric: tabular-nums; }
+    .unit-label { font-size: 0.8em; color: #666; }
 
-        .metric { margin: 10px 0; padding: 12px 15px; background: rgba(0, 0, 0, 0.5); border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid transparent; cursor: default; position: relative; }
-        .metric:hover { background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; }
-        .label { font-size: 0.85rem; color: #8892b0; }
-        .value { font-size: 1.1rem; font-weight: bold; color: #ffd700; font-variant-numeric: tabular-nums; text-align: right; }
+    .input-group {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
-        .total-box { background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%); border: 1px solid #00d4ff; margin-top: 20px; margin-bottom: 20px; }
+    input {
+      background: #1a1d2e;
+      border: 1px solid #00d4ff;
+      color: white;
+      padding: 10px;
+      font-family: inherit;
+      border-radius: 5px;
+      outline: none;
+      font-size: 16px;
+    }
 
-        .session-box {
-            background: linear-gradient(90deg, rgba(0, 255, 65, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
-            border: 1px solid #00ff41;
-            margin-bottom: 30px;
-            animation: pulse-border 2s infinite;
-        }
-        @keyframes pulse-border { 0% { border-color: #00ff41; } 50% { border-color: #00661a; } 100% { border-color: #00ff41; } }
+    .range-container {
+      width: 100%;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      margin-top: 5px;
+    }
+    input[type="range"] { width: 100%; accent-color: #00d4ff; cursor: pointer; }
 
-        .total-speed-highlight {
-            font-size: 0.8rem;
-            color: #00d4ff;
-            margin-top: 5px;
-            font-weight: bold;
-        }
+    .metric {
+      margin: 10px 0;
+      padding: 12px 15px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 3px solid transparent;
+      cursor: default;
+      position: relative;
+    }
+    .metric:hover { background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; }
+    .label { font-size: 0.85rem; color: #8892b0; }
+    .value {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #ffd700;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
 
-        .displacement-box {
-            margin-bottom: 30px;
-            background: rgba(255, 0, 85, 0.1);
-            border: 1px solid #ff0055;
-            padding: 20px;
-            border-radius: 15px;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
+    .total-box { background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%); border: 1px solid #00d4ff; margin-top: 20px; margin-bottom: 20px; }
 
-        .displacement-box::before {
-            content: "COSMIC GPS";
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: #ff0055;
-            color: #000;
-            padding: 3px 10px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            border-radius: 13px 0 10px 0;
-        }
+    .session-box {
+      background: linear-gradient(90deg, rgba(0, 255, 65, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+      border: 1px solid #00ff41;
+      margin-bottom: 30px;
+      animation: pulse-border 2s infinite;
+    }
+    @keyframes pulse-border { 0% { border-color: #00ff41; } 50% { border-color: #00661a; } 100% { border-color: #00ff41; } }
 
-        .d-title { color: #ff0055; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        .d-value { color: #fff; font-size: 1.4rem; font-weight: bold; text-shadow: 0 0 10px rgba(255, 0, 85, 0.5); font-variant-numeric: tabular-nums; }
-        .d-note { font-size: 0.75rem; color: #ff99bb; margin-top: 10px; font-style: italic; opacity: 0.8; line-height: 1.4; }
+    .total-speed-highlight { font-size: 0.8rem; color: #00d4ff; margin-top: 5px; font-weight: bold; }
 
-        .milestone-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
-        .progress-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
-        .p-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: #ccc; }
-        .p-bar-bg { width: 100%; height: 10px; background: #0f111a; border-radius: 5px; overflow: hidden; }
-        .p-bar-fill { height: 100%; background: linear-gradient(90deg, #00d4ff, #0055ff); width: 0%; transition: width 0.5s ease; }
-        .p-detail { font-size: 0.75rem; color: #8892b0; margin-top: 8px; text-align: right; }
+    .displacement-box {
+      margin-bottom: 30px;
+      background: rgba(255, 0, 85, 0.1);
+      border: 1px solid #ff0055;
+      padding: 20px;
+      border-radius: 15px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .displacement-box::before {
+      content: "COSMIC GPS";
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #ff0055;
+      color: #000;
+      padding: 3px 10px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      border-radius: 13px 0 10px 0;
+    }
+    .d-title { color: #ff0055; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+    .d-value { color: #fff; font-size: 1.4rem; font-weight: bold; text-shadow: 0 0 10px rgba(255, 0, 85, 0.5); font-variant-numeric: tabular-nums; }
+    .d-note { font-size: 0.75rem; color: #ff99bb; margin-top: 10px; opacity: 0.8; line-height: 1.4; }
 
-        /* Friend compare ("Cosmic Connection") */
-        .multiplayer-box {
-            border: 1px solid #9d4edd;
-            background: rgba(157, 78, 221, 0.05);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            text-align: center;
-            position: relative;
-        }
-        .multiplayer-box h3 { margin: 0 0 15px 0; color: #e0aaff; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
-        .friend-input-wrapper { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px; }
-        .compare-btn { background: rgba(157, 78, 221, 0.2); border: 1px solid #9d4edd; color: #e0aaff; width: 100%; padding: 10px; cursor: pointer; font-family: inherit; font-weight: bold; transition: 0.2s; border-radius: 5px; }
-        .compare-btn:hover { background: #9d4edd; color: #000; }
-        .result-row { margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(157, 78, 221, 0.3); display: none; }
-        .result-row.active { display: block; animation: fadeIn 0.5s; }
-        .res-label { font-size: 0.8rem; color: #c77dff; margin-bottom: 5px; }
-        .res-val { font-size: 1.2rem; font-weight: bold; color: #fff; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .milestone-section { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
+    .progress-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; }
+    .p-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: #ccc; }
+    .p-bar-bg { width: 100%; height: 10px; background: #0f111a; border-radius: 5px; overflow: hidden; }
+    .p-bar-fill { height: 100%; background: linear-gradient(90deg, #00d4ff, #0055ff); width: 0%; transition: width 0.5s ease; }
+    .p-detail { font-size: 0.75rem; color: #8892b0; margin-top: 8px; text-align: right; }
 
-        .manual-title { text-align: center; text-transform: uppercase; letter-spacing: 2px; color: #00d4ff; margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
-        .details-grid { display: grid; gap: 10px; }
-        details { background: rgba(0,0,0,0.3); border-radius: 5px; overflow: hidden; transition: all 0.3s ease; }
-        details[open] { background: rgba(0, 212, 255, 0.05); }
-        summary { padding: 12px; cursor: pointer; font-size: 0.9rem; font-weight: bold; color: #ccc; list-style: none; display: flex; justify-content: space-between; align-items: center; }
-        summary::-webkit-details-marker { display: none; }
-        summary::after { content: "+"; color: #00d4ff; font-weight: bold; }
-        details[open] summary::after { content: "-"; }
-        .info-text { padding: 0 15px 15px 15px; font-size: 0.8rem; color: #8892b0; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; padding-top: 10px; }
+    /* Friend compare + party predictor */
+    .multiplayer-box {
+      border: 1px solid #9d4edd;
+      background: rgba(157, 78, 221, 0.05);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+      position: relative;
+    }
+    .multiplayer-box h3 { margin: 0 0 15px 0; color: #e0aaff; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
+    .friend-input-wrapper { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px; }
+    .compare-btn {
+      background: rgba(157, 78, 221, 0.2);
+      border: 1px solid #9d4edd;
+      color: #e0aaff;
+      width: 100%;
+      padding: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: bold;
+      transition: 0.2s;
+      border-radius: 5px;
+    }
+    .compare-btn:hover { background: #9d4edd; color: #000; }
 
-        .footer-section { margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 15px; z-index: 5; position: relative; }
-        .privacy-text { font-size: 0.7rem; color: #555; line-height: 1.4; }
-        .coffee-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); color: #ccc; padding: 10px 20px; border-radius: 30px; font-size: 0.9rem; transition: all 0.3s ease; }
-        .coffee-btn:hover { background: rgba(255, 221, 0, 0.15); color: #ffd700; border-color: #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); transform: translateY(-2px); }
-        .author-link { font-size: 0.8rem; color: #00d4ff; text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
-        .author-link:hover { opacity: 1; }
+    .result-row { margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(157, 78, 221, 0.3); display: none; }
+    .result-row.active { display: block; animation: fadeIn 0.5s; }
+    .res-label { font-size: 0.8rem; color: #c77dff; margin-bottom: 5px; }
+    .res-val { font-size: 1.2rem; font-weight: bold; color: #fff; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 3D solar system (left side on desktop) */
-        #solar-system-container {
-            position: fixed;
-            top: 10vh;        
-            left: 0vw;        
-            width: 450px;     
-            height: 65vh;     
-            z-index: 0;
-            pointer-events: auto; 
-        }
+    .manual-title {
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #00d4ff;
+      margin-bottom: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 20px;
+    }
+    .details-grid { display: grid; gap: 10px; }
+    details { background: rgba(0, 0, 0, 0.3); border-radius: 5px; overflow: hidden; transition: all 0.3s ease; }
+    details[open] { background: rgba(0, 212, 255, 0.05); }
+    summary {
+      padding: 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #ccc;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: #00d4ff; font-weight: bold; }
+    details[open] summary::after { content: "-"; }
+    .info-text {
+      padding: 0 15px 15px 15px;
+      font-size: 0.8rem;
+      color: #8892b0;
+      line-height: 1.4;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 5px;
+      padding-top: 10px;
+    }
 
-        /* Mode buttons for the 3D view */
-        #solar-controls {
-            position: absolute;
-            bottom: -20px;     
-            top: auto;        
-            left: 50%;        
-            transform: translateX(-50%);
-            display: flex;
-            gap: 5px;
-            background: rgba(11, 13, 23, 0.85);
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #00d4ff;
-            pointer-events: auto; 
-            z-index: 10;
-            width: max-content; 
-            max-width: 100%;  
-            box-sizing: border-box;
-            flex-wrap: wrap;  
-            justify-content: center; 
-        }
-        #solar-controls .toggle-btn {
-            font-size: 0.65rem;
-            padding: 5px 8px;
-        }
+    .footer-section {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      z-index: 5;
+      position: relative;
+    }
+    .privacy-text { font-size: 0.7rem; color: #555; line-height: 1.4; }
+    .coffee-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ccc;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    .coffee-btn:hover {
+      background: rgba(255, 221, 0, 0.15);
+      color: #ffd700;
+      border-color: #ffd700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+      transform: translateY(-2px);
+    }
+    .author-link {
+      font-size: 0.8rem;
+      color: #00d4ff;
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .author-link:hover { opacity: 1; }
 
-        .separator-line {
-            width: 2px;
-            background: rgba(0, 212, 255, 0.4);
-            margin: 0 4px;
-            border-radius: 2px;
-        }
+    /* 3D solar system (left side on desktop) */
+    #solar-system-container {
+      position: fixed;
+      top: 10vh;
+      left: 0vw;
+      width: 450px;
+      height: 65vh;
+      z-index: 0;
+      pointer-events: auto;
+    }
 
-        /* Right-side "Galactic context" panel */
-        .right-panel {
-            position: fixed;
-            top: 10vh;
-            right: 2vw;
-            width: 320px;
-            background: rgba(11, 13, 23, 0.85);
-            padding: 1.5rem;
-            border-radius: 15px;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 50px rgba(0,0,0,0.6);
-            z-index: 5;
-            color: white;
-            text-align: center;
-        }
+    /* Mode buttons for the 3D view */
+    #solar-controls {
+      position: absolute;
+      bottom: -20px;
+      top: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      background: rgba(11, 13, 23, 0.85);
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #00d4ff;
+      pointer-events: auto;
+      z-index: 10;
+      width: max-content;
+      max-width: 100%;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #solar-controls .toggle-btn { font-size: 0.65rem; padding: 5px 8px; }
 
-        .right-panel h3 {
-            color: #9d4edd;
-            margin-top: 0;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-        }
+    .separator-line { width: 2px; background: rgba(0, 212, 255, 0.4); margin: 0 4px; border-radius: 2px; }
 
-        /* 3D galaxy mini-map (canvas lives inside this box) */
-        .galaxy-map {
-            width: 100%;
-            height: 200px;
-            background: #000;
-            border-radius: 10px;
-            position: relative;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-            overflow: hidden;
-        }
+    /* Right-side "Galactic context" panel */
+    .right-panel {
+      position: fixed;
+      top: 10vh;
+      right: 2vw;
+      width: 320px;
+      background: rgba(11, 13, 23, 0.85);
+      padding: 1.5rem;
+      border-radius: 15px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
+      z-index: 5;
+      color: white;
+      text-align: center;
+    }
+    .right-panel h3 {
+      color: #9d4edd;
+      margin-top: 0;
+      margin-bottom: 15px;
+      letter-spacing: 2px;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+    }
 
-        /* The Three.js renderer attaches to this element */
-        #galaxy-3d-container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            cursor: grab;
-        }
-        #galaxy-3d-container:active { cursor: grabbing; }
+    .galaxy-map {
+      width: 100%;
+      height: 200px;
+      background: #000;
+      border-radius: 10px;
+      position: relative;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+    }
+    #galaxy-3d-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: grab; }
+    #galaxy-3d-container:active { cursor: grabbing; }
 
-        .you-are-here-label {
-            position: absolute;
-            top: 85%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.65rem;
-            color: #00ff41;
-            font-weight: bold;
-            white-space: nowrap;
-            text-shadow: 1px 1px 2px #000, -1px -1px 2px #000;
-            pointer-events: none;
-        }
+    .you-are-here-label {
+      position: absolute;
+      top: 85%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      color: #00ff41;
+      font-weight: bold;
+      white-space: nowrap;
+      text-shadow: 1px 1px 2px #000, -1px -1px 2px #000;
+      pointer-events: none;
+    }
 
-        .gal-stat {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            padding-bottom: 5px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
+    .gal-stat {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.85rem;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .gal-stat .gal-label { color: #8892b0; }
+    .gal-stat .gal-val { color: #ffd700; font-weight: bold; font-variant-numeric: tabular-nums; }
 
-        .gal-stat .gal-label { color: #8892b0; }
-        .gal-stat .gal-val { color: #ffd700; font-weight: bold; font-variant-numeric: tabular-nums; }
+    /* Mobile: toggle between calculator and 3D */
+    #mobile-toggle-btn {
+      display: none;
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: #00d4ff;
+      color: #000;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: bold;
+      border-radius: 30px;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+      cursor: pointer;
+      white-space: nowrap;
+    }
 
-        /* Mobile: toggle between calculator and 3D */
-        #mobile-toggle-btn {
-            display: none;
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background: #00d4ff;
-            color: #000;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1rem;
-            font-family: inherit;
-            font-weight: bold;
-            border-radius: 30px;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
-            cursor: pointer;
-            white-space: nowrap;
-        }
+    @media screen and (max-width: 1200px) {
+      #mobile-toggle-btn { display: block; }
+      #solar-system-container { display: none; }
+      .container { margin-bottom: 20px; }
 
-        /* Mobile layout tweaks */
-        @media screen and (max-width: 1200px) { 
-            #mobile-toggle-btn {
-                display: block;
-            }
-            #solar-system-container { 
-                display: none; 
-            }
-            .container {
-                margin-bottom: 20px; 
-            }
-            
-            .right-panel {
-                position: relative;
-                top: 0;
-                right: 0;
-                width: 90%;
-                max-width: 600px;
-                margin-top: 10px;
-                margin-bottom: 80px; 
-            }
+      .right-panel {
+        position: relative;
+        top: 0;
+        right: 0;
+        width: 90%;
+        max-width: 600px;
+        margin-top: 10px;
+        margin-bottom: 80px;
+      }
 
-            body.show-3d-on-mobile .container,
-            body.show-3d-on-mobile .right-panel,
-            body.show-3d-on-mobile h1,
-            body.show-3d-on-mobile h2,
-            body.show-3d-on-mobile canvas#starfield {
-                display: none; 
-            }
-            body.show-3d-on-mobile #solar-system-container {
-                display: block; 
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                background-color: #000;
-                z-index: 100;
-            }
-            body.show-3d-on-mobile #solar-controls {
-                top: 50px;       
-                bottom: auto;    
-                left: 50%;       
-                width: 90%;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            body.show-3d-on-mobile #mobile-toggle-btn {
-                z-index: 1001; 
-            }
-            #focus-separator {
-                display: none !important; 
-            }
-        }
+      body.show-3d-on-mobile .container,
+      body.show-3d-on-mobile .right-panel,
+      body.show-3d-on-mobile h1,
+      body.show-3d-on-mobile h2,
+      body.show-3d-on-mobile canvas#starfield {
+        display: none;
+      }
 
-        @media screen and (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            .container { width: 95%; padding: 15px; margin-top: 140px; }
-            .right-panel { width: 95%; padding: 15px; }
-            
-            .value, .d-value, .res-val, #dist-total {
-                font-size: 1.1rem !important; 
-                word-break: break-all;      
-                white-space: normal;
-            }
+      body.show-3d-on-mobile #solar-system-container {
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #000;
+        z-index: 100;
+      }
 
-            .controls-container { gap: 5px; }
-            .toggle-btn { padding: 5px 8px; font-size: 0.7rem; }
-            
-            .total-box { overflow: hidden; }
-        }
+      body.show-3d-on-mobile #solar-controls {
+        top: 50px;
+        bottom: auto;
+        left: 50%;
+        width: 90%;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
 
-    </style>
+      body.show-3d-on-mobile #mobile-toggle-btn { z-index: 1001; }
+      #focus-separator { display: none !important; }
+    }
+
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      .container { width: 95%; padding: 15px; margin-top: 140px; }
+      .right-panel { width: 95%; padding: 15px; }
+
+      .value, .d-value, .res-val, #dist-total {
+        font-size: 1.1rem !important;
+        word-break: break-all;
+        white-space: normal;
+      }
+
+      .controls-container { gap: 5px; }
+      .toggle-btn { padding: 5px 8px; font-size: 0.7rem; }
+      .total-box { overflow: hidden; }
+    }
+  </style>
 </head>
+
 <body>
+  <canvas id="starfield"></canvas>
 
-    <canvas id="starfield"></canvas>
+  <button id="mobile-toggle-btn" onclick="toggleMobileView()">🌌 VIEW SOLAR SYSTEM</button>
 
-    <button id="mobile-toggle-btn" onclick="toggleMobileView()">🌌 VIEW SOLAR SYSTEM</button>
+  <div id="solar-system-container">
+    <div id="solar-controls">
+      <button class="toggle-btn active" id="mode-cinematic" onclick="setOrbitMode('cinematic')">CINEMATIC</button>
+      <button class="toggle-btn" id="btn-ff" onclick="toggleFastForward()" style="border-color:#ffd700; color:#ffd700;">⏩ 10X SPEED</button>
+      <button class="toggle-btn" id="mode-live" onclick="setOrbitMode('live')">TODAY (VORTEX)</button>
+      <button class="toggle-btn" id="mode-birth" onclick="setOrbitMode('birth')">BIRTH DATE</button>
 
-    <div id="solar-system-container">
-        <div id="solar-controls">
-            <button class="toggle-btn active" id="mode-cinematic" onclick="setOrbitMode('cinematic')">CINEMATIC</button>
-            <button class="toggle-btn" id="btn-ff" onclick="toggleFastForward()" style="border-color:#ffd700; color:#ffd700;">⏩ 10X SPEED</button>
-            <button class="toggle-btn" id="mode-live" onclick="setOrbitMode('live')">TODAY (VORTEX)</button>
-            <button class="toggle-btn" id="mode-birth" onclick="setOrbitMode('birth')">BIRTH DATE</button>
-            
-            <div id="focus-separator" class="separator-line" style="display: none;"></div>
-            <button class="toggle-btn" id="btn-focus" onclick="toggleFocus()" style="display: none; border-color:#ff0055; color:#ff0055;">🌍 TRACK EARTH</button>
-        </div>
+      <div id="focus-separator" class="separator-line" style="display:none;"></div>
+      <button class="toggle-btn" id="btn-focus" onclick="trackObject('earth')" style="display:none; border-color:#2277ff; color:#2277ff;">🌍 EARTH</button>
+      <button class="toggle-btn" id="btn-v1" onclick="trackObject('v1')" style="display:none; border-color:#ff4444; color:#ff4444;">🔴 VOYAGER 1</button>
+      <button class="toggle-btn" id="btn-v2" onclick="trackObject('v2')" style="display:none; border-color:#4444ff; color:#4444ff;">🔵 VOYAGER 2</button>
+    </div>
+  </div>
+
+  <h1 data-i18n="title">Cosmic Odometer</h1>
+  <h2 data-i18n="subtitle" style="font-size:1rem; color:#8892b0; margin-top:-10px; font-weight:normal;">
+    Space Travel Calculator & Age in Seconds
+  </h2>
+
+  <div class="container">
+    <div id="share-tooltip" data-i18n="copied">Link Copied!</div>
+
+    <div class="controls-container">
+      <button class="toggle-btn" id="installBtn" onclick="installPWA()">📲 INSTALL APP</button>
+
+      <div class="unit-toggle-group">
+        <button class="toggle-btn active" id="btn-km" onclick="setUnit('km')">KM</button>
+        <button class="toggle-btn" id="btn-mi" onclick="setUnit('mi')">MILES</button>
+      </div>
+
+      <button class="toggle-btn icon-btn btn-x" onclick="shareSocial('twitter')" title="Tweet Stats">𝕏</button>
+      <button class="toggle-btn icon-btn btn-wa" onclick="shareSocial('whatsapp')" title="Share on WhatsApp">💬</button>
+      <button class="toggle-btn icon-btn" onclick="shareSocial('native')" title="Share Link">🔗</button>
+      <button class="toggle-btn icon-btn" id="btn-motion" onclick="toggleMotion()" title="Pause Animation">⏸</button>
+      <button class="toggle-btn icon-btn" onclick="generateReceipt()" title="Download Receipt">🧾</button>
+
+      <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="jp">日本語</option>
+      </select>
     </div>
 
-    <h1 data-i18n="title">Cosmic Odometer</h1>
-    <h2 data-i18n="subtitle" style="font-size: 1rem; color: #8892b0; margin-top: -10px; font-weight: normal;">
-        Space Travel Calculator & Age in Seconds
-    </h2>
+    <div class="input-group">
+      <div style="color:#00d4ff; font-size:0.9rem; font-weight:bold; text-transform:uppercase;">ENTER BIRTH DATE:</div>
 
-    <div class="container">
-        <div id="share-tooltip" data-i18n="copied">Link Copied!</div>
+      <div class="row">
+        <input type="date" id="birthDate" />
+        <input type="time" id="birthTime" value="12:00" />
+      </div>
 
-        <div class="controls-container">
-            <button class="toggle-btn" id="installBtn" onclick="installPWA()">📲 INSTALL APP</button>
-            
-            <div class="unit-toggle-group">
-                <button class="toggle-btn active" id="btn-km" onclick="setUnit('km')">KM</button>
-                <button class="toggle-btn" id="btn-mi" onclick="setUnit('mi')">MILES</button>
-            </div>
-
-            <button class="toggle-btn icon-btn btn-x" onclick="shareSocial('twitter')" title="Tweet Stats">𝕏</button>
-            <button class="toggle-btn icon-btn btn-wa" onclick="shareSocial('whatsapp')" title="Share on WhatsApp">💬</button>
-            <button class="toggle-btn icon-btn" onclick="shareSocial('native')" title="Share Link">🔗</button>
-            <button class="toggle-btn icon-btn" id="btn-motion" onclick="toggleMotion()" title="Pause Animation">⏸</button>
-            <button class="toggle-btn icon-btn" onclick="generateReceipt()" title="Download Receipt">🧾</button>
-
-            <select id="lang-select" class="lang-select" onchange="changeLanguage(this.value)">
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="es">Español</option>
-                <option value="jp">日本語</option>
-            </select>
+      <div class="range-container">
+        <div class="label" style="display:flex; justify-content:space-between; margin-bottom:5px;">
+          <span><span data-i18n="latitude">Latitude</span>: <span id="latDisplay" style="color:#00d4ff">0°</span></span>
+          <span id="rot-speed-display" style="color:#ffd700">0.465 km/s</span>
         </div>
-
-        <div class="input-group">
-            <div style="color: #00d4ff; font-size: 0.9rem; font-weight: bold; text-transform: uppercase;">ENTER BIRTH DATE:</div>
-
-            <div class="row">
-                <input type="date" id="birthDate">
-                <input type="time" id="birthTime" value="12:00">
-            </div>
-
-            <div class="range-container">
-                <div class="label" style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span><span data-i18n="latitude">Latitude</span>: <span id="latDisplay" style="color:#00d4ff">0°</span></span>
-                    <span id="rot-speed-display" style="color:#ffd700">0.465 km/s</span>
-                </div>
-                <input type="range" id="latRange" min="-90" max="90" value="0" step="1">
-            </div>
-        </div>
-
-        <div class="time-box">
-            <div class="time-label" data-i18n="mission_duration">Mission Duration</div>
-            <div class="time-display" id="time-display-text">Calculating...</div>
-        </div>
-        
-        <div class="metric session-box">
-            <div>
-                <div class="label" style="color: #00ff41">DISTANCE THIS SESSION</div>
-                <div class="label" style="font-size:0.7rem;">(Since opening this page)</div>
-            </div>
-            <div class="value" id="dist-session" style="color: #00ff41; font-size: 1.3rem;">0 km</div>
-        </div>
-
-        <div class="metric">
-            <div class="label" data-i18n="rotated">1. Rotated (Spin)</div>
-            <div class="value" id="dist-rot">0 km</div>
-        </div>
-        <div class="metric">
-            <div class="label" data-i18n="orbited">2. Orbited Sun</div>
-            <div class="value" id="dist-orbit">0 km</div>
-        </div>
-        <div class="metric">
-            <div class="label" data-i18n="solar_travel">3. Solar System Travel</div>
-            <div class="value" id="dist-solar">0 km</div>
-        </div>
-        <div class="metric">
-            <div class="label" data-i18n="galactic_travel">4. Galactic Travel</div>
-            <div class="value" id="dist-galaxy">0 km</div>
-        </div>
-
-        <div class="metric total-box">
-            <div>
-                <div class="label" style="color: white" data-i18n="total_distance">TOTAL DISTANCE</div>
-                <div class="total-speed-highlight" id="total-speed-display">Traveling at: 0 km/s</div>
-            </div>
-            <div class="value" id="dist-total" style="color: #00d4ff; font-size: 1.3rem;">0 km</div>
-        </div>
-
-        <div class="displacement-box">
-            <div class="d-title" data-i18n="displacement_title">Linear Travel Estimate</div>
-            <div class="d-value" id="dist-vector">0 km</div>
-            <div class="d-note" data-i18n="displacement_desc">
-                A simple estimate that ignores circular paths (spin/orbit). Not a true “from birth point” vector.
-            </div>
-        </div>
-        
-        <div class="multiplayer-box">
-            <h3>👩‍🚀 Cosmic Connection</h3>
-            <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Compare your flight path with a friend.</div>
-            
-            <div class="friend-input-wrapper">
-                <input type="date" id="friendDate" style="border-color: #9d4edd; background: rgba(0,0,0,0.3);">
-                <button class="compare-btn" onclick="calculateConnection()">CALCULATE GAP</button>
-            </div>
-
-            <div id="connection-results" class="result-row">
-                <div style="margin-bottom: 20px;">
-                    <div class="res-label">DISTANCE APART AT BIRTH</div>
-                    <div class="res-val" id="res-gap">0 km</div>
-                    <div style="font-size:0.7rem; color:#9d4edd; margin-top:3px;">
-                        The distance Earth traveled between your two birthdays.
-                    </div>
-                </div>
-                <div>
-                    <div class="res-label">SHARED JOURNEY</div>
-                    <div class="res-val" id="res-shared">0 km</div>
-                    <div style="font-size:0.7rem; color:#9d4edd; margin-top:3px;">
-                        Distance traveled together since you both existed.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="multiplayer-box" style="border-color: #00d4ff; background: rgba(0, 212, 255, 0.05);">
-            <h3 style="color: #00d4ff;">🚀 Party Predictor</h3>
-            <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Predict the exact day you will cross a major cosmic milestone.</div>
-            
-            <div class="friend-input-wrapper">
-                <select id="milestone-target" style="background: rgba(0,0,0,0.3); color: #fff; padding: 10px; border: 1px solid #00d4ff; border-radius: 5px; font-family: inherit; font-size: 0.9rem; outline: none;">
-                    <option value="100000000000">100 Billion</option>
-                    <option value="500000000000">500 Billion</option>
-                    <option value="1000000000000" selected>1 Trillion</option>
-                    <option value="5000000000000">5 Trillion</option>
-                </select>
-                <button class="compare-btn" style="border-color: #00d4ff; color: #00d4ff;" onclick="calculateFutureMilestone()" onmouseover="this.style.background='#00d4ff'; this.style.color='#000';" onmouseout="this.style.background='rgba(0, 212, 255, 0.2)'; this.style.color='#00d4ff';">PREDICT DATE</button>
-            </div>
-
-            <div id="milestone-result-container" class="result-row" style="border-color: rgba(0, 212, 255, 0.3);">
-                <div class="res-val" id="milestone-result" style="font-size: 1.1rem; color: #fff;"></div>
-                <a id="share-x-btn" href="#" target="_blank" style="display: none; margin-top: 15px; background: #1DA1F2; color: #fff; padding: 8px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem; border: 1px solid #1DA1F2;">
-                    🐦 Share Date to X
-                </a>
-            </div>
-        </div>
-
-        <div class="milestone-section">
-            <div class="progress-card">
-                <div class="p-header"><span data-i18n="moon_trips">Moon Round Trips</span><span id="txt-moon" style="color:#ffd700">0</span></div>
-                <div class="p-bar-bg"><div class="p-bar-fill" id="bar-moon" style="background: linear-gradient(90deg, #00d4ff, #ffffff);"></div></div>
-            </div>
-            <div class="progress-card">
-                <div class="p-header"><span data-i18n="passed_pluto">Passed Pluto</span><span id="txt-pluto" style="color:#ffd700">0x</span></div>
-                <div class="p-bar-bg"><div class="p-bar-fill" id="bar-pluto"></div></div>
-            </div>
-            <div class="progress-card">
-                <div class="p-header"><span data-i18n="light_year_prog">Progress to 1 Light Year</span><span id="txt-light" style="color:#ffd700">0%</span></div>
-                <div class="p-bar-bg"><div class="p-bar-fill" id="bar-light" style="background: linear-gradient(90deg, #ff0055, #ff5500);"></div></div>
-                <div class="p-detail"><span data-i18n="you_are">You are</span> <span id="light-years-raw">0</span> <span data-i18n="ly_away">LY away.</span></div>
-            </div>
-        </div>
-
-        <h3 class="manual-title" data-i18n="manual_title">Flight Manual</h3>
-        <div class="details-grid">
-            <details><summary>1. What is "Distance Apart"?</summary><div class="info-text">Because the Galaxy is moving at 2.1 million km/h, the Earth was in a completely different part of the universe when your friend was born compared to when you were born.</div></details>
-            <details><summary data-i18n="faq_1_q">2. What is "Rotated"?</summary><div class="info-text" data-i18n="faq_1_a">Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.</div></details>
-            <details><summary data-i18n="faq_2_q">3. What is "Orbited Sun"?</summary><div class="info-text" data-i18n="faq_2_a">Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.</div></details>
-            <details><summary data-i18n="faq_3_q">4. What is "Solar Travel"?</summary><div class="info-text" data-i18n="faq_3_a">The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).</div></details>
-            <details><summary data-i18n="faq_4_q">5. What is "Galactic Travel"?</summary><div class="info-text" data-i18n="faq_4_a">Our Galaxy moves at ~600 km/s (simplified) relative to the cosmic background.</div></details>
-        </div>
-
-        <div class="footer-section">
-            <div class="privacy-text" data-i18n="privacy">
-                🔒 Privacy Note: Your birth date/time are processed locally.
-            </div>
-            <a href="https://www.buymeacoffee.com/nemo7299" target="_blank" rel="noopener noreferrer" class="coffee-btn">
-                <span>🚀</span> Keep the odometer spinning 🧋
-            </a>
-            <a href="https://github.com/rohanjadhav1880-glitch/cosmic-odometer" class="author-link">Created by @nemo7299</a>
-        </div>
+        <input type="range" id="latRange" min="-90" max="90" value="0" step="1" />
+      </div>
     </div>
 
-    <div class="right-panel" id="milky-way-panel">
-        <h3>🌌 GALACTIC CONTEXT</h3>
-        
-        <div class="galaxy-map" id="galaxy-map">
-            <div id="galaxy-3d-container"></div>
-            <div class="you-are-here-label">YOU ARE HERE</div>
-        </div>
-
-        <div class="gal-stat">
-            <span class="gal-label">Galactic Speed</span>
-            <span class="gal-val">2.1M km/h</span>
-        </div>
-        <div class="gal-stat">
-            <span class="gal-label">Dist. to Center</span>
-            <span class="gal-val">26,000 LY</span>
-        </div>
-        <div class="gal-stat" style="border-bottom: none; margin-bottom: 0;">
-            <span class="gal-label">Cosmic Orbit Complete</span>
-            <span class="gal-val" id="cosmic-orbit-val" style="color: #00ff41;">0.0000%</span>
-        </div>
+    <div class="time-box">
+      <div class="time-label" data-i18n="mission_duration">Mission Duration</div>
+      <div class="time-display" id="time-display-text">Calculating...</div>
     </div>
 
-    <script>
-        // Mobile view toggle (calculator <-> 3D view)
-        let is3DViewVisibleOnMobile = false;
-        function toggleMobileView() {
-            is3DViewVisibleOnMobile = !is3DViewVisibleOnMobile;
-            const btn = document.getElementById('mobile-toggle-btn');
-            
-            if (is3DViewVisibleOnMobile) {
-                document.body.classList.add('show-3d-on-mobile');
-                btn.innerHTML = '🔙 BACK TO CALCULATOR';
-                setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
-            } else {
-                document.body.classList.remove('show-3d-on-mobile');
-                btn.innerHTML = '🌌 VIEW SOLAR SYSTEM';
-            }
+    <div class="metric session-box">
+      <div>
+        <div class="label" style="color:#00ff41">DISTANCE THIS SESSION</div>
+        <div class="label" style="font-size:0.7rem;">(Since opening this page)</div>
+      </div>
+      <div class="value" id="dist-session" style="color:#00ff41; font-size:1.3rem;">0 km</div>
+    </div>
+
+    <div class="metric">
+      <div class="label" data-i18n="rotated">1. Rotated (Spin)</div>
+      <div class="value" id="dist-rot">0 km</div>
+    </div>
+    <div class="metric">
+      <div class="label" data-i18n="orbited">2. Orbited Sun</div>
+      <div class="value" id="dist-orbit">0 km</div>
+    </div>
+    <div class="metric">
+      <div class="label" data-i18n="solar_travel">3. Solar System Travel</div>
+      <div class="value" id="dist-solar">0 km</div>
+    </div>
+    <div class="metric">
+      <div class="label" data-i18n="galactic_travel">4. Galactic Travel</div>
+      <div class="value" id="dist-galaxy">0 km</div>
+    </div>
+
+    <div class="metric total-box">
+      <div>
+        <div class="label" style="color:white" data-i18n="total_distance">TOTAL DISTANCE</div>
+        <div class="total-speed-highlight" id="total-speed-display">Traveling at: 0 km/s</div>
+      </div>
+      <div class="value" id="dist-total" style="color:#00d4ff; font-size:1.3rem;">0 km</div>
+    </div>
+
+    <div class="displacement-box">
+      <div class="d-title" data-i18n="displacement_title">Net Displacement Estimate</div>
+      <div class="d-value" id="dist-vector">0 km</div>
+      <div class="d-note">
+        Why is this just an estimate?
+        <span onclick="document.getElementById('physics-exp').classList.toggle('active')"
+              style="color:#00d4ff; text-decoration:underline; cursor:pointer;">Reveal the physics.</span>
+      </div>
+
+      <div id="physics-exp" class="result-row" style="border-top:1px solid rgba(255,0,85,0.3); text-align:left; margin-top:10px; padding-top:10px;">
+        <div style="font-size:0.75rem; color:#ff99bb; line-height:1.5;">
+          <strong>Astrophysics constraint:</strong> There is no absolute fixed grid in the universe! This vector uses the
+          600 km/s Cosmic Microwave Background rest frame. However, astronomical margin of error (±15 km/s) means your
+          true current location has an uncertainty radius of several billion kilometers. Einstein says hi! 🪐
+        </div>
+      </div>
+    </div>
+
+    <div class="multiplayer-box">
+      <h3>👩‍🚀 Cosmic Connection</h3>
+      <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Compare your flight path with a friend.</div>
+
+      <div class="friend-input-wrapper">
+        <input type="date" id="friendDate" style="border-color:#9d4edd; background:rgba(0,0,0,0.3);" />
+        <button class="compare-btn" onclick="calculateConnection()">CALCULATE GAP</button>
+      </div>
+
+      <div id="connection-results" class="result-row">
+        <div style="margin-bottom:20px;">
+          <div class="res-label">DISTANCE APART AT BIRTH</div>
+          <div class="res-val" id="res-gap">0 km</div>
+          <div style="font-size:0.7rem; color:#9d4edd; margin-top:3px;">The distance Earth traveled between your two birthdays.</div>
+        </div>
+        <div>
+          <div class="res-label">SHARED JOURNEY</div>
+          <div class="res-val" id="res-shared">0 km</div>
+          <div style="font-size:0.7rem; color:#9d4edd; margin-top:3px;">Distance traveled together since you both existed.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="multiplayer-box" style="border-color:#00d4ff; background:rgba(0,212,255,0.05);">
+      <h3 style="color:#00d4ff;">🚀 Party Predictor</h3>
+      <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Predict the exact day you will cross a major cosmic milestone.</div>
+
+      <div class="friend-input-wrapper">
+        <select id="milestone-target" style="background:rgba(0,0,0,0.3); color:#fff; padding:10px; border:1px solid #00d4ff; border-radius:5px; font-family:inherit; font-size:0.9rem; outline:none;">
+          <option value="100000000000">100 Billion</option>
+          <option value="500000000000">500 Billion</option>
+          <option value="1000000000000" selected>1 Trillion</option>
+          <option value="5000000000000">5 Trillion</option>
+        </select>
+        <button class="compare-btn"
+                style="border-color:#00d4ff; color:#00d4ff;"
+                onclick="calculateFutureMilestone()"
+                onmouseover="this.style.background='#00d4ff'; this.style.color='#000';"
+                onmouseout="this.style.background='rgba(0, 212, 255, 0.2)'; this.style.color='#00d4ff';">
+          PREDICT DATE
+        </button>
+      </div>
+
+      <div id="milestone-result-container" class="result-row" style="border-color:rgba(0,212,255,0.3);">
+        <div class="res-val" id="milestone-result" style="font-size:1.1rem; color:#fff;"></div>
+        <a id="share-x-btn" href="#" target="_blank"
+           style="display:none; margin-top:15px; background:#1DA1F2; color:#fff; padding:8px 20px; text-decoration:none; border-radius:5px; font-weight:bold; font-size:0.9rem; border:1px solid #1DA1F2;">
+          🐦 Share Date to X
+        </a>
+      </div>
+    </div>
+
+    <div class="milestone-section">
+      <div class="progress-card">
+        <div class="p-header"><span data-i18n="moon_trips">Moon Round Trips</span><span id="txt-moon" style="color:#ffd700">0</span></div>
+        <div class="p-bar-bg"><div class="p-bar-fill" id="bar-moon" style="background:linear-gradient(90deg,#00d4ff,#ffffff);"></div></div>
+      </div>
+
+      <div class="progress-card">
+        <div class="p-header"><span data-i18n="passed_pluto">Passed Pluto</span><span id="txt-pluto" style="color:#ffd700">0x</span></div>
+        <div class="p-bar-bg"><div class="p-bar-fill" id="bar-pluto"></div></div>
+      </div>
+
+      <div class="progress-card">
+        <div class="p-header"><span data-i18n="light_year_prog">Progress to 1 Light Year</span><span id="txt-light" style="color:#ffd700">0%</span></div>
+        <div class="p-bar-bg"><div class="p-bar-fill" id="bar-light" style="background:linear-gradient(90deg,#ff0055,#ff5500);"></div></div>
+        <div class="p-detail"><span data-i18n="you_are">You are</span> <span id="light-years-raw">0</span> <span data-i18n="ly_away">LY away.</span></div>
+      </div>
+    </div>
+
+    <h3 class="manual-title" data-i18n="manual_title">Flight Manual</h3>
+    <div class="details-grid">
+      <details>
+        <summary>1. What is "Distance Apart"?</summary>
+        <div class="info-text">Because the Galaxy is moving at 2.1 million km/h, the Earth was in a completely different part of the universe when your friend was born compared to when you were born.</div>
+      </details>
+      <details><summary data-i18n="faq_1_q">2. What is "Rotated"?</summary><div class="info-text" data-i18n="faq_1_a">Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.</div></details>
+      <details><summary data-i18n="faq_2_q">3. What is "Orbited Sun"?</summary><div class="info-text" data-i18n="faq_2_a">Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.</div></details>
+      <details><summary data-i18n="faq_3_q">4. What is "Solar Travel"?</summary><div class="info-text" data-i18n="faq_3_a">The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).</div></details>
+      <details><summary data-i18n="faq_4_q">5. What is "Galactic Travel"?</summary><div class="info-text" data-i18n="faq_4_a">Our Galaxy moves at ~600 km/s (simplified) relative to the cosmic background.</div></details>
+    </div>
+
+    <div class="footer-section">
+      <div class="privacy-text" data-i18n="privacy">🔒 Privacy Note: Your birth date/time are processed locally.</div>
+      <a href="https://www.buymeacoffee.com/nemo7299" target="_blank" rel="noopener noreferrer" class="coffee-btn">
+        <span>🚀</span> Keep the odometer spinning 🧋
+      </a>
+      <a href="https://github.com/rohanjadhav1880-glitch/cosmic-odometer" class="author-link">Created by @nemo7299</a>
+    </div>
+  </div>
+
+  <div class="right-panel" id="milky-way-panel">
+    <h3>🌌 GALACTIC CONTEXT</h3>
+
+    <div class="galaxy-map" id="galaxy-map">
+      <div id="galaxy-3d-container"></div>
+      <div class="you-are-here-label">YOU ARE HERE</div>
+    </div>
+
+    <div class="gal-stat"><span class="gal-label">Galactic Speed</span><span class="gal-val">2.1M km/h</span></div>
+    <div class="gal-stat"><span class="gal-label">Dist. to Center</span><span class="gal-val">26,000 LY</span></div>
+    <div class="gal-stat" style="border-bottom:none; margin-bottom:0;">
+      <span class="gal-label">Cosmic Orbit Complete</span>
+      <span class="gal-val" id="cosmic-orbit-val" style="color:#00ff41;">0.0000%</span>
+    </div>
+  </div>
+
+  <!-- App logic -->
+  <script>
+    (function () {
+      "use strict";
+
+      // Expose handlers used by inline onclick=""
+      window.toggleMobileView = toggleMobileView;
+      window.setOrbitMode = setOrbitMode;
+      window.trackObject = trackObject;
+      window.toggleFastForward = toggleFastForward;
+
+      window.installPWA = installPWA;
+      window.shareSocial = shareSocial;
+      window.setUnit = setUnit;
+      window.toggleMotion = toggleMotion;
+      window.generateReceipt = generateReceipt;
+
+      window.changeLanguage = changeLanguage;
+      window.calculateConnection = calculateConnection;
+      window.calculateFutureMilestone = calculateFutureMilestone;
+
+      // Constants
+      const DIST = {
+        MOON_ROUND_TRIP_KM: 768800,
+        PLUTO_KM: 5900000000,
+        LIGHT_YEAR_KM: 9460730472580
+      };
+
+      const SPEED = {
+        ORBIT_KM_S: 29.78,
+        SOLAR_KM_S: 220,
+        GALAXY_KM_S: 600
+      };
+
+      const MAX_ROTATION_KM_S = 0.4651;
+      const KM_TO_MILES = 0.621371;
+      const J2000_MS = new Date("2000-01-01T12:00:00Z").getTime();
+
+      // State
+      let is3DViewVisibleOnMobile = false;
+      let deferredPrompt = null;
+
+      let useMiles = false;
+      let isAnimating = true;
+      let currentLang = "en";
+
+      let currentRotationSpeedKmS = MAX_ROTATION_KM_S;
+      const sessionStartMs = Date.now();
+
+      // 3D flags shared with the Three.js code
+      window.orbitMode = "cinematic";
+      window.trackingTarget = "sun";
+      window.cinematicSpeedMult = 1;
+
+      // DOM helpers
+      const $ = (id) => document.getElementById(id);
+
+      const dateInput = $("birthDate");
+      const timeInput = $("birthTime");
+      const latRange = $("latRange");
+      const timeDisplayText = $("time-display-text");
+      const langSelect = $("lang-select");
+
+      // i18n
+      const translations = {
+        en: {
+          title: "Cosmic Odometer",
+          subtitle: "Space Travel Calculator & Age in Seconds",
+          copied: "Link Copied!",
+          latitude: "Latitude",
+          mission_duration: "Mission Duration",
+          rotated: "1. Rotated (Spin)",
+          orbited: "2. Orbited Sun",
+          solar_travel: "3. Solar System Travel",
+          galactic_travel: "4. Galactic Travel",
+          total_distance: "TOTAL DISTANCE",
+          traveling_at: "Traveling at",
+          displacement_title: "Net Displacement Estimate",
+          moon_trips: "Moon Round Trips",
+          passed_pluto: "Passed Pluto",
+          light_year_prog: "Progress to 1 Light Year",
+          you_are: "You are",
+          ly_away: "LY away.",
+          manual_title: "Flight Manual",
+          faq_1_q: "1. What is \"Rotated\"?",
+          faq_1_a: "Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.",
+          faq_2_q: "2. What is \"Orbited Sun\"?",
+          faq_2_a: "Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.",
+          faq_3_q: "3. What is \"Solar Travel\"?",
+          faq_3_a: "The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).",
+          faq_4_q: "4. What is \"Galactic Travel\"?",
+          faq_4_a: "Our Galaxy moves at ~600 km/s (simplified) relative to the cosmic background.",
+          privacy: "🔒 Privacy Note: Your birth date/time are processed locally and are not sent to our server.",
+          unit_y: "y", unit_mo: "mo", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
+          welcome: "Welcome, Time Traveler"
+        },
+        fr: {
+          title: "Odomètre cosmique",
+          subtitle: "Calculateur de voyage spatial & âge en secondes",
+          copied: "Lien copié !",
+          latitude: "Latitude",
+          mission_duration: "Durée de mission",
+          rotated: "1. Rotation (Spin)",
+          orbited: "2. Orbite solaire",
+          solar_travel: "3. Voyage du système solaire",
+          galactic_travel: "4. Voyage galactique",
+          total_distance: "DISTANCE TOTALE",
+          traveling_at: "Vitesse",
+          displacement_title: "Estimation linéaire",
+          moon_trips: "Allers-retours Lune",
+          passed_pluto: "Pluton dépassée",
+          light_year_prog: "Progression vers 1 année-lumière",
+          you_are: "Tu es à",
+          ly_away: "AL.",
+          manual_title: "Manuel de vol",
+          faq_1_q: "1. Qu’est-ce que « Rotation » ?",
+          faq_1_a: "Distance due à la rotation terrestre. À l’équateur : ~1 600 km/h. Aux pôles : 0.",
+          faq_2_q: "2. Qu’est-ce que « Orbite solaire » ?",
+          faq_2_a: "La Terre tourne autour du Soleil à ~107 000 km/h.",
+          faq_3_q: "3. Qu’est-ce que « Voyage solaire » ?",
+          faq_3_a: "Le Soleil entraîne le système solaire dans la Voie lactée à ~792 000 km/h.",
+          faq_4_q: "4. Qu’est-ce que « Voyage galactique » ?",
+          faq_4_a: "Notre galaxie se déplace à ~600 km/s (simplifié) par rapport au fond cosmique.",
+          privacy: "🔒 Confidentialité : la date/heure de naissance est traitée localement.",
+          unit_y: "a", unit_mo: "mo", unit_d: "j", unit_h: "h", unit_min: "min", unit_s: "s",
+          welcome: "Bienvenue"
+        },
+        es: {
+          title: "Odómetro Cósmico",
+          subtitle: "Calculadora de viaje espacial y edad",
+          copied: "¡Enlace copiado!",
+          latitude: "Latitud",
+          mission_duration: "Duración de misión",
+          rotated: "1. Rotación (Giro)",
+          orbited: "2. Órbita solar",
+          solar_travel: "3. Viaje del sistema solar",
+          galactic_travel: "4. Viaje galáctico",
+          total_distance: "DISTANCIA TOTAL",
+          traveling_at: "Viajando a",
+          displacement_title: "Estimación lineal",
+          moon_trips: "Viajes a la Luna (ida y vuelta)",
+          passed_pluto: "Pasado Plutón",
+          light_year_prog: "Progreso a 1 año luz",
+          you_are: "Estás a",
+          ly_away: "AL.",
+          manual_title: "Manual de vuelo",
+          faq_1_q: "1. ¿Qué es «Rotación»?",
+          faq_1_a: "Distancia por el giro de la Tierra. En el ecuador: ~1.600 km/h. En los polos: 0.",
+          faq_2_q: "2. ¿Qué es «Órbita solar»?",
+          faq_2_a: "La Tierra corre alrededor del Sol a ~107.000 km/h.",
+          faq_3_q: "3. ¿Qué es «Viaje solar»?",
+          faq_3_a: "El Sol arrastra el sistema solar por la Vía Láctea a ~792.000 km/h.",
+          faq_4_q: "4. ¿Qué es «Viaje galáctico»?",
+          faq_4_a: "Nuestra galaxia se mueve a ~600 km/s (simplificado) relativo al fondo cósmico.",
+          privacy: "🔒 Privacidad: fecha/hora procesadas localmente.",
+          unit_y: "a", unit_mo: "mo", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
+          welcome: "Bienvenido"
+        },
+        jp: {
+          title: "宇宙走行距離計",
+          subtitle: "宇宙旅行計算機 & 秒単位の年齢",
+          copied: "リンクをコピーしました!",
+          latitude: "緯度",
+          mission_duration: "ミッション経過時間",
+          rotated: "1. 自転距離",
+          orbited: "2. 公転距離",
+          solar_travel: "3. 太陽系移動距離",
+          galactic_travel: "4. 銀河系移動距離",
+          total_distance: "総移動距離",
+          traveling_at: "現在の速度",
+          displacement_title: "直線推定",
+          moon_trips: "月への往復回数",
+          passed_pluto: "冥王星通過回数",
+          light_year_prog: "1光年への到達度",
+          you_are: "現在",
+          ly_away: "光年。",
+          manual_title: "フライトマニュアル",
+          faq_1_q: "1. 自転距離とは？",
+          faq_1_a: "地球の自転による移動。赤道付近では時速約1,600km。極点では0。",
+          faq_2_q: "2. 公転距離とは？",
+          faq_2_a: "地球は時速約107,000kmで太陽の周りを回っています。",
+          faq_3_q: "3. 太陽系移動距離とは？",
+          faq_3_a: "太陽は惑星を引き連れて天の川銀河を時速約792,000kmで移動しています。",
+          faq_4_q: "4. 銀河系移動距離とは？",
+          faq_4_a: "銀河は宇宙背景に対して約600km/s（簡易）で移動します。",
+          privacy: "🔒 プライバシー：誕生日/時刻はローカル処理され、当サイトのサーバーには送信されません。",
+          unit_y: "年", unit_mo: "ヶ月", unit_d: "日", unit_h: "時間", unit_min: "分", unit_s: "秒",
+          welcome: "ようこそ、タイムトラベラー"
         }
+      };
 
-        // Orbit mode state + camera/controls toggles
-        window.orbitMode = 'cinematic';
-        window.isTrackingEarth = false;
-        
-        function setOrbitMode(mode) {
-            window.orbitMode = mode;
-            document.getElementById('mode-cinematic').classList.toggle('active', mode === 'cinematic');
-            document.getElementById('mode-live').classList.toggle('active', mode === 'live');
-            document.getElementById('mode-birth').classList.toggle('active', mode === 'birth');
-            
-            const focusBtn = document.getElementById('btn-focus');
-            const focusSep = document.getElementById('focus-separator');
-            const ffBtn = document.getElementById('btn-ff');
+      function t(key) {
+        const pack = translations[currentLang] || translations.en;
+        return pack[key] ?? key;
+      }
 
-            if (window.trailGroup) {
-                window.trailGroup.visible = (mode === 'live');
-                if (mode === 'live' && window.update3DTrails) {
-                    window.update3DTrails(); 
-                }
-            }
-
-            if (window.cinematicTrailGroup) {
-                window.cinematicTrailGroup.visible = (mode === 'cinematic');
-            }
-
-            const container = document.getElementById('solar-system-container');
-            if (window.solarControls && window.solarCamera) {
-                if (mode === 'live') {
-                    window.solarControls.enabled = true;
-                    container.style.pointerEvents = 'auto'; 
-                    container.style.cursor = 'grab';
-                    
-                    focusBtn.style.display = 'block';
-                    focusSep.style.display = 'block';
-                    if (ffBtn) ffBtn.style.display = 'none';
-                    
-                    window.solarCamera.position.set(0, 5, 130);
-                    window.solarControls.target.set(0, 5, 0);
-                    window.solarControls.update();
-                } else if (mode === 'cinematic') {
-                    window.solarControls.enabled = true;
-                    container.style.pointerEvents = 'auto'; 
-                    container.style.cursor = 'grab';
-                    
-                    focusBtn.style.display = 'none';
-                    focusSep.style.display = 'none';
-                    if (ffBtn) ffBtn.style.display = 'block';
-                    
-                    window.isTrackingEarth = false;
-                    focusBtn.innerText = "🌍 TRACK EARTH";
-                    focusBtn.classList.remove('active');
-                    
-                    window.solarCamera.position.set(0, 5, 130);
-                    window.solarControls.target.set(0, 5, 0); 
-                    window.solarControls.update();
-                } else {
-                   
-                    window.solarControls.enabled = true;
-                    container.style.pointerEvents = 'auto'; 
-                    container.style.cursor = 'grab';
-                    
-                    focusBtn.style.display = 'none';
-                    focusSep.style.display = 'none';
-                    if (ffBtn) ffBtn.style.display = 'none';
-                    
-                    window.isTrackingEarth = false;
-                    focusBtn.innerText = "🌍 TRACK EARTH";
-                    focusBtn.classList.remove('active');
-                    
-                    
-                    window.solarCamera.position.set(0, 5, 130);
-                    window.solarControls.target.set(0, 5, 0); 
-                    window.solarControls.update();
-                }
-            }
-        }
-
-        window.toggleFocus = function() {
-            window.isTrackingEarth = !window.isTrackingEarth;
-            const btn = document.getElementById('btn-focus');
-            
-            if (window.isTrackingEarth) {
-                btn.innerText = "☀️ TRACK SUN";
-                btn.classList.add('active');
-                
-                if(window.earthMesh) {
-                    const earthPos = new THREE.Vector3();
-                    window.earthMesh.getWorldPosition(earthPos);
-                    const sunPos = new THREE.Vector3(0, 5, 0);
-                    const directionToSun = new THREE.Vector3().subVectors(sunPos, earthPos).normalize();
-                    const idealCameraPos = earthPos.clone().add(directionToSun.multiplyScalar(6)).add(new THREE.Vector3(0, 3, 0));
-                    window.solarCamera.position.copy(idealCameraPos);
-                }
-            } else {
-                btn.innerText = "🌍 TRACK EARTH";
-                btn.classList.remove('active');
-                window.solarCamera.position.set(0, 5, 130);
-            }
-        }
-
-        window.cinematicSpeedMult = 1;
-        window.toggleFastForward = function() {
-            window.cinematicSpeedMult = (window.cinematicSpeedMult === 1) ? 10 : 1;
-            const btn = document.getElementById('btn-ff');
-            
-            if (window.cinematicSpeedMult > 1) {
-                btn.classList.add('active');
-                btn.style.backgroundColor = '#ffd700';
-                btn.style.color = '#000';
-            } else {
-                btn.classList.remove('active');
-                btn.style.backgroundColor = 'transparent';
-                btn.style.color = '#ffd700';
-            }
-        }
-
-        const DIST_MOON_ROUNDTRIP = 768800;
-        const DIST_PLUTO = 5900000000;
-        const DIST_LIGHT_YEAR = 9460730472580;
-
-        const SPEED_ORBIT = 29.78;
-        const SPEED_SOLAR = 220;
-        const SPEED_GALAXY = 600;
-
-        const MAX_ROTATION_SPEED = 0.4651;
-        const KM_TO_MILES = 0.621371;
-
-        let currentRotationSpeed = MAX_ROTATION_SPEED;
-        let useMiles = false;
-        let isAnimating = true;
-        let currentLang = 'en';
-        
-        const sessionStartTime = Date.now();
-
-        const dateInput = document.getElementById('birthDate');
-        const timeInput = document.getElementById('birthTime');
-        const latRange = document.getElementById('latRange');
-        const timeDisplayText = document.getElementById('time-display-text');
-        const langSelect = document.getElementById('lang-select');
-        
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('installBtn').style.display = 'block';
+      function applyLanguage() {
+        const pack = translations[currentLang] || translations.en;
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (pack[key]) el.innerText = pack[key];
         });
+        updateTotalSpeedDisplay();
+      }
 
-        async function installPWA() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    deferredPrompt = null;
-                }
-            }
-        }
-        
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(
-                    (registration) => console.log('SW registered: ', registration),
-                    (err) => console.log('SW registration failed: ', err)
-                );
-            });
-        }
+      // PWA install prompt
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        $("installBtn").style.display = "block";
+      });
 
-        const translations = {
-            en: {
-                title: "Cosmic Odometer",
-                subtitle: "Space Travel Calculator & Age in Seconds",
-                copied: "Link Copied!",
-                latitude: "Latitude",
-                mission_duration: "Mission Duration",
-                rotated: "1. Rotated (Spin)",
-                orbited: "2. Orbited Sun",
-                solar_travel: "3. Solar System Travel",
-                galactic_travel: "4. Galactic Travel",
-                total_distance: "TOTAL DISTANCE",
-                traveling_at: "Traveling at",
-                displacement_title: "Linear Travel Estimate",
-                displacement_desc: "A simple estimate that ignores circular paths (spin/orbit). Not a true “from birth point” vector.",
-                moon_trips: "Moon Round Trips",
-                moon_desc: "Enough distance to fly to the Moon and back.",
-                passed_pluto: "Passed Pluto",
-                pluto_desc: "Laps of the entire Solar System.",
-                light_year_prog: "Progress to 1 Light Year",
-                you_are: "You are",
-                ly_away: "LY away.",
-                manual_title: "Flight Manual",
-                faq_1_q: "1. What is \"Rotated\"?",
-                faq_1_a: "Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.",
-                faq_2_q: "2. What is \"Orbited Sun\"?",
-                faq_2_a: "Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.",
-                faq_3_q: "3. What is \"Solar Travel\"?",
-                faq_3_a: "The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).",
-                faq_4_q: "4. What is \"Galactic Travel\"?",
-                faq_4_a: "Our Galaxy moves at ~600 km/s (simplified) relative to the cosmic background.",
-                faq_5_q: "Total Distance?",
-                faq_5_a: "The sum of these speeds into one total path length since you were born (fun approximation).",
-                privacy: "🔒 Privacy Note: Your birth date/time are processed locally and are not sent to our server.",
-                unit_y: "y", unit_mo: "mo", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
-                welcome: "Welcome, Time Traveler"
-            },
-            fr: {
-                title: "Odomètre cosmique",
-                subtitle: "Calculateur de voyage spatial & âge en secondes",
-                copied: "Lien copié !",
-                latitude: "Latitude",
-                mission_duration: "Durée de mission",
-                rotated: "1. Rotation (Spin)",
-                orbited: "2. Orbite solaire",
-                solar_travel: "3. Voyage du système solaire",
-                galactic_travel: "4. Voyage galactique",
-                total_distance: "DISTANCE TOTALE",
-                traveling_at: "Vitesse",
-                displacement_title: "Estimation linéaire",
-                displacement_desc: "Estimation simple qui ignore les trajectoires circulaires (rotation/orbite). Pas un vrai vecteur depuis la naissance.",
-                moon_trips: "Allers-retours Lune",
-                moon_desc: "Distance suffisante pour aller à la Lune et revenir.",
-                passed_pluto: "Pluton dépassée",
-                pluto_desc: "Tours complets du système solaire.",
-                light_year_prog: "Progression vers 1 année-lumière",
-                you_are: "Tu es à",
-                ly_away: "AL.",
-                manual_title: "Manuel de vol",
-                faq_1_q: "1. Qu’est-ce que « Rotation » ?",
-                faq_1_a: "Distance due à la rotation terrestre. À l’équateur : ~1 600 km/h. Aux pôles : 0.",
-                faq_2_q: "2. Qu’est-ce que « Orbite solaire » ?",
-                faq_2_a: "La Terre tourne autour du Soleil à ~107 000 km/h.",
-                faq_3_q: "3. Qu’est-ce que « Voyage solaire » ?",
-                faq_3_a: "Le Soleil entraîne le système solaire dans la Voie lactée à ~792 000 km/h.",
-                faq_4_q: "4. Qu’est-ce que « Voyage galactique » ?",
-                faq_4_a: "Notre galaxie se déplace à ~600 km/s (simplifié) par rapport au fond cosmique.",
-                faq_5_q: "Distance totale ?",
-                faq_5_a: "Somme des vitesses en une longueur totale (approximation).",
-                privacy: "🔒 Confidentialité : la date/heure de naissance est traitée localement.",
-                unit_y: "a", unit_mo: "mo", unit_d: "j", unit_h: "h", unit_min: "min", unit_s: "s",
-                welcome: "Bienvenue"
-            },
-            es: {
-                title: "Odómetro Cósmico",
-                subtitle: "Calculadora de viaje espacial y edad",
-                copied: "¡Enlace copiado!",
-                latitude: "Latitud",
-                mission_duration: "Duración de misión",
-                rotated: "1. Rotación (Giro)",
-                orbited: "2. Órbita solar",
-                solar_travel: "3. Viaje del sistema solar",
-                galactic_travel: "4. Viaje galáctico",
-                total_distance: "DISTANCIA TOTAL",
-                traveling_at: "Viajando a",
-                displacement_title: "Estimación lineal",
-                displacement_desc: "Estimación simple que ignora trayectorias circulares (rotación/órbita). No es un vector real desde el nacimiento.",
-                moon_trips: "Viajes a la Luna (ida y vuelta)",
-                moon_desc: "Distancia suficiente para ir a la Luna y volver.",
-                passed_pluto: "Pasado Plutón",
-                pluto_desc: "Vueltas completas al sistema solar.",
-                light_year_prog: "Progreso a 1 año luz",
-                you_are: "Estás a",
-                ly_away: "AL.",
-                manual_title: "Manual de vuelo",
-                faq_1_q: "1. ¿Qué es «Rotación»?",
-                faq_1_a: "Distancia por el giro de la Tierra. En el ecuador: ~1.600 km/h. En los polos: 0.",
-                faq_2_q: "2. ¿Qué es «Órbita solar»?",
-                faq_2_a: "La Tierra corre alrededor del Sol a ~107.000 km/h.",
-                faq_3_q: "3. ¿Qué es «Viaje solar»?",
-                faq_3_a: "El Sol arrastra el sistema solar por la Vía Láctea a ~792.000 km/h.",
-                faq_4_q: "4. ¿Qué es «Viaje galáctico»?",
-                faq_4_a: "Nuestra galaxia se mueve a ~600 km/s (simplificado) relativo al fondo cósmico.",
-                faq_5_q: "¿Distancia total?",
-                faq_5_a: "Suma de velocidades como una longitud total (aprox.).",
-                privacy: "🔒 Privacidad: fecha/hora procesadas localmente.",
-                unit_y: "a", unit_mo: "mo", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
-                welcome: "Bienvenido"
-            },
-            jp: {
-                title: "宇宙走行距離計",
-                subtitle: "宇宙旅行計算機 & 秒単位の年齢",
-                copied: "リンクをコピーしました!",
-                latitude: "緯度",
-                mission_duration: "ミッション経過時間",
-                rotated: "1. 自転距離",
-                orbited: "2. 公転距離",
-                solar_travel: "3. 太陽系移動距離",
-                galactic_travel: "4. 銀河系移動距離",
-                total_distance: "総移動距離",
-                traveling_at: "現在の速度",
-                displacement_title: "直線推定",
-                displacement_desc: "自転/公転などの円運動を無視した簡易推定です。出生地点からの厳密なベクトルではありません。",
-                moon_trips: "月への往復回数",
-                moon_desc: "月まで行って帰ってこれる距離。",
-                passed_pluto: "冥王星通過回数",
-                pluto_desc: "太陽系全体を何周したか。",
-                light_year_prog: "1光年への到達度",
-                you_are: "現在",
-                ly_away: "光年。",
-                manual_title: "フライトマニュアル",
-                faq_1_q: "1. 自転距離とは？",
-                faq_1_a: "地球の自転による移動。赤道付近では時速約1,600km。極点では0。",
-                faq_2_q: "2. 公転距離とは？",
-                faq_2_a: "地球は時速約107,000kmで太陽の周りを回っています。",
-                faq_3_q: "3. 太陽系移動距離とは？",
-                faq_3_a: "太陽は惑星を引き連れて天の川銀河を時速約792,000kmで移動しています。",
-                faq_4_q: "4. 銀河系移動距離とは？",
-                faq_4_a: "銀河は宇宙背景に対して約600km/s（簡易）で移動します。",
-                faq_5_q: "総移動距離とは？",
-                faq_5_a: "速度を合計した総距離（概算）です。",
-                privacy: "🔒 プライバシー：誕生日/時刻はローカル処理され、当サイトのサーバーには送信されません。",
-                unit_y: "年", unit_mo: "ヶ月", unit_d: "日", unit_h: "時間", unit_min: "分", unit_s: "秒",
-                welcome: "ようこそ、タイムトラベラー"
-            }
-        };
+      async function installPWA() {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === "accepted") deferredPrompt = null;
+      }
 
-        function getT(key) {
-            return (translations[currentLang] && translations[currentLang][key]) ? translations[currentLang][key] : key;
-        }
-
-        function initData() {
-            const urlParams = new URLSearchParams(window.location.search);
-
-            const savedDate = localStorage.getItem('cosmic_date');
-            const savedTime = localStorage.getItem('cosmic_time');
-            const savedLat = localStorage.getItem('cosmic_lat');
-            const savedUnit = localStorage.getItem('cosmic_unit');
-            const savedLang = localStorage.getItem('cosmic_lang');
-
-            const urlLang = urlParams.get('lang');
-            if (urlLang && translations[urlLang]) {
-                currentLang = urlLang;
-            } else if (savedLang && translations[savedLang]) {
-                currentLang = savedLang;
-            }
-            langSelect.value = currentLang;
-            applyLanguage(currentLang);
-
-            if (urlParams.has('date')) dateInput.value = urlParams.get('date');
-            else if (savedDate) dateInput.value = savedDate;
-            else dateInput.valueAsDate = new Date();
-
-            if (urlParams.has('time')) timeInput.value = urlParams.get('time');
-            else if (savedTime) timeInput.value = savedTime;
-
-            if (urlParams.has('lat')) latRange.value = urlParams.get('lat');
-            else if (savedLat) latRange.value = savedLat;
-
-            const urlUnit = urlParams.get('unit');
-            const effectiveUnit = urlUnit || savedUnit || 'km';
-            useMiles = (effectiveUnit === 'mi');
-
-            document.getElementById('btn-km').classList.toggle('active', !useMiles);
-            document.getElementById('btn-mi').classList.toggle('active', useMiles);
-        }
-
-        function saveData() {
-            localStorage.setItem('cosmic_date', dateInput.value);
-            localStorage.setItem('cosmic_time', timeInput.value);
-            localStorage.setItem('cosmic_lat', latRange.value);
-            localStorage.setItem('cosmic_unit', useMiles ? 'mi' : 'km');
-            localStorage.setItem('cosmic_lang', currentLang);
-        }
-
-        function changeLanguage(lang) {
-            currentLang = translations[lang] ? lang : 'en';
-            saveData();
-            applyLanguage(currentLang);
-            updateDashboard();
-        }
-
-        function applyLanguage(lang) {
-            const t = translations[lang];
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) el.innerText = t[key];
-            });
-            updateTotalSpeedDisplay();
-        }
-
-        function getShareData() {
-            const baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            const params = new URLSearchParams();
-            params.set('date', dateInput.value);
-            params.set('unit', useMiles ? 'mi' : 'km');
-            params.set('lang', currentLang);
-
-            const fullUrl = `${baseUrl}?${params.toString()}`;
-            const totalDist = document.getElementById('dist-total').innerText;
-            
-            const friendDist = document.getElementById('res-shared').innerText;
-            const isComparing = document.getElementById('connection-results').classList.contains('active');
-
-            let text = `I have traveled ${totalDist} through the universe since birth. 🚀`;
-            if (isComparing) {
-                text = `My friend and I have traveled ${friendDist} together through the cosmos. 👯‍♀️`;
-            }
-            text += `\nCheck your cosmic mileage here:`;
-
-            return { title: "Cosmic Odometer", text: text, url: fullUrl };
-        }
-
-        function shareSocial(platform) {
-            const data = getShareData();
-            
-            if (platform === 'twitter') {
-                const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(data.text)}&url=${encodeURIComponent(data.url)}`;
-                window.open(tweetUrl, '_blank');
-            } else if (platform === 'whatsapp') {
-                const waUrl = `https://wa.me/?text=${encodeURIComponent(data.text + " " + data.url)}`;
-                window.open(waUrl, '_blank');
-            } else if (platform === 'native') {
-                if (navigator.share) {
-                    navigator.share({
-                        title: data.title,
-                        text: data.text,
-                        url: data.url
-                    }).catch(console.error);
-                } else {
-                    navigator.clipboard.writeText(data.url).then(() => {
-                        const tooltip = document.getElementById('share-tooltip');
-                        tooltip.classList.add('show');
-                        setTimeout(() => tooltip.classList.remove('show'), 2000);
-                    });
-                }
-            }
-        }
-
-        function setUnit(unit) {
-            useMiles = (unit === 'mi');
-            document.getElementById('btn-km').classList.toggle('active', !useMiles);
-            document.getElementById('btn-mi').classList.toggle('active', useMiles);
-            saveData();
-            updateRotation();
-            updateDashboard();
-        }
-
-        function toggleMotion() {
-            isAnimating = !isAnimating;
-            const btn = document.getElementById('btn-motion');
-            if (isAnimating) {
-                btn.innerText = "⏸";
-                btn.title = "Pause Animation";
-                animateStars();
-            } else {
-                btn.innerText = "▶";
-                btn.title = "Play Animation";
-            }
-        }
-
-        function updateRotation() {
-            const lat = Number(latRange.value);
-            const hem = lat < 0 ? "°S" : (lat > 0 ? "°N" : "°");
-            document.getElementById('latDisplay').innerText = Math.abs(lat) + hem;
-
-            const radians = lat * (Math.PI / 180);
-            currentRotationSpeed = MAX_ROTATION_SPEED * Math.cos(radians);
-
-            let speedDisplay = currentRotationSpeed;
-            let unitLabel = useMiles ? "mi/s" : "km/s";
-            if (useMiles) speedDisplay *= KM_TO_MILES;
-
-            document.getElementById('rot-speed-display').innerText = speedDisplay.toFixed(3) + " " + unitLabel;
-            updateTotalSpeedDisplay();
-        }
-
-        function updateTotalSpeedDisplay() {
-            const totalSpeedKm = currentRotationSpeed + SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY;
-            let displayVal = totalSpeedKm;
-            let unit = useMiles ? "mi/s" : "km/s";
-            if (useMiles) displayVal *= KM_TO_MILES;
-
-            document.getElementById('total-speed-display').innerText = 
-                getT('traveling_at') + ": " + displayVal.toFixed(2) + " " + unit;
-        }
-
-        function calculatePreciseAge(birth, now) {
-            let years = now.getFullYear() - birth.getFullYear();
-            let months = now.getMonth() - birth.getMonth();
-            let days = now.getDate() - birth.getDate();
-            let hours = now.getHours() - birth.getHours();
-            let mins = now.getMinutes() - birth.getMinutes();
-            let secs = now.getSeconds() - birth.getSeconds();
-
-            if (secs < 0) { secs += 60; mins--; }
-            if (mins < 0) { mins += 60; hours--; }
-            if (hours < 0) { hours += 24; days--; }
-            if (days < 0) {
-                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-                days += prevMonth;
-                months--;
-            }
-            if (months < 0) { months += 12; years--; }
-
-            return { years, months, days, hours, mins, secs };
-        }
-
-        function calculateConnection() {
-            const myDate = new Date(dateInput.value + "T12:00");
-            const friendDateStr = document.getElementById('friendDate').value;
-            
-            if (!friendDateStr) {
-                alert("Please enter a friend's birth date!");
-                return;
-            }
-            const friendDate = new Date(friendDateStr + "T12:00");
-            
-            const diffMs = Math.abs(myDate - friendDate);
-            const diffSeconds = diffMs / 1000;
-            const systemVelocity = SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY; 
-            const gapDistance = diffSeconds * systemVelocity;
-            
-            const youngerDate = (myDate > friendDate) ? myDate : friendDate;
-            const now = new Date();
-            
-            let sharedDistance = 0;
-            if (now > youngerDate) {
-                const sharedSeconds = (now - youngerDate) / 1000;
-                sharedDistance = sharedSeconds * (currentRotationSpeed + systemVelocity);
-            }
-
-            document.getElementById('connection-results').classList.add('active');
-            document.getElementById('res-gap').innerText = format(gapDistance);
-            document.getElementById('res-shared').innerText = format(sharedDistance);
-        }
-
-        // --- NEW PREDICTOR FUNCTION ADDED HERE ---
-        function calculateFutureMilestone() {
-            const birthDateInput = document.getElementById('birthDate').value; 
-            const birthTimeInput = document.getElementById('birthTime').value || "12:00";
-            
-            // Show the result container
-            document.getElementById('milestone-result-container').classList.add('active');
-
-            if (!birthDateInput) {
-                document.getElementById('milestone-result').innerHTML = "<span style='color: #ff4444;'>Please enter your birth date first!</span>";
-                document.getElementById('share-x-btn').style.display = 'none';
-                return;
-            }
-
-            const targetVal = parseFloat(document.getElementById('milestone-target').value);
-            // Grab the EXACT speed the user is traveling based on latitude
-            const averageCosmicSpeedKmPerSec = currentRotationSpeed + SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY; 
-            
-            // Make the target value correspond to their currently selected unit
-            let targetKm = targetVal;
-            if (useMiles) {
-                targetKm = targetVal / KM_TO_MILES; 
-            }
-            
-            const birthDate = new Date(birthDateInput + "T" + birthTimeInput);
-            const now = new Date();
-            const secondsAlive = (now - birthDate) / 1000;
-            const currentKm = secondsAlive * averageCosmicSpeedKmPerSec;
-
-            let unitLabel = useMiles ? "Miles" : "Kilometers";
-
-            if (currentKm >= targetKm) {
-                document.getElementById('milestone-result').innerHTML = "You already passed this milestone! <br><span style='font-size: 0.8rem; color: #888; font-weight: normal; margin-top: 5px; display: inline-block;'>(Pick a bigger target)</span>";
-                document.getElementById('share-x-btn').style.display = 'none';
-                return;
-            }
-
-            const kmRemaining = targetKm - currentKm;
-            const secondsRemaining = kmRemaining / averageCosmicSpeedKmPerSec;
-            const futureDate = new Date(now.getTime() + (secondsRemaining * 1000));
-            
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const formattedDate = futureDate.toLocaleDateString(undefined, options);
-            
-            document.getElementById('milestone-result').innerHTML = `You will cross this milestone on:<br><span style='color: #00d4ff; font-size: 1.4rem; display: block; margin-top: 10px;'>${formattedDate} 🪐</span>`;
-            
-            let targetFormatted;
-            if (targetVal >= 1000000000000) {
-                targetFormatted = (targetVal / 1000000000000) + " Trillion";
-            } else {
-                targetFormatted = (targetVal / 1000000000) + " Billion";
-            }
-            
-            const tweetText = `I will officially travel ${targetFormatted} ${unitLabel} through the universe on ${formattedDate}. You're all invited to my space party. 🚀 Calculate yours on Cosmic Odometer:`;
-            const siteUrl = "https://cosmicodometer.space/";
-            
-            const xIntentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(siteUrl)}`;
-            
-            const shareBtn = document.getElementById('share-x-btn');
-            shareBtn.href = xIntentUrl;
-            shareBtn.style.display = 'inline-block'; 
-        }
-        // -----------------------------------------
-
-        function updateDashboard() {
-            const birthStr = `${dateInput.value}T${timeInput.value}`;
-            const birthDate = new Date(birthStr);
-            const now = new Date();
-
-            if (birthDate < now) {
-                const age = calculatePreciseAge(birthDate, now);
-                const timeStr = `
-                    <span class="time-unit"><span class="unit-val">${age.years}</span><span class="unit-label">${getT('unit_y')}</span></span>
-                    <span class="time-unit"><span class="unit-val">${age.months}</span><span class="unit-label">${getT('unit_mo')}</span></span>
-                    <span class="time-unit"><span class="unit-val">${age.days}</span><span class="unit-label">${getT('unit_d')}</span></span>
-                    <span class="time-unit" style="margin-left:10px; color:#aaa">|</span>
-                    <span class="time-unit" style="margin-left:10px"><span class="unit-val">${String(age.hours).padStart(2, '0')}</span><span class="unit-label">${getT('unit_h')}</span></span> :
-                    <span class="time-unit"><span class="unit-val">${String(age.mins).padStart(2, '0')}</span><span class="unit-label">${getT('unit_min')}</span></span> :
-                    <span class="time-unit"><span class="unit-val">${String(age.secs).padStart(2, '0')}</span><span class="unit-label">${getT('unit_s')}</span></span>
-                `;
-                timeDisplayText.innerHTML = timeStr;
-            } else {
-                timeDisplayText.innerHTML = getT('welcome');
-            }
-
-            const secondsAlive = (now - birthDate) / 1000;
-            const totalSpeed = currentRotationSpeed + SPEED_ORBIT + SPEED_SOLAR + SPEED_GALAXY;
-
-            if (secondsAlive > 0) {
-                const dRot = secondsAlive * currentRotationSpeed;
-                const dOrbit = secondsAlive * SPEED_ORBIT;
-                const dSolar = secondsAlive * SPEED_SOLAR;
-                const dGalaxy = secondsAlive * SPEED_GALAXY;
-                const dTotal = dRot + dOrbit + dSolar + dGalaxy;
-
-                const dLinear = secondsAlive * (SPEED_GALAXY + SPEED_SOLAR);
-
-                document.getElementById('dist-rot').innerText = format(dRot);
-                document.getElementById('dist-orbit').innerText = format(dOrbit);
-                document.getElementById('dist-solar').innerText = format(dSolar);
-                document.getElementById('dist-galaxy').innerText = format(dGalaxy);
-                document.getElementById('dist-total').innerText = format(dTotal);
-                document.getElementById('dist-vector').innerText = format(dLinear);
-
-                const moonTrips = dTotal / DIST_MOON_ROUNDTRIP;
-                document.getElementById('txt-moon').innerText = Math.floor(moonTrips).toLocaleString();
-                document.getElementById('bar-moon').style.width = ((moonTrips % 1) * 100) + "%";
-
-                const plutoTrips = dTotal / DIST_PLUTO;
-                document.getElementById('txt-pluto').innerText = Math.floor(plutoTrips).toLocaleString() + "x";
-                document.getElementById('bar-pluto').style.width = ((plutoTrips % 1) * 100) + "%";
-
-                const lyProgress = (dTotal / DIST_LIGHT_YEAR) * 100;
-                document.getElementById('txt-light').innerText = lyProgress.toFixed(4) + "%";
-                document.getElementById('bar-light').style.width = Math.min(lyProgress, 100) + "%";
-                
-                // FIXED: Now displays distance remaining!
-                document.getElementById('light-years-raw').innerText = Math.max(0, 1 - (dTotal / DIST_LIGHT_YEAR)).toFixed(5);
-
-                const cosmicOrbitVal = document.getElementById('cosmic-orbit-val');
-                if (cosmicOrbitVal) {
-                    const ageInYears = secondsAlive / (365.25 * 24 * 3600);
-                    const orbitPercent = (ageInYears / 225000000) * 100; 
-                    cosmicOrbitVal.innerText = orbitPercent.toFixed(8) + "%";
-                }
-            }
-            
-            const sessionSeconds = (Date.now() - sessionStartTime) / 1000;
-            const sessionDistance = sessionSeconds * totalSpeed;
-            document.getElementById('dist-session').innerText = format(sessionDistance);
-        }
-
-        function format(numInKm) {
-            let val = numInKm;
-            let unit = " km";
-            if (useMiles) {
-                val = numInKm * KM_TO_MILES;
-                unit = " mi";
-            }
-            return Math.floor(val).toLocaleString() + unit;
-        }
-
-        function generateReceipt() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            const width = 600;
-            const height = 1000;
-            canvas.width = width;
-            canvas.height = height;
-
-            ctx.fillStyle = '#0b0d17';
-            ctx.fillRect(0, 0, width, height);
-            ctx.strokeStyle = '#1a1d2e';
-            ctx.lineWidth = 1;
-            for(let i=0; i<width; i+=40) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,height); ctx.stroke(); }
-            for(let i=0; i<height; i+=40) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(width,i); ctx.stroke(); }
-
-            const margin = 50;
-            let cursorY = 100;
-            const distTotal = document.getElementById('dist-total').innerText;
-            const birthDateStr = dateInput.value || "UNKNOWN";
-            const speedTextFull = document.getElementById('total-speed-display').innerText;
-            const speedVal = speedTextFull.includes(': ') ? speedTextFull.split(': ')[1] : speedTextFull;
-
-            ctx.textAlign = 'center';
-            ctx.fillStyle = '#00d4ff'; 
-            ctx.font = 'bold 40px "Courier New", monospace';
-            ctx.fillText("COSMIC ODOMETER", width / 2, cursorY);
-            
-            cursorY += 50;
-            ctx.fillStyle = '#8892b0';
-            ctx.font = '24px "Courier New", monospace';
-            ctx.fillText("OFFICIAL TRAVEL LOG", width / 2, cursorY);
-
-            cursorY += 40;
-            ctx.strokeStyle = '#00d4ff';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(margin, cursorY);
-            ctx.lineTo(width - margin, cursorY);
-            ctx.stroke();
-
-            cursorY += 60;
-            ctx.textAlign = 'left';
-            ctx.fillStyle = '#8892b0'; 
-            ctx.font = '20px "Courier New", monospace';
-            ctx.fillText("PASSENGER ORIGIN:", margin, cursorY);
-            
-            cursorY += 35;
-            ctx.fillStyle = '#ffffff'; 
-            ctx.font = 'bold 30px "Courier New", monospace';
-            ctx.fillText("EARTH / " + birthDateStr, margin, cursorY);
-
-            cursorY += 70;
-            ctx.fillStyle = '#8892b0';
-            ctx.font = '20px "Courier New", monospace';
-            ctx.fillText("CURRENT STATUS:", margin, cursorY);
-            
-            cursorY += 35;
-            ctx.fillStyle = '#ffd700'; 
-            ctx.fillText("DRIFTING THROUGH VOID", margin, cursorY);
-
-            cursorY += 70;
-            ctx.fillStyle = '#8892b0';
-            ctx.font = '20px "Courier New", monospace';
-            ctx.fillText("TOTAL DISTANCE:", margin, cursorY);
-
-            cursorY += 50;
-            ctx.fillStyle = '#00d4ff'; 
-            ctx.font = 'bold 48px "Courier New", monospace';
-            if(distTotal.length > 15) ctx.font = 'bold 36px "Courier New", monospace';
-            ctx.fillText(distTotal, margin, cursorY);
-
-            cursorY += 70;
-            ctx.fillStyle = '#8892b0'; 
-            ctx.font = '20px "Courier New", monospace';
-            ctx.fillText("VELOCITY:", margin, cursorY);
-
-            cursorY += 35;
-            ctx.fillStyle = '#ff0055'; 
-            ctx.font = 'bold 30px "Courier New", monospace';
-            ctx.fillText(speedVal, margin, cursorY);
-
-            cursorY = height - 120;
-            ctx.strokeStyle = '#333';
-            ctx.beginPath(); ctx.moveTo(margin, cursorY); ctx.lineTo(width-margin, cursorY); ctx.stroke();
-            
-            cursorY += 60;
-            ctx.textAlign = 'center';
-            ctx.fillStyle = '#fff';
-            ctx.font = '20px "Courier New", monospace';
-            ctx.fillText("cosmicodometer.space", width/2, cursorY);
-
-            try {
-                const link = document.createElement('a');
-                link.download = 'cosmic-receipt.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            } catch(e) {
-                alert("Could not download the image (browser blocked the download).");
-            }
-        }
-
-        dateInput.addEventListener('change', () => { 
-            updateDashboard(); 
-            saveData(); 
-            if(window.orbitMode === 'live' && window.update3DTrails) {
-                window.update3DTrails(); 
-            }
+      // Service worker
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").then(
+            (registration) => console.log("SW registered:", registration),
+            (err) => console.log("SW registration failed:", err)
+          );
         });
-        
-        latRange.addEventListener('input', () => { updateRotation(); saveData(); });
-        timeInput.addEventListener('change', () => { updateDashboard(); saveData(); });
+      }
 
-        initData();
+      // Save user preferences (localStorage + URL)
+      function initData() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const savedDate = localStorage.getItem("cosmic_date");
+        const savedTime = localStorage.getItem("cosmic_time");
+        const savedLat = localStorage.getItem("cosmic_lat");
+        const savedUnit = localStorage.getItem("cosmic_unit");
+        const savedLang = localStorage.getItem("cosmic_lang");
+
+        const urlLang = urlParams.get("lang");
+        if (urlLang && translations[urlLang]) currentLang = urlLang;
+        else if (savedLang && translations[savedLang]) currentLang = savedLang;
+
+        langSelect.value = currentLang;
+        applyLanguage();
+
+        if (urlParams.has("date")) dateInput.value = urlParams.get("date");
+        else if (savedDate) dateInput.value = savedDate;
+        else dateInput.valueAsDate = new Date();
+
+        if (urlParams.has("time")) timeInput.value = urlParams.get("time");
+        else if (savedTime) timeInput.value = savedTime;
+
+        if (urlParams.has("lat")) latRange.value = urlParams.get("lat");
+        else if (savedLat) latRange.value = savedLat;
+
+        const urlUnit = urlParams.get("unit");
+        const effectiveUnit = urlUnit || savedUnit || "km";
+        useMiles = effectiveUnit === "mi";
+        $("btn-km").classList.toggle("active", !useMiles);
+        $("btn-mi").classList.toggle("active", useMiles);
+      }
+
+      function saveData() {
+        localStorage.setItem("cosmic_date", dateInput.value);
+        localStorage.setItem("cosmic_time", timeInput.value);
+        localStorage.setItem("cosmic_lat", latRange.value);
+        localStorage.setItem("cosmic_unit", useMiles ? "mi" : "km");
+        localStorage.setItem("cosmic_lang", currentLang);
+      }
+
+      function changeLanguage(lang) {
+        currentLang = translations[lang] ? lang : "en";
+        saveData();
+        applyLanguage();
+        updateDashboard();
+      }
+
+      // UI helpers
+      function toggleMobileView() {
+        is3DViewVisibleOnMobile = !is3DViewVisibleOnMobile;
+        const btn = $("mobile-toggle-btn");
+
+        if (is3DViewVisibleOnMobile) {
+          document.body.classList.add("show-3d-on-mobile");
+          btn.innerHTML = "🔙 BACK TO CALCULATOR";
+          setTimeout(() => window.dispatchEvent(new Event("resize")), 50);
+        } else {
+          document.body.classList.remove("show-3d-on-mobile");
+          btn.innerHTML = "🌌 VIEW SOLAR SYSTEM";
+        }
+      }
+
+      function setUnit(unit) {
+        useMiles = unit === "mi";
+        $("btn-km").classList.toggle("active", !useMiles);
+        $("btn-mi").classList.toggle("active", useMiles);
+
+        saveData();
         updateRotation();
         updateDashboard();
-        setInterval(updateDashboard, 100);
+      }
 
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-        let w, h;
+      function toggleMotion() {
+        isAnimating = !isAnimating;
+        const btn = $("btn-motion");
+        if (isAnimating) {
+          btn.innerText = "⏸";
+          btn.title = "Pause Animation";
+          animateStars();
+        } else {
+          btn.innerText = "▶";
+          btn.title = "Play Animation";
+        }
+      }
 
-        const resize = () => {
-            w = canvas.width = window.innerWidth;
-            h = canvas.height = window.innerHeight;
-            
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.translate(w / 2, h / 2);
-        };
+      function updateRotation() {
+        const lat = Number(latRange.value);
+        const hem = lat < 0 ? "°S" : lat > 0 ? "°N" : "°";
+        $("latDisplay").innerText = Math.abs(lat) + hem;
 
-        window.addEventListener('resize', resize);
-        resize();
+        const radians = lat * (Math.PI / 180);
+        currentRotationSpeedKmS = MAX_ROTATION_KM_S * Math.cos(radians);
 
-        const stars = Array(800).fill().map(() => ({
-            x: (Math.random() - 0.5) * w * 2,
-            y: (Math.random() - 0.5) * h * 2,
-            z: Math.random() * w,
-            pz: 0
+        let speed = currentRotationSpeedKmS;
+        let unitLabel = useMiles ? "mi/s" : "km/s";
+        if (useMiles) speed *= KM_TO_MILES;
+
+        $("rot-speed-display").innerText = speed.toFixed(3) + " " + unitLabel;
+        updateTotalSpeedDisplay();
+      }
+
+      function updateTotalSpeedDisplay() {
+        const totalSpeedKmS = currentRotationSpeedKmS + SPEED.ORBIT_KM_S + SPEED.SOLAR_KM_S + SPEED.GALAXY_KM_S;
+        let show = totalSpeedKmS;
+        const unit = useMiles ? "mi/s" : "km/s";
+        if (useMiles) show *= KM_TO_MILES;
+
+        $("total-speed-display").innerText = `${t("traveling_at")}: ${show.toFixed(2)} ${unit}`;
+      }
+
+      function formatDistance(km) {
+        let val = km;
+        let unit = " km";
+        if (useMiles) {
+          val = km * KM_TO_MILES;
+          unit = " mi";
+        }
+        return Math.floor(val).toLocaleString() + unit;
+      }
+
+      function getShareData() {
+        const baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        const params = new URLSearchParams();
+        params.set("date", dateInput.value);
+        params.set("unit", useMiles ? "mi" : "km");
+        params.set("lang", currentLang);
+
+        const fullUrl = `${baseUrl}?${params.toString()}`;
+        const totalDist = $("dist-total").innerText;
+
+        const friendDist = $("res-shared").innerText;
+        const isComparing = $("connection-results").classList.contains("active");
+
+        let text = `I have traveled ${totalDist} through the universe since birth. 🚀`;
+        if (isComparing) text = `My friend and I have traveled ${friendDist} together through the cosmos. 👯‍♀️`;
+        text += `\nCheck your cosmic mileage here:`;
+
+        return { title: "Cosmic Odometer", text, url: fullUrl };
+      }
+
+      function shareSocial(platform) {
+        const data = getShareData();
+
+        if (platform === "twitter") {
+          const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(data.text)}&url=${encodeURIComponent(data.url)}`;
+          window.open(tweetUrl, "_blank");
+          return;
+        }
+
+        if (platform === "whatsapp") {
+          const waUrl = `https://wa.me/?text=${encodeURIComponent(data.text + " " + data.url)}`;
+          window.open(waUrl, "_blank");
+          return;
+        }
+
+        if (navigator.share) {
+          navigator.share({ title: data.title, text: data.text, url: data.url }).catch(console.error);
+        } else {
+          navigator.clipboard.writeText(data.url).then(() => {
+            const tooltip = $("share-tooltip");
+            tooltip.classList.add("show");
+            setTimeout(() => tooltip.classList.remove("show"), 2000);
+          });
+        }
+      }
+
+      // Time math
+      function calculatePreciseAge(birth, now) {
+        let years = now.getFullYear() - birth.getFullYear();
+        let months = now.getMonth() - birth.getMonth();
+        let days = now.getDate() - birth.getDate();
+        let hours = now.getHours() - birth.getHours();
+        let mins = now.getMinutes() - birth.getMinutes();
+        let secs = now.getSeconds() - birth.getSeconds();
+
+        if (secs < 0) { secs += 60; mins--; }
+        if (mins < 0) { mins += 60; hours--; }
+        if (hours < 0) { hours += 24; days--; }
+        if (days < 0) {
+          const prevMonthDays = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+          days += prevMonthDays;
+          months--;
+        }
+        if (months < 0) { months += 12; years--; }
+
+        return { years, months, days, hours, mins, secs };
+      }
+
+      // Main dashboard update
+      function updateDashboard() {
+        const birthStr = `${dateInput.value}T${timeInput.value}`;
+        const birthDate = new Date(birthStr);
+        const now = new Date();
+
+        if (birthDate < now) {
+          const age = calculatePreciseAge(birthDate, now);
+          timeDisplayText.innerHTML = `
+            <span class="time-unit"><span class="unit-val">${age.years}</span><span class="unit-label">${t("unit_y")}</span></span>
+            <span class="time-unit"><span class="unit-val">${age.months}</span><span class="unit-label">${t("unit_mo")}</span></span>
+            <span class="time-unit"><span class="unit-val">${age.days}</span><span class="unit-label">${t("unit_d")}</span></span>
+            <span class="time-unit" style="margin-left:10px; color:#aaa">|</span>
+            <span class="time-unit" style="margin-left:10px"><span class="unit-val">${String(age.hours).padStart(2, "0")}</span><span class="unit-label">${t("unit_h")}</span></span> :
+            <span class="time-unit"><span class="unit-val">${String(age.mins).padStart(2, "0")}</span><span class="unit-label">${t("unit_min")}</span></span> :
+            <span class="time-unit"><span class="unit-val">${String(age.secs).padStart(2, "0")}</span><span class="unit-label">${t("unit_s")}</span></span>
+          `;
+        } else {
+          timeDisplayText.innerHTML = t("welcome");
+        }
+
+        const secondsAlive = (now - birthDate) / 1000;
+        const totalSpeedKmS = currentRotationSpeedKmS + SPEED.ORBIT_KM_S + SPEED.SOLAR_KM_S + SPEED.GALAXY_KM_S;
+
+        if (secondsAlive > 0) {
+          const dRot = secondsAlive * currentRotationSpeedKmS;
+          const dOrbit = secondsAlive * SPEED.ORBIT_KM_S;
+          const dSolar = secondsAlive * SPEED.SOLAR_KM_S;
+          const dGalaxy = secondsAlive * SPEED.GALAXY_KM_S;
+          const dTotal = dRot + dOrbit + dSolar + dGalaxy;
+
+          // Net displacement estimate (intentionally simple)
+          const dLinear = secondsAlive * (SPEED.GALAXY_KM_S + SPEED.SOLAR_KM_S);
+
+          $("dist-rot").innerText = formatDistance(dRot);
+          $("dist-orbit").innerText = formatDistance(dOrbit);
+          $("dist-solar").innerText = formatDistance(dSolar);
+          $("dist-galaxy").innerText = formatDistance(dGalaxy);
+          $("dist-total").innerText = formatDistance(dTotal);
+          $("dist-vector").innerText = formatDistance(dLinear);
+
+          // Milestones
+          const moonTrips = dTotal / DIST.MOON_ROUND_TRIP_KM;
+          $("txt-moon").innerText = Math.floor(moonTrips).toLocaleString();
+          $("bar-moon").style.width = ((moonTrips % 1) * 100) + "%";
+
+          const plutoTrips = dTotal / DIST.PLUTO_KM;
+          $("txt-pluto").innerText = Math.floor(plutoTrips).toLocaleString() + "x";
+          $("bar-pluto").style.width = ((plutoTrips % 1) * 100) + "%";
+
+          const lyProgress = (dTotal / DIST.LIGHT_YEAR_KM) * 100;
+          $("txt-light").innerText = lyProgress.toFixed(4) + "%";
+          $("bar-light").style.width = Math.min(lyProgress, 100) + "%";
+          $("light-years-raw").innerText = Math.max(0, 1 - (dTotal / DIST.LIGHT_YEAR_KM)).toFixed(5);
+
+          const cosmicOrbitVal = $("cosmic-orbit-val");
+          if (cosmicOrbitVal) {
+            const ageYears = secondsAlive / (365.25 * 24 * 3600);
+            const orbitPercent = (ageYears / 225000000) * 100;
+            cosmicOrbitVal.innerText = orbitPercent.toFixed(8) + "%";
+          }
+        }
+
+        // Session distance
+        const sessionSeconds = (Date.now() - sessionStartMs) / 1000;
+        $("dist-session").innerText = formatDistance(sessionSeconds * totalSpeedKmS);
+      }
+
+      // Friend compare
+      function calculateConnection() {
+        const myDate = new Date(dateInput.value + "T12:00");
+        const friendDateStr = $("friendDate").value;
+        if (!friendDateStr) {
+          alert("Please enter a friend's birth date!");
+          return;
+        }
+
+        const friendDate = new Date(friendDateStr + "T12:00");
+
+        const diffMs = Math.abs(myDate - friendDate);
+        const diffSeconds = diffMs / 1000;
+
+        const systemVelocity = SPEED.ORBIT_KM_S + SPEED.SOLAR_KM_S + SPEED.GALAXY_KM_S;
+        const gapDistanceKm = diffSeconds * systemVelocity;
+
+        const youngerDate = (myDate > friendDate) ? myDate : friendDate;
+        const now = new Date();
+
+        let sharedDistanceKm = 0;
+        if (now > youngerDate) {
+          const sharedSeconds = (now - youngerDate) / 1000;
+          sharedDistanceKm = sharedSeconds * (currentRotationSpeedKmS + systemVelocity);
+        }
+
+        $("connection-results").classList.add("active");
+        $("res-gap").innerText = formatDistance(gapDistanceKm);
+        $("res-shared").innerText = formatDistance(sharedDistanceKm);
+      }
+
+      // Milestone predictor
+      function calculateFutureMilestone() {
+        const birthDateStr = dateInput.value;
+        const birthTimeStr = timeInput.value || "12:00";
+        $("milestone-result-container").classList.add("active");
+
+        if (!birthDateStr) {
+          $("milestone-result").innerHTML = "<span style='color:#ff4444;'>Please enter your birth date first!</span>";
+          $("share-x-btn").style.display = "none";
+          return;
+        }
+
+        const targetVal = parseFloat($("milestone-target").value);
+        const avgSpeedKmS = currentRotationSpeedKmS + SPEED.ORBIT_KM_S + SPEED.SOLAR_KM_S + SPEED.GALAXY_KM_S;
+
+        let targetKm = targetVal;
+        if (useMiles) targetKm = targetVal / KM_TO_MILES;
+
+        const birthDate = new Date(birthDateStr + "T" + birthTimeStr);
+        const now = new Date();
+
+        const secondsAlive = (now - birthDate) / 1000;
+        const currentKm = secondsAlive * avgSpeedKmS;
+
+        const unitLabel = useMiles ? "Miles" : "Kilometers";
+
+        if (currentKm >= targetKm) {
+          $("milestone-result").innerHTML = "You already passed this milestone! <br><span style='font-size:0.8rem; color:#888; font-weight:normal; margin-top:5px; display:inline-block;'>(Pick a bigger target)</span>";
+          $("share-x-btn").style.display = "none";
+          return;
+        }
+
+        const remainingKm = targetKm - currentKm;
+        const secondsRemaining = remainingKm / avgSpeedKmS;
+        const futureDate = new Date(now.getTime() + (secondsRemaining * 1000));
+
+        const formattedDate = futureDate.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+        $("milestone-result").innerHTML =
+          `You will cross this milestone on:<br><span style='color:#00d4ff; font-size:1.4rem; display:block; margin-top:10px;'>${formattedDate} 🪐</span>`;
+
+        let targetFormatted = "";
+        if (targetVal >= 1000000000000) targetFormatted = (targetVal / 1000000000000) + " Trillion";
+        else targetFormatted = (targetVal / 1000000000) + " Billion";
+
+        const tweetText = `I will officially travel ${targetFormatted} ${unitLabel} through the universe on ${formattedDate}. You're all invited to my space party. 🚀 Calculate yours on Cosmic Odometer:`;
+        const siteUrl = "https://cosmicodometer.space/";
+        const xIntentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(siteUrl)}`;
+
+        const shareBtn = $("share-x-btn");
+        shareBtn.href = xIntentUrl;
+        shareBtn.style.display = "inline-block";
+      }
+
+      // Orbit mode UI logic (used by the 3D renderer)
+      function setOrbitMode(mode) {
+        window.orbitMode = mode;
+
+        $("mode-cinematic").classList.toggle("active", mode === "cinematic");
+        $("mode-live").classList.toggle("active", mode === "live");
+        $("mode-birth").classList.toggle("active", mode === "birth");
+
+        const btnEarth = $("btn-focus");
+        const btnV1 = $("btn-v1");
+        const btnV2 = $("btn-v2");
+        const focusSep = $("focus-separator");
+        const ffBtn = $("btn-ff");
+
+        if (window.trailGroup) {
+          window.trailGroup.visible = (mode === "live");
+          if (mode === "live" && window.update3DTrails) window.update3DTrails();
+        }
+        if (window.cinematicTrailGroup) window.cinematicTrailGroup.visible = (mode === "cinematic");
+
+        const container = $("solar-system-container");
+        if (!window.solarControls || !window.solarCamera) return;
+
+        window.solarControls.enabled = true;
+        container.style.pointerEvents = "auto";
+        container.style.cursor = "grab";
+
+        if (mode === "live") {
+          focusSep.style.display = "block";
+          btnEarth.style.display = "block";
+          btnV1.style.display = "block";
+          btnV2.style.display = "block";
+          if (ffBtn) ffBtn.style.display = "none";
+
+          window.solarCamera.position.set(0, 5, 130);
+          window.solarControls.target.set(0, 5, 0);
+          window.solarControls.update();
+          return;
+        }
+
+        focusSep.style.display = "none";
+        btnEarth.style.display = "none";
+        btnV1.style.display = "none";
+        btnV2.style.display = "none";
+
+        if (mode === "cinematic") {
+          if (ffBtn) ffBtn.style.display = "block";
+        } else {
+          if (ffBtn) ffBtn.style.display = "none";
+        }
+
+        window.trackingTarget = "sun";
+        btnEarth.classList.remove("active");
+        btnV1.classList.remove("active");
+        btnV2.classList.remove("active");
+
+        window.solarCamera.position.set(0, 5, 130);
+        window.solarControls.target.set(0, 5, 0);
+        window.solarControls.update();
+      }
+
+      function trackObject(target) {
+        window.trackingTarget = (window.trackingTarget === target) ? "sun" : target;
+
+        $("btn-focus").classList.toggle("active", window.trackingTarget === "earth");
+        $("btn-v1").classList.toggle("active", window.trackingTarget === "v1");
+        $("btn-v2").classList.toggle("active", window.trackingTarget === "v2");
+
+        if (!window.solarCamera) return;
+
+        if (window.trackingTarget === "sun") {
+          window.solarCamera.position.set(0, 5, 130);
+          return;
+        }
+
+        if (window.trackingTarget === "earth" && window.earthMesh) {
+          const pos = new THREE.Vector3();
+          window.earthMesh.getWorldPosition(pos);
+          const sunPos = new THREE.Vector3(0, 5, 0);
+          const dir = new THREE.Vector3().subVectors(sunPos, pos).normalize();
+          window.solarCamera.position.copy(pos.clone().add(dir.multiplyScalar(6)).add(new THREE.Vector3(0, 3, 0)));
+          return;
+        }
+
+        if (window.trackingTarget === "v1" && window.v1Mesh) {
+          const pos = new THREE.Vector3();
+          window.v1Mesh.getWorldPosition(pos);
+          const sunPos = new THREE.Vector3(0, 0, 0);
+          const dir = new THREE.Vector3().subVectors(sunPos, pos).normalize();
+          window.solarCamera.position.copy(pos.clone().add(dir.multiplyScalar(20)).add(new THREE.Vector3(0, 5, 0)));
+          return;
+        }
+
+        if (window.trackingTarget === "v2" && window.v2Mesh) {
+          const pos = new THREE.Vector3();
+          window.v2Mesh.getWorldPosition(pos);
+          const sunPos = new THREE.Vector3(0, 0, 0);
+          const dir = new THREE.Vector3().subVectors(sunPos, pos).normalize();
+          window.solarCamera.position.copy(pos.clone().add(dir.multiplyScalar(20)).add(new THREE.Vector3(0, 5, 0)));
+          return;
+        }
+      }
+
+      function toggleFastForward() {
+        window.cinematicSpeedMult = (window.cinematicSpeedMult === 1) ? 10 : 1;
+        const btn = $("btn-ff");
+
+        if (window.cinematicSpeedMult > 1) {
+          btn.classList.add("active");
+          btn.style.backgroundColor = "#ffd700";
+          btn.style.color = "#000";
+        } else {
+          btn.classList.remove("active");
+          btn.style.backgroundColor = "transparent";
+          btn.style.color = "#ffd700";
+        }
+      }
+
+      // Receipt generator
+      function generateReceipt() {
+        if (!window.solarRenderer || !window.planetMeshes || window.planetMeshes.length === 0) {
+          alert("The 3D engine is still loading! Please wait a second and try again.");
+          return;
+        }
+
+        const distTotal = $("dist-total").innerText;
+        const birthDateStr = dateInput.value || "UNKNOWN";
+        const speedTextFull = $("total-speed-display").innerText;
+        const speedVal = speedTextFull.includes(": ") ? speedTextFull.split(": ")[1] : speedTextFull;
+
+        const moonTrips = $("txt-moon").innerText;
+        const plutoTrips = $("txt-pluto").innerText;
+        const lyProgress = $("txt-light").innerText;
+
+        const birthVal = dateInput.value;
+        const birthTime = timeInput.value || "12:00";
+        const targetMs = birthVal ? new Date(birthVal + "T" + birthTime).getTime() : Date.now();
+        const birthDays = (targetMs - J2000_MS) / (1000 * 60 * 60 * 24);
+
+        const targetValInput = parseFloat($("milestone-target").value);
+        let targetText = (targetValInput >= 1e12)
+          ? (targetValInput / 1e12) + " Trillion"
+          : (targetValInput / 1e9) + " Billion";
+        targetText += useMiles ? " Miles" : " Kilometers";
+
+        const avgSpeedKmS = currentRotationSpeedKmS + SPEED.ORBIT_KM_S + SPEED.SOLAR_KM_S + SPEED.GALAXY_KM_S;
+        const targetKmMath = useMiles ? targetValInput / KM_TO_MILES : targetValInput;
+        const currentKmMath = ((Date.now() - targetMs) / 1000) * avgSpeedKmS;
+
+        let projectedEta = "";
+        if (currentKmMath >= targetKmMath) {
+          projectedEta = "Already Passed!";
+        } else {
+          const remaining = (targetKmMath - currentKmMath) / avgSpeedKmS;
+          const futureDate = new Date(Date.now() + (remaining * 1000));
+          projectedEta = futureDate.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+        }
+
+        // Save renderer state, snap to birth alignment, render, restore
+        const savedStates = window.planetMeshes.map(p => ({
+          pivotRot: p.pivot.rotation.y,
+          meshRot: p.mesh.rotation.y
         }));
+        const savedMoonRot = window.moonPivot ? window.moonPivot.rotation.y : 0;
+        const savedTrail = window.trailGroup?.visible ?? false;
+        const savedCinematic = window.cinematicTrailGroup?.visible ?? false;
+        const savedCamPos = window.solarCamera.position.clone();
+        const savedCamRot = window.solarCamera.rotation.clone();
 
-        function animateStars() {
-            if (!isAnimating) return;
+        window.planetMeshes.forEach(p => {
+          const orbits = birthDays / p.data.period;
+          p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
+        });
+        if (window.moonPivot) window.moonPivot.rotation.y = (birthDays / 27.322) * 2 * Math.PI;
 
-            ctx.clearRect(-w/2, -h/2, w, h);
-            stars.forEach(s => {
-                s.z -= 25;
-                if (s.z <= 0) {
-                    s.z = w;
-                    s.x = (Math.random() - 0.5) * w * 2;
-                    s.y = (Math.random() - 0.5) * h * 2;
-                    s.pz = s.z;
-                }
+        if (window.trailGroup) window.trailGroup.visible = false;
+        if (window.cinematicTrailGroup) window.cinematicTrailGroup.visible = false;
+        if (window.voyagerMeshes) window.voyagerMeshes.forEach(v => { v.mesh.visible = false; v.line.visible = false; });
 
-                const x = (s.x / s.z) * w;
-                const y = (s.y / s.z) * h;
+        window.solarCamera.position.set(0, 100, 0);
+        window.solarCamera.lookAt(0, 0, 0);
 
-                if (s.pz === 0) s.pz = s.z;
-                const px = (s.x / (s.z + 25)) * w;
-                const py = (s.y / (s.z + 25)) * h;
+        window.solarRenderer.render(window.solarScene, window.solarCamera);
+        const snapshotUrl = window.solarRenderer.domElement.toDataURL("image/png");
 
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(255, 255, 255, ${1 - s.z / w})`;
-                ctx.lineWidth = 1.5;
-                ctx.moveTo(x, y);
-                ctx.lineTo(px, py);
-                ctx.stroke();
-            });
+        window.planetMeshes.forEach((p, i) => {
+          p.pivot.rotation.y = savedStates[i].pivotRot;
+          p.mesh.rotation.y = savedStates[i].meshRot;
+        });
+        if (window.moonPivot) window.moonPivot.rotation.y = savedMoonRot;
+        if (window.trailGroup) window.trailGroup.visible = savedTrail;
+        if (window.cinematicTrailGroup) window.cinematicTrailGroup.visible = savedCinematic;
+        window.solarCamera.position.copy(savedCamPos);
+        window.solarCamera.rotation.copy(savedCamRot);
 
-            requestAnimationFrame(animateStars);
+        // Build receipt image
+        const canvas = document.createElement("canvas");
+        const width = 600;
+        const height = 1500;
+        canvas.width = width;
+        canvas.height = height;
+
+        const img = new Image();
+        img.onload = () => {
+          const ctx = canvas.getContext("2d");
+
+          ctx.fillStyle = "#0b0d17";
+          ctx.fillRect(0, 0, width, height);
+
+          ctx.strokeStyle = "#1a1d2e";
+          ctx.lineWidth = 1;
+          for (let i = 0; i < width; i += 40) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, height); ctx.stroke(); }
+          for (let i = 0; i < height; i += 40) { ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(width, i); ctx.stroke(); }
+
+          const margin = 50;
+          let y = 80;
+
+          ctx.textAlign = "center";
+          ctx.fillStyle = "#00d4ff";
+          ctx.font = 'bold 40px "Courier New", monospace';
+          ctx.fillText("COSMIC ODOMETER", width / 2, y);
+
+          y += 40;
+          ctx.fillStyle = "#8892b0";
+          ctx.font = '20px "Courier New", monospace';
+          ctx.fillText("OFFICIAL TRAVEL LOG", width / 2, y);
+
+          y += 30;
+          ctx.strokeStyle = "#00d4ff";
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(margin, y); ctx.lineTo(width - margin, y); ctx.stroke();
+
+          y += 45;
+          ctx.fillStyle = "#ff0055";
+          ctx.font = 'bold 18px "Courier New", monospace';
+          ctx.fillText("ORBITAL ALIGNMENT AT LAUNCH", width / 2, y);
+
+          y += 25;
+          const size = 320;
+          const imgX = (width - size) / 2;
+          const imgY = y;
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(width / 2, imgY + size / 2, size / 2, 0, Math.PI * 2);
+          ctx.closePath();
+          ctx.clip();
+
+          const sw = img.width;
+          const sh = img.height;
+          const minDim = Math.min(sw, sh);
+          const sx = (sw - minDim) / 2;
+          const sy = (sh - minDim) / 2;
+          ctx.drawImage(img, sx, sy, minDim, minDim, imgX, imgY, size, size);
+          ctx.restore();
+
+          ctx.beginPath();
+          ctx.arc(width / 2, imgY + size / 2, size / 2, 0, Math.PI * 2);
+          ctx.strokeStyle = "#00d4ff";
+          ctx.lineWidth = 4;
+          ctx.stroke();
+
+          y += size + 60;
+
+          ctx.textAlign = "left";
+          ctx.fillStyle = "#8892b0";
+          ctx.font = '20px "Courier New", monospace';
+          ctx.fillText("PASSENGER ORIGIN:", margin, y);
+
+          y += 30;
+          ctx.fillStyle = "#ffffff";
+          ctx.font = 'bold 28px "Courier New", monospace';
+          ctx.fillText("EARTH / " + birthDateStr, margin, y);
+
+          y += 60;
+          ctx.fillStyle = "#8892b0";
+          ctx.font = '20px "Courier New", monospace';
+          ctx.fillText("TOTAL DISTANCE:", margin, y);
+
+          y += 40;
+          ctx.fillStyle = "#00d4ff";
+          ctx.font = distTotal.length > 15 ? 'bold 34px "Courier New", monospace' : 'bold 44px "Courier New", monospace';
+          ctx.fillText(distTotal, margin, y);
+
+          y += 60;
+          ctx.fillStyle = "#8892b0";
+          ctx.font = '20px "Courier New", monospace';
+          ctx.fillText("VELOCITY:", margin, y);
+
+          y += 30;
+          ctx.fillStyle = "#ff0055";
+          ctx.font = 'bold 28px "Courier New", monospace';
+          ctx.fillText(speedVal, margin, y);
+
+          y += 60;
+          ctx.strokeStyle = "#333";
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(margin, y); ctx.lineTo(width - margin, y); ctx.stroke();
+
+          y += 50;
+          ctx.textAlign = "center";
+          ctx.fillStyle = "#ffd700";
+          ctx.font = 'bold 24px "Courier New", monospace';
+          ctx.fillText("FLIGHT MILESTONES", width / 2, y);
+
+          y += 40;
+          ctx.font = '20px "Courier New", monospace';
+          ctx.textAlign = "left";
+          ctx.fillStyle = "#8892b0";
+          ctx.fillText("MOON ROUND TRIPS:", margin, y);
+          ctx.textAlign = "right";
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText(moonTrips, width - margin, y);
+
+          y += 40;
+          ctx.textAlign = "left";
+          ctx.fillStyle = "#8892b0";
+          ctx.fillText("PASSED PLUTO:", margin, y);
+          ctx.textAlign = "right";
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText(plutoTrips, width - margin, y);
+
+          y += 40;
+          ctx.textAlign = "left";
+          ctx.fillStyle = "#8892b0";
+          ctx.fillText("1 LIGHT YEAR PROGRESS:", margin, y);
+          ctx.textAlign = "right";
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText(lyProgress, width - margin, y);
+
+          y += 60;
+          ctx.strokeStyle = "#333";
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(margin, y); ctx.lineTo(width - margin, y); ctx.stroke();
+
+          y += 50;
+          ctx.textAlign = "center";
+          ctx.fillStyle = "#00ff41";
+          ctx.font = 'bold 24px "Courier New", monospace';
+          ctx.fillText("NEXT MAJOR ETA", width / 2, y);
+
+          y += 40;
+          ctx.font = '20px "Courier New", monospace';
+          ctx.textAlign = "left";
+          ctx.fillStyle = "#8892b0";
+          ctx.fillText("TARGET:", margin, y);
+          ctx.textAlign = "right";
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText(targetText, width - margin, y);
+
+          y += 40;
+          ctx.textAlign = "left";
+          ctx.fillStyle = "#8892b0";
+          ctx.fillText("PROJECTED DATE:", margin, y);
+          ctx.textAlign = "right";
+          ctx.fillStyle = "#00ff41";
+          ctx.fillText(projectedEta, width - margin, y);
+
+          y = height - 90;
+          ctx.strokeStyle = "#333";
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(margin, y); ctx.lineTo(width - margin, y); ctx.stroke();
+
+          y += 50;
+          ctx.textAlign = "center";
+          ctx.fillStyle = "#fff";
+          ctx.font = '20px "Courier New", monospace';
+          ctx.fillText("cosmicodometer.space", width / 2, y);
+
+          try {
+            const link = document.createElement("a");
+            link.download = `cosmic-receipt-${birthDateStr}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+          } catch (e) {
+            alert("Could not download the image (browser blocked the download).");
+          }
+        };
+        img.src = snapshotUrl;
+      }
+
+      // Events
+      dateInput.addEventListener("change", () => {
+        updateDashboard();
+        saveData();
+        if (window.orbitMode === "live" && window.update3DTrails) window.update3DTrails();
+      });
+      timeInput.addEventListener("change", () => { updateDashboard(); saveData(); });
+      latRange.addEventListener("input", () => { updateRotation(); saveData(); });
+
+      // Boot
+      initData();
+      updateRotation();
+      updateDashboard();
+      setInterval(updateDashboard, 100);
+
+      // Starfield
+      const starCanvas = $("starfield");
+      const starCtx = starCanvas.getContext("2d");
+      let w = 0, h = 0;
+
+      function resizeStars() {
+        w = starCanvas.width = window.innerWidth;
+        h = starCanvas.height = window.innerHeight;
+
+        starCtx.setTransform(1, 0, 0, 1, 0, 0);
+        starCtx.translate(w / 2, h / 2);
+      }
+
+      window.addEventListener("resize", resizeStars);
+      resizeStars();
+
+      const stars = Array(800).fill(0).map(() => ({
+        x: (Math.random() - 0.5) * w * 2,
+        y: (Math.random() - 0.5) * h * 2,
+        z: Math.random() * w,
+        pz: 0
+      }));
+
+      function animateStars() {
+        if (!isAnimating) return;
+
+        starCtx.clearRect(-w / 2, -h / 2, w, h);
+
+        for (const s of stars) {
+          s.z -= 25;
+
+          if (s.z <= 0) {
+            s.z = w;
+            s.x = (Math.random() - 0.5) * w * 2;
+            s.y = (Math.random() - 0.5) * h * 2;
+            s.pz = s.z;
+          }
+
+          const x = (s.x / s.z) * w;
+          const y = (s.y / s.z) * h;
+
+          if (s.pz === 0) s.pz = s.z;
+          const px = (s.x / (s.z + 25)) * w;
+          const py = (s.y / (s.z + 25)) * h;
+
+          starCtx.beginPath();
+          starCtx.strokeStyle = `rgba(255, 255, 255, ${1 - s.z / w})`;
+          starCtx.lineWidth = 1.5;
+          starCtx.moveTo(x, y);
+          starCtx.lineTo(px, py);
+          starCtx.stroke();
         }
 
-        animateStars();
-    </script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    
-    <script>
-        // 3D solar system (left panel)
-        function init3DSolarSystem() {
-            const container = document.getElementById('solar-system-container');
+        requestAnimationFrame(animateStars);
+      }
 
-            const scene = new THREE.Scene();
-            scene.rotation.x = 0.6; 
-            scene.position.y = 10; 
+      animateStars();
+    })();
+  </script>
 
-            let initWidth = container.clientWidth || window.innerWidth;
-            let initHeight = container.clientHeight || window.innerHeight;
-            const camera = new THREE.PerspectiveCamera(45, initWidth / initHeight, 0.1, 1000);
-            camera.position.z = 90; 
-            window.solarCamera = camera;
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setSize(initWidth, initHeight);
-            container.appendChild(renderer.domElement);
+  <!-- 3D solar system + galaxy -->
+  <script>
+    function init3DSolarSystem() {
+      const container = document.getElementById("solar-system-container");
 
-            window.solarControls = new THREE.OrbitControls(camera, renderer.domElement);
-            window.solarControls.target.set(0, 10, 0); 
-            window.solarControls.enableDamping = true; 
-            window.solarControls.dampingFactor = 0.05;
-            window.solarControls.enabled = true; 
+      const scene = new THREE.Scene();
+      scene.rotation.x = 0.6;
+      scene.position.y = 10;
 
-            const ambientLight = new THREE.AmbientLight(0x333333); 
-            scene.add(ambientLight);
+      let initWidth = container.clientWidth || window.innerWidth;
+      let initHeight = container.clientHeight || window.innerHeight;
 
-            const sunLight = new THREE.PointLight(0xffffff, 2.5, 300); 
-            scene.add(sunLight);
+      const camera = new THREE.PerspectiveCamera(45, initWidth / initHeight, 0.1, 10000);
+      camera.position.z = 90;
+      window.solarCamera = camera;
 
-            window.trailGroup = new THREE.Group();
-            window.trailGroup.visible = false; 
-            scene.add(window.trailGroup);
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(initWidth, initHeight);
+      container.appendChild(renderer.domElement);
 
-            const systemGroup = new THREE.Group();
-            systemGroup.rotation.x = 0; 
-            scene.add(systemGroup);
+      window.solarRenderer = renderer;
+      window.solarScene = scene;
 
-            const sunGeo = new THREE.SphereGeometry(3.5, 32, 32);
-            const sunMat = new THREE.MeshBasicMaterial({ color: 0xffcc00 }); 
-            const sun = new THREE.Mesh(sunGeo, sunMat);
-            
-            const sunHaloGeo = new THREE.SphereGeometry(3.8, 16, 16);
-            const sunHaloMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, wireframe: true, transparent: true, opacity: 0.3 });
-            const sunHalo = new THREE.Mesh(sunHaloGeo, sunHaloMat);
-            sun.add(sunHalo);
-            systemGroup.add(sun); 
+      window.solarControls = new THREE.OrbitControls(camera, renderer.domElement);
+      window.solarControls.target.set(0, 10, 0);
+      window.solarControls.enableDamping = true;
+      window.solarControls.dampingFactor = 0.05;
+      window.solarControls.enabled = true;
 
-            const J2000 = new Date('2000-01-01T12:00:00Z').getTime();
-            
-            const planetData = [
-                { name: "Mercury", size: 0.3, dist: 4, color: 0x888888, period: 87.97, offset: 4.40 },
-                { name: "Venus", size: 0.7, dist: 7, color: 0xe3bb76, period: 224.70, offset: 3.16 },
-                { name: "Earth", size: 0.8, dist: 10, color: 0x2277ff, period: 365.25, offset: 1.75, isEarth: true },
-                { name: "Mars", size: 0.4, dist: 13, color: 0xc1440e, period: 686.98, offset: 6.20 },
-                { name: "Jupiter", size: 2.2, dist: 17, color: 0xd39c7e, period: 4332.59, offset: 0.60 },
-                { name: "Saturn", size: 1.8, dist: 22, color: 0xd8ca9d, period: 10759.22, offset: 0.87, hasRings: true },
-                { name: "Uranus", size: 1.2, dist: 26, color: 0x4b70dd, period: 30685.4, offset: 5.46 },
-                { name: "Neptune", size: 1.2, dist: 30, color: 0x274687, period: 60189.0, offset: 5.31 }
-            ];
+      scene.add(new THREE.AmbientLight(0x333333));
+      scene.add(new THREE.PointLight(0xffffff, 2.5, 300));
 
-            const planetMeshes = [];
-            const textureLoader = new THREE.TextureLoader();
-            textureLoader.crossOrigin = 'anonymous';
+      window.trailGroup = new THREE.Group();
+      window.trailGroup.visible = false;
+      scene.add(window.trailGroup);
 
-            planetData.forEach(p => {
-                const pivot = new THREE.Object3D();
-                systemGroup.add(pivot); 
+      const systemGroup = new THREE.Group();
+      systemGroup.rotation.x = 0;
+      scene.add(systemGroup);
 
-                const geo = new THREE.SphereGeometry(p.size, 32, 32);
-                let mat, mesh;
-                
-                if (p.isEarth) {
-                    mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8 });
-                    mat.map = textureLoader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@master/examples/textures/planets/earth_atmos_2048.jpg');
-                    
-                    // NEW: Earth + Moon container
-                    const earthSystemGroup = new THREE.Group();
-                    earthSystemGroup.position.x = p.dist; 
-                    pivot.add(earthSystemGroup);
+      const sunGeo = new THREE.SphereGeometry(3.5, 32, 32);
+      const sunMat = new THREE.MeshBasicMaterial({ color: 0xffcc00 });
+      const sun = new THREE.Mesh(sunGeo, sunMat);
 
-                    mesh = new THREE.Mesh(geo, mat);
-                    earthSystemGroup.add(mesh);
+      const sunHaloGeo = new THREE.SphereGeometry(3.8, 16, 16);
+      const sunHaloMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, wireframe: true, transparent: true, opacity: 0.3 });
+      const sunHalo = new THREE.Mesh(sunHaloGeo, sunHaloMat);
+      sun.add(sunHalo);
+      systemGroup.add(sun);
 
-                    // NEW: Moon Pivot (rotates exactly relative to Earth)
-                    const moonPivot = new THREE.Group();
-                    earthSystemGroup.add(moonPivot);
+      const J2000 = new Date("2000-01-01T12:00:00Z").getTime();
 
-                    const moonGeo = new THREE.SphereGeometry(0.2, 16, 16);
-                    const moonMat = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 0.9 });
-                    const moonMesh = new THREE.Mesh(moonGeo, moonMat);
-                    moonMesh.position.x = 1.2; 
-                    moonPivot.add(moonMesh);
+      const planetData = [
+        { name: "Mercury", size: 0.3, dist: 4,  color: 0x888888, period: 87.97,   offset: 4.40 },
+        { name: "Venus",   size: 0.7, dist: 7,  color: 0xe3bb76, period: 224.70,  offset: 3.16 },
+        { name: "Earth",   size: 0.8, dist: 10, color: 0x2277ff, period: 365.25,  offset: 1.75, isEarth: true },
+        { name: "Mars",    size: 0.4, dist: 13, color: 0xc1440e, period: 686.98,  offset: 6.20 },
+        { name: "Jupiter", size: 2.2, dist: 17, color: 0xd39c7e, period: 4332.59, offset: 0.60 },
+        { name: "Saturn",  size: 1.8, dist: 22, color: 0xd8ca9d, period: 10759.22,offset: 0.87, hasRings: true },
+        { name: "Uranus",  size: 1.2, dist: 26, color: 0x4b70dd, period: 30685.4, offset: 5.46 },
+        { name: "Neptune", size: 1.2, dist: 30, color: 0x274687, period: 60189.0, offset: 5.31 }
+      ];
 
-                    window.earthMesh = mesh;
-                    window.earthPivot = pivot;
-                    window.moonPivot = moonPivot;
+      const planetMeshes = [];
+      const textureLoader = new THREE.TextureLoader();
+      textureLoader.crossOrigin = "anonymous";
 
-                } else {
-                    mat = new THREE.MeshStandardMaterial({ color: p.color, roughness: 0.7, metalness: 0.1 });
-                    mesh = new THREE.Mesh(geo, mat);
-                    mesh.position.x = p.dist; 
-                    pivot.add(mesh);
-                }
+      planetData.forEach((p) => {
+        const pivot = new THREE.Object3D();
+        systemGroup.add(pivot);
 
-                if (p.hasRings) {
-                    const ringGeo = new THREE.RingGeometry(p.size * 1.4, p.size * 2.3, 32);
-                    const ringMat = new THREE.MeshStandardMaterial({ color: p.color, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
-                    const ring = new THREE.Mesh(ringGeo, ringMat);
-                    ring.rotation.x = Math.PI / 2 + 0.2; 
-                    mesh.add(ring);
-                }
+        const geo = new THREE.SphereGeometry(p.size, 32, 32);
+        let mesh;
 
-                const pathGeo = new THREE.RingGeometry(p.dist - 0.05, p.dist + 0.05, 64);
-                const pathMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: 0.1 });
-                const path = new THREE.Mesh(pathGeo, pathMat);
-                path.rotation.x = Math.PI / 2; 
-                systemGroup.add(path); 
+        if (p.isEarth) {
+          const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8 });
+          mat.map = textureLoader.load("https://cdn.jsdelivr.net/gh/mrdoob/three.js@master/examples/textures/planets/earth_atmos_2048.jpg");
 
-                planetMeshes.push({ pivot: pivot, mesh: mesh, data: p });
-            });
+          const earthSystemGroup = new THREE.Group();
+          earthSystemGroup.position.x = p.dist;
+          pivot.add(earthSystemGroup);
 
-            window.cinematicTrailGroup = new THREE.Group();
-            window.cinematicTrailGroup.visible = true; 
-            scene.add(window.cinematicTrailGroup);
+          mesh = new THREE.Mesh(geo, mat);
+          earthSystemGroup.add(mesh);
 
-            const cinematicTrails = [];
-            const cinematicSegments = 800;
-            const cinematicDaysToDraw = 8000;
-            const cinematicGalacticSpeed = 0.018; 
+          const moonPivot = new THREE.Group();
+          earthSystemGroup.add(moonPivot);
 
-            planetMeshes.forEach(p => {
-                const geo = new THREE.BufferGeometry();
-                const positions = new Float32Array((cinematicSegments + 1) * 3);
-                const colors = new Float32Array((cinematicSegments + 1) * 3);
-                const baseColor = new THREE.Color(p.data.color);
+          const moonGeo = new THREE.SphereGeometry(0.2, 16, 16);
+          const moonMat = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 0.9 });
+          const moonMesh = new THREE.Mesh(moonGeo, moonMat);
+          moonMesh.position.x = 1.2;
+          moonPivot.add(moonMesh);
 
-                for (let i = 0; i <= cinematicSegments; i++) {
-                    const intensity = 0.5 + 0.5 * Math.pow(1.0 - (i / cinematicSegments), 1.2); 
-                    colors[i*3] = baseColor.r * intensity;
-                    colors[i*3+1] = baseColor.g * intensity;
-                    colors[i*3+2] = baseColor.b * intensity;
-                }
-
-                geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-                geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-                
-                const mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, linewidth: 2 });
-                const line = new THREE.Line(geo, mat);
-                window.cinematicTrailGroup.add(line);
-                cinematicTrails.push({ line, data: p.data });
-            });
-
-            const sunGeoC = new THREE.BufferGeometry();
-            const sunPosC = new Float32Array(6);
-            const sunColC = new Float32Array([1,0.8,0,  0,0,0]);
-            sunGeoC.setAttribute('position', new THREE.BufferAttribute(sunPosC, 3));
-            sunGeoC.setAttribute('color', new THREE.BufferAttribute(sunColC, 3));
-            const sunMatC = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.9 });
-            const sunLineC = new THREE.Line(sunGeoC, sunMatC);
-            window.cinematicTrailGroup.add(sunLineC);
-
-            window.update3DTrails = function() {
-                while(window.trailGroup.children.length > 0){ 
-                    window.trailGroup.remove(window.trailGroup.children[0]); 
-                }
-
-                if (window.orbitMode !== 'live') return;
-
-                const birthVal = document.getElementById('birthDate').value;
-                if (!birthVal) return;
-                
-                const birthMs = new Date(birthVal + "T12:00").getTime();
-                const nowMs = Date.now();
-                const totalDays = (nowMs - birthMs) / (1000 * 60 * 60 * 24);
-                
-                if (totalDays <= 0) return;
-
-                const visualGalacticSpeed = 0.018; 
-                const daysToDraw = Math.min(totalDays, 36500); 
-                const segments = 4000; 
-                const daysElapsedToday = (nowMs - J2000) / (1000 * 60 * 60 * 24);
-
-                planetMeshes.forEach(p => {
-                    const points = [];
-                    const colors = [];
-                    const baseColor = new THREE.Color(p.data.color);
-
-                    for (let i = 0; i <= segments; i++) {
-                        const t_ago = daysToDraw * (i / segments);
-                        const historicalDays = daysElapsedToday - t_ago;
-                        
-                        const orbits = historicalDays / p.data.period;
-                        const theta = (orbits * 2 * Math.PI) + p.data.offset;
-
-                        // FIXED: Removed the extra Math.dist typo!
-                        const rawX = p.data.dist * Math.cos(theta);
-                        const rawZ = -p.data.dist * Math.sin(theta);
-
-                        const angle = Math.PI / 3; 
-                        const trailX = -t_ago * visualGalacticSpeed * Math.cos(angle);
-                        const trailY = -t_ago * visualGalacticSpeed * Math.sin(angle);
-
-                        points.push(new THREE.Vector3(rawX + trailX, trailY, rawZ));
-
-                        const intensity = 0.5 + 0.5 * Math.pow(1.0 - (i / segments), 1.2); 
-                        colors.push(baseColor.r * intensity, baseColor.g * intensity, baseColor.b * intensity);
-                    }
-
-                    const geo = new THREE.BufferGeometry().setFromPoints(points);
-                    geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-                    const mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, linewidth: 2 });
-                    const line = new THREE.Line(geo, mat);
-                    window.trailGroup.add(line);
-                });
-
-                const angle = Math.PI / 3;
-                const sunPoints = [
-                    new THREE.Vector3(0, 0, 0),
-                    new THREE.Vector3(
-                        -daysToDraw * visualGalacticSpeed * Math.cos(angle), 
-                        -daysToDraw * visualGalacticSpeed * Math.sin(angle), 
-                        0
-                    )
-                ];
-                const sunColors = [1,0.8,0,  0,0,0];
-                const sunTrailGeo = new THREE.BufferGeometry().setFromPoints(sunPoints);
-                sunTrailGeo.setAttribute('color', new THREE.Float32BufferAttribute(sunColors, 3));
-                const sunTrailMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.9 });
-                const sunLine = new THREE.Line(sunTrailGeo, sunTrailMat);
-                window.trailGroup.add(sunLine);
-            };
-
-            let cinematicDaysElapsed = (Date.now() - J2000) / (1000 * 60 * 60 * 24);
-
-            function animate3D() {
-                requestAnimationFrame(animate3D);
-                sun.rotation.y += 0.005; 
-                
-                if (window.solarControls && window.solarControls.enabled) {
-                    if (window.isTrackingEarth && window.earthMesh) {
-                        const earthPos = new THREE.Vector3();
-                        window.earthMesh.getWorldPosition(earthPos);
-                        window.solarControls.target.lerp(earthPos, 0.1); 
-                    } 
-                    window.solarControls.update(); 
-                }
-
-                const nowDays = (Date.now() - J2000) / (1000 * 60 * 60 * 24);
-
-                if (window.orbitMode === 'cinematic') {
-                    cinematicDaysElapsed += (0.5 * window.cinematicSpeedMult); 
-                    
-                    // NEW: Moon synced perfectly to cinematic days elapsed (period = 27.322 days)
-                    if (window.moonPivot) window.moonPivot.rotation.y = (cinematicDaysElapsed / 27.322) * 2 * Math.PI;
-
-                    planetMeshes.forEach(p => {
-                        const orbits = cinematicDaysElapsed / p.data.period;
-                        p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
-                        p.mesh.rotation.y += 0.01; 
-                    });
-
-                    cinematicTrails.forEach(ct => {
-                        const positions = ct.line.geometry.attributes.position.array;
-                        for (let i = 0; i <= cinematicSegments; i++) {
-                            const t_ago = cinematicDaysToDraw * (i / cinematicSegments);
-                            const historicalDays = cinematicDaysElapsed - t_ago;
-                            
-                            const orbits = historicalDays / ct.data.period;
-                            const theta = (orbits * 2 * Math.PI) + ct.data.offset;
-
-                            const rawX = ct.data.dist * Math.cos(theta);
-                            const rawZ = -ct.data.dist * Math.sin(theta);
-                            
-                            const angle = Math.PI / 3;
-                            const trailX = -t_ago * cinematicGalacticSpeed * Math.cos(angle);
-                            const trailY = -t_ago * cinematicGalacticSpeed * Math.sin(angle);
-
-                            positions[i*3] = rawX + trailX;
-                            positions[i*3+1] = trailY;
-                            positions[i*3+2] = rawZ;
-                        }
-                        ct.line.geometry.attributes.position.needsUpdate = true;
-                    });
-
-                    const angle = Math.PI / 3;
-                    const sunPosArray = sunLineC.geometry.attributes.position.array;
-                    sunPosArray[0] = 0; sunPosArray[1] = 0; sunPosArray[2] = 0;
-                    sunPosArray[3] = -cinematicDaysToDraw * cinematicGalacticSpeed * Math.cos(angle); 
-                    sunPosArray[4] = -cinematicDaysToDraw * cinematicGalacticSpeed * Math.sin(angle); 
-                    sunPosArray[5] = 0;
-                    sunLineC.geometry.attributes.position.needsUpdate = true;
-                } 
-                else if (window.orbitMode === 'live') {
-                    cinematicDaysElapsed = nowDays; 
-                    
-                    // NEW: Moon synced perfectly to real-life "now" days elapsed
-                    if (window.moonPivot) window.moonPivot.rotation.y = (nowDays / 27.322) * 2 * Math.PI;
-
-                    const now = new Date();
-                    const utcHours = now.getUTCHours() + (now.getUTCMinutes() / 60) + (now.getUTCSeconds() / 3600);
-                    const timeFraction = utcHours / 24; 
-                    
-                    planetMeshes.forEach(p => {
-                        const orbits = nowDays / p.data.period;
-                        p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
-                        
-                        if (p.data.isEarth) {
-                            const TEXTURE_OFFSET = -Math.PI / 2;
-                            p.mesh.rotation.y = (timeFraction * Math.PI * 2) + TEXTURE_OFFSET;
-                        } else {
-                            p.mesh.rotation.y += 0.01; 
-                        }
-                    });
-                } 
-                else if (window.orbitMode === 'birth') {
-                    const birthVal = document.getElementById('birthDate').value;
-                    const targetMs = birthVal ? new Date(birthVal + "T12:00").getTime() : Date.now();
-                    const birthDays = (targetMs - J2000) / (1000 * 60 * 60 * 24);
-
-                    // NEW: Moon snaps perfectly to the exact birth date phase!
-                    if (window.moonPivot) window.moonPivot.rotation.y = (birthDays / 27.322) * 2 * Math.PI;
-
-                    planetMeshes.forEach(p => {
-                        const orbits = birthDays / p.data.period;
-                        p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
-                        p.mesh.rotation.y += 0.01; 
-                    });
-                }
-                
-                renderer.render(scene, camera);
-            }
-            animate3D();
-
-            window.addEventListener('resize', () => {
-                let currentWidth = container.clientWidth || window.innerWidth;
-                let currentHeight = container.clientHeight || window.innerHeight;
-                
-                if (window.innerWidth <= 1200 && document.body.classList.contains('show-3d-on-mobile')) {
-                    currentWidth = window.innerWidth;
-                    currentHeight = window.innerHeight;
-                }
-                
-                if (currentWidth === 0 || currentHeight === 0) return;
-                
-                camera.aspect = currentWidth / currentHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(currentWidth, currentHeight);
-            });
+          window.earthMesh = mesh;
+          window.earthPivot = pivot;
+          window.moonPivot = moonPivot;
+        } else {
+          const mat = new THREE.MeshStandardMaterial({ color: p.color, roughness: 0.7, metalness: 0.1 });
+          mesh = new THREE.Mesh(geo, mat);
+          mesh.position.x = p.dist;
+          pivot.add(mesh);
         }
 
-        // 3D galaxy mini-map (right panel)
-        let galaxyScene, galaxyCamera, galaxyRenderer, galaxyParticles, earthMarker;
-
-        function init3DGalaxy() {
-            const container = document.getElementById('galaxy-3d-container');
-            if(!container) return;
-
-            galaxyScene = new THREE.Scene();
-            
-            galaxyCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            galaxyCamera.position.set(0, 45, 60); 
-            galaxyCamera.lookAt(0, 0, 0);
-
-            galaxyRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            galaxyRenderer.setSize(container.clientWidth, container.clientHeight);
-            container.appendChild(galaxyRenderer.domElement);
-
-            const coreGeo = new THREE.SphereGeometry(3, 32, 32);
-            const coreMat = new THREE.MeshBasicMaterial({ color: 0xffeebb, transparent: true, opacity: 0.9 });
-            const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-            galaxyScene.add(coreMesh);
-
-            const particleGeo = new THREE.BufferGeometry();
-            const particleCount = 6000;
-            const posArray = new Float32Array(particleCount * 3);
-            const colorArray = new Float32Array(particleCount * 3);
-            
-            const colorInside = new THREE.Color(0xffddaa);
-            const colorOutside = new THREE.Color(0x2277ff);
-
-            for(let i=0; i<particleCount; i++) {
-                const i3 = i * 3;
-                
-                const radius = Math.pow(Math.random(), 1.5) * 28; 
-                const spinAngle = radius * 0.4;
-                const branchAngle = ((i % 3) / 3) * Math.PI * 2;
-                
-                const randomX = Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1) * 3;
-                const randomY = Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1) * 1.5;
-                const randomZ = Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1) * 3;
-
-                const x = Math.cos(branchAngle + spinAngle) * radius + randomX;
-                const y = randomY;
-                const z = Math.sin(branchAngle + spinAngle) * radius + randomZ;
-
-                posArray[i3] = x;
-                posArray[i3+1] = y;
-                posArray[i3+2] = z;
-
-                const mixedColor = colorInside.clone().lerp(colorOutside, radius / 28);
-                colorArray[i3] = mixedColor.r;
-                colorArray[i3+1] = mixedColor.g;
-                colorArray[i3+2] = mixedColor.b;
-            }
-
-            particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            particleGeo.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
-
-            const particleMat = new THREE.PointsMaterial({
-                size: 0.25,
-                vertexColors: true,
-                blending: THREE.AdditiveBlending,
-                transparent: true,
-                opacity: 0.8,
-                depthWrite: false
-            });
-
-            galaxyParticles = new THREE.Points(particleGeo, particleMat);
-            galaxyParticles.rotation.x = 0.2;
-            galaxyScene.add(galaxyParticles);
-
-            const markerGeo = new THREE.SphereGeometry(0.8, 16, 16);
-            const markerMat = new THREE.MeshBasicMaterial({ color: 0x00ff41 });
-            earthMarker = new THREE.Mesh(markerGeo, markerMat);
-            
-            const earthRadius = 16;
-            const earthSpin = earthRadius * 0.4;
-            const earthBranch = (0 / 3) * Math.PI * 2; 
-            earthMarker.position.x = Math.cos(earthBranch + earthSpin) * earthRadius;
-            earthMarker.position.z = Math.sin(earthBranch + earthSpin) * earthRadius;
-            
-            galaxyParticles.add(earthMarker);
-
-            window.galaxyControls = new THREE.OrbitControls(galaxyCamera, galaxyRenderer.domElement);
-            window.galaxyControls.enableDamping = true;
-            window.galaxyControls.enableZoom = false; 
-
-            function animateGalaxy() {
-                requestAnimationFrame(animateGalaxy);
-                
-                galaxyParticles.rotation.y += 0.001; 
-                
-                const pulse = 1 + Math.sin(Date.now() * 0.005) * 0.3;
-                earthMarker.scale.set(pulse, pulse, pulse);
-
-                window.galaxyControls.update();
-                galaxyRenderer.render(galaxyScene, galaxyCamera);
-            }
-            animateGalaxy();
-
-            window.addEventListener('resize', () => {
-                const mapDiv = document.getElementById('galaxy-map');
-                if(!mapDiv || mapDiv.clientWidth === 0) return;
-                
-                galaxyCamera.aspect = mapDiv.clientWidth / mapDiv.clientHeight;
-                galaxyCamera.updateProjectionMatrix();
-                galaxyRenderer.setSize(mapDiv.clientWidth, mapDiv.clientHeight);
-            });
+        if (p.hasRings) {
+          const ringGeo = new THREE.RingGeometry(p.size * 1.4, p.size * 2.3, 32);
+          const ringMat = new THREE.MeshStandardMaterial({ color: p.color, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
+          const ring = new THREE.Mesh(ringGeo, ringMat);
+          ring.rotation.x = Math.PI / 2 + 0.2;
+          mesh.add(ring);
         }
 
-        setTimeout(() => {
-            init3DSolarSystem();
-            init3DGalaxy();
-        }, 500); 
-    </script>
+        const pathGeo = new THREE.RingGeometry(p.dist - 0.05, p.dist + 0.05, 64);
+        const pathMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: 0.1 });
+        const path = new THREE.Mesh(pathGeo, pathMat);
+        path.rotation.x = Math.PI / 2;
+        systemGroup.add(path);
+
+        planetMeshes.push({ pivot, mesh, data: p });
+      });
+
+      window.planetMeshes = planetMeshes;
+
+      // Voyagers
+      const voyagerData = [
+        { id: "v1", name: "Voyager 1", rJ2000: 75.3, vAuPerDay: 0.00982, lat: 35,  lon: 216, color: 0xff4444, launchMs: new Date("1977-09-05T00:00:00Z").getTime() },
+        { id: "v2", name: "Voyager 2", rJ2000: 60.1, vAuPerDay: 0.00865, lat: -32, lon: 288, color: 0x4444ff, launchMs: new Date("1977-08-20T00:00:00Z").getTime() }
+      ];
+
+      window.voyagerMeshes = [];
+      voyagerData.forEach((v) => {
+        const geo = new THREE.SphereGeometry(1.2, 16, 16);
+        const mat = new THREE.MeshBasicMaterial({ color: v.color });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.visible = false;
+
+        const lineGeo = new THREE.BufferGeometry();
+        lineGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3));
+        const lineMat = new THREE.LineBasicMaterial({ color: v.color, transparent: true, opacity: 0.6, linewidth: 2 });
+        const line = new THREE.Line(lineGeo, lineMat);
+        line.visible = false;
+
+        systemGroup.add(mesh);
+        systemGroup.add(line);
+
+        if (v.id === "v1") window.v1Mesh = mesh;
+        if (v.id === "v2") window.v2Mesh = mesh;
+
+        window.voyagerMeshes.push({ mesh, line, data: v });
+      });
+
+      // Cinematic trails
+      window.cinematicTrailGroup = new THREE.Group();
+      window.cinematicTrailGroup.visible = true;
+      scene.add(window.cinematicTrailGroup);
+
+      const cinematicTrails = [];
+      const cinematicSegments = 800;
+      const cinematicDaysToDraw = 8000;
+      const cinematicGalacticSpeed = 0.018;
+
+      planetMeshes.forEach((p) => {
+        const geo = new THREE.BufferGeometry();
+        const positions = new Float32Array((cinematicSegments + 1) * 3);
+        const colors = new Float32Array((cinematicSegments + 1) * 3);
+        const baseColor = new THREE.Color(p.data.color);
+
+        for (let i = 0; i <= cinematicSegments; i++) {
+          const intensity = 0.5 + 0.5 * Math.pow(1.0 - (i / cinematicSegments), 1.2);
+          colors[i * 3 + 0] = baseColor.r * intensity;
+          colors[i * 3 + 1] = baseColor.g * intensity;
+          colors[i * 3 + 2] = baseColor.b * intensity;
+        }
+
+        geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+        geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+        const mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, linewidth: 2 });
+        const line = new THREE.Line(geo, mat);
+        window.cinematicTrailGroup.add(line);
+        cinematicTrails.push({ line, data: p.data });
+      });
+
+      const sunGeoC = new THREE.BufferGeometry();
+      sunGeoC.setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3));
+      sunGeoC.setAttribute("color", new THREE.BufferAttribute(new Float32Array([1, 0.8, 0, 0, 0, 0]), 3));
+      const sunMatC = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.9 });
+      const sunLineC = new THREE.Line(sunGeoC, sunMatC);
+      window.cinematicTrailGroup.add(sunLineC);
+
+      window.update3DTrails = function () {
+        while (window.trailGroup.children.length > 0) window.trailGroup.remove(window.trailGroup.children[0]);
+        if (window.orbitMode !== "live") return;
+
+        const birthVal = document.getElementById("birthDate").value;
+        if (!birthVal) return;
+
+        const birthMs = new Date(birthVal + "T12:00").getTime();
+        const nowMs = Date.now();
+        const totalDays = (nowMs - birthMs) / (1000 * 60 * 60 * 24);
+        if (totalDays <= 0) return;
+
+        const visualGalacticSpeed = 0.018;
+        const daysToDraw = Math.min(totalDays, 36500);
+        const segments = 4000;
+        const daysElapsedToday = (nowMs - J2000) / (1000 * 60 * 60 * 24);
+
+        planetMeshes.forEach((p) => {
+          const points = [];
+          const colors = [];
+          const baseColor = new THREE.Color(p.data.color);
+
+          for (let i = 0; i <= segments; i++) {
+            const tAgo = daysToDraw * (i / segments);
+            const historicalDays = daysElapsedToday - tAgo;
+
+            const orbits = historicalDays / p.data.period;
+            const theta = (orbits * 2 * Math.PI) + p.data.offset;
+
+            const rawX = p.data.dist * Math.cos(theta);
+            const rawZ = -p.data.dist * Math.sin(theta);
+
+            const angle = Math.PI / 3;
+            const trailX = -tAgo * visualGalacticSpeed * Math.cos(angle);
+            const trailY = -tAgo * visualGalacticSpeed * Math.sin(angle);
+
+            points.push(new THREE.Vector3(rawX + trailX, trailY, rawZ));
+
+            const intensity = 0.5 + 0.5 * Math.pow(1.0 - (i / segments), 1.2);
+            colors.push(baseColor.r * intensity, baseColor.g * intensity, baseColor.b * intensity);
+          }
+
+          const geo = new THREE.BufferGeometry().setFromPoints(points);
+          geo.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+          const mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, linewidth: 2 });
+          const line = new THREE.Line(geo, mat);
+          window.trailGroup.add(line);
+        });
+
+        const angle = Math.PI / 3;
+        const sunPoints = [
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(-daysToDraw * visualGalacticSpeed * Math.cos(angle), -daysToDraw * visualGalacticSpeed * Math.sin(angle), 0)
+        ];
+        const sunTrailGeo = new THREE.BufferGeometry().setFromPoints(sunPoints);
+        sunTrailGeo.setAttribute("color", new THREE.Float32BufferAttribute([1, 0.8, 0, 0, 0, 0], 3));
+        const sunTrailMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.9 });
+        window.trailGroup.add(new THREE.Line(sunTrailGeo, sunTrailMat));
+      };
+
+      function updateVoyagers(daysElapsed, currentTimestamp) {
+        if (!window.voyagerMeshes) return;
+        const showLines = (window.trackingTarget === "v1" || window.trackingTarget === "v2");
+
+        window.voyagerMeshes.forEach((v) => {
+          if (currentTimestamp < v.data.launchMs || window.orbitMode === "cinematic") {
+            v.mesh.visible = false;
+            v.line.visible = false;
+            return;
+          }
+
+          v.mesh.visible = true;
+          v.line.visible = showLines;
+
+          let currentAu = v.data.rJ2000 + (v.data.vAuPerDay * daysElapsed);
+          if (currentAu < 1) currentAu = 1;
+
+          const R = currentAu * 10;
+          const latRad = v.data.lat * Math.PI / 180;
+          const lonRad = v.data.lon * Math.PI / 180;
+
+          const x = R * Math.cos(latRad) * Math.cos(lonRad);
+          const y = R * Math.sin(latRad);
+          const z = -R * Math.cos(latRad) * Math.sin(lonRad);
+
+          v.mesh.position.set(x, y, z);
+
+          const startX = 10 * Math.cos(latRad) * Math.cos(lonRad);
+          const startY = 10 * Math.sin(latRad);
+          const startZ = -10 * Math.cos(latRad) * Math.sin(lonRad);
+
+          const posAttr = v.line.geometry.attributes.position.array;
+          posAttr[0] = startX; posAttr[1] = startY; posAttr[2] = startZ;
+          posAttr[3] = x;      posAttr[4] = y;      posAttr[5] = z;
+          v.line.geometry.attributes.position.needsUpdate = true;
+        });
+      }
+
+      let cinematicDaysElapsed = (Date.now() - J2000) / (1000 * 60 * 60 * 24);
+
+      function animate3D() {
+        requestAnimationFrame(animate3D);
+        sun.rotation.y += 0.005;
+
+        if (window.solarControls && window.solarControls.enabled) {
+          let targetPos = new THREE.Vector3(0, 5, 0);
+          if (window.trackingTarget === "earth" && window.earthMesh) window.earthMesh.getWorldPosition(targetPos);
+          else if (window.trackingTarget === "v1" && window.v1Mesh && window.v1Mesh.visible) window.v1Mesh.getWorldPosition(targetPos);
+          else if (window.trackingTarget === "v2" && window.v2Mesh && window.v2Mesh.visible) window.v2Mesh.getWorldPosition(targetPos);
+
+          window.solarControls.target.lerp(targetPos, 0.1);
+          window.solarControls.update();
+        }
+
+        const nowMs = Date.now();
+        const nowDays = (nowMs - J2000) / (1000 * 60 * 60 * 24);
+
+        if (window.orbitMode === "cinematic") {
+          cinematicDaysElapsed += (0.5 * window.cinematicSpeedMult);
+          updateVoyagers(cinematicDaysElapsed, nowMs);
+
+          if (window.moonPivot) window.moonPivot.rotation.y = (cinematicDaysElapsed / 27.322) * 2 * Math.PI;
+
+          planetMeshes.forEach((p) => {
+            const orbits = cinematicDaysElapsed / p.data.period;
+            p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
+            p.mesh.rotation.y += 0.01;
+          });
+
+          cinematicTrails.forEach((ct) => {
+            const positions = ct.line.geometry.attributes.position.array;
+            for (let i = 0; i <= cinematicSegments; i++) {
+              const tAgo = cinematicDaysToDraw * (i / cinematicSegments);
+              const historicalDays = cinematicDaysElapsed - tAgo;
+
+              const orbits = historicalDays / ct.data.period;
+              const theta = (orbits * 2 * Math.PI) + ct.data.offset;
+
+              const rawX = ct.data.dist * Math.cos(theta);
+              const rawZ = -ct.data.dist * Math.sin(theta);
+
+              const angle = Math.PI / 3;
+              const trailX = -tAgo * cinematicGalacticSpeed * Math.cos(angle);
+              const trailY = -tAgo * cinematicGalacticSpeed * Math.sin(angle);
+
+              positions[i * 3 + 0] = rawX + trailX;
+              positions[i * 3 + 1] = trailY;
+              positions[i * 3 + 2] = rawZ;
+            }
+            ct.line.geometry.attributes.position.needsUpdate = true;
+          });
+
+          const angle = Math.PI / 3;
+          const sunPosArray = sunLineC.geometry.attributes.position.array;
+          sunPosArray[0] = 0; sunPosArray[1] = 0; sunPosArray[2] = 0;
+          sunPosArray[3] = -cinematicDaysToDraw * cinematicGalacticSpeed * Math.cos(angle);
+          sunPosArray[4] = -cinematicDaysToDraw * cinematicGalacticSpeed * Math.sin(angle);
+          sunPosArray[5] = 0;
+          sunLineC.geometry.attributes.position.needsUpdate = true;
+        } else if (window.orbitMode === "live") {
+          cinematicDaysElapsed = nowDays;
+          updateVoyagers(nowDays, nowMs);
+
+          if (window.moonPivot) window.moonPivot.rotation.y = (nowDays / 27.322) * 2 * Math.PI;
+
+          const utc = new Date();
+          const utcHours = utc.getUTCHours() + (utc.getUTCMinutes() / 60) + (utc.getUTCSeconds() / 3600);
+          const timeFraction = utcHours / 24;
+
+          planetMeshes.forEach((p) => {
+            const orbits = nowDays / p.data.period;
+            p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
+
+            if (p.data.isEarth) {
+              const TEXTURE_OFFSET = -Math.PI / 2;
+              p.mesh.rotation.y = (timeFraction * Math.PI * 2) + TEXTURE_OFFSET;
+            } else {
+              p.mesh.rotation.y += 0.01;
+            }
+          });
+        } else {
+          const birthVal = document.getElementById("birthDate").value;
+          const targetMs = birthVal ? new Date(birthVal + "T12:00").getTime() : Date.now();
+          const birthDays = (targetMs - J2000) / (1000 * 60 * 60 * 24);
+
+          updateVoyagers(birthDays, targetMs);
+
+          if (window.moonPivot) window.moonPivot.rotation.y = (birthDays / 27.322) * 2 * Math.PI;
+
+          planetMeshes.forEach((p) => {
+            const orbits = birthDays / p.data.period;
+            p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
+            p.mesh.rotation.y += 0.01;
+          });
+        }
+
+        renderer.render(scene, camera);
+      }
+
+      animate3D();
+
+      window.addEventListener("resize", () => {
+        let currentWidth = container.clientWidth || window.innerWidth;
+        let currentHeight = container.clientHeight || window.innerHeight;
+
+        if (window.innerWidth <= 1200 && document.body.classList.contains("show-3d-on-mobile")) {
+          currentWidth = window.innerWidth;
+          currentHeight = window.innerHeight;
+        }
+        if (currentWidth === 0 || currentHeight === 0) return;
+
+        camera.aspect = currentWidth / currentHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(currentWidth, currentHeight);
+      });
+    }
+
+    let galaxyScene, galaxyCamera, galaxyRenderer, galaxyParticles, earthMarker;
+
+    function init3DGalaxy() {
+      const container = document.getElementById("galaxy-3d-container");
+      if (!container) return;
+
+      galaxyScene = new THREE.Scene();
+
+      galaxyCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+      galaxyCamera.position.set(0, 45, 60);
+      galaxyCamera.lookAt(0, 0, 0);
+
+      galaxyRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      galaxyRenderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(galaxyRenderer.domElement);
+
+      const coreGeo = new THREE.SphereGeometry(3, 32, 32);
+      const coreMat = new THREE.MeshBasicMaterial({ color: 0xffeebb, transparent: true, opacity: 0.9 });
+      galaxyScene.add(new THREE.Mesh(coreGeo, coreMat));
+
+      const particleGeo = new THREE.BufferGeometry();
+      const particleCount = 6000;
+      const posArray = new Float32Array(particleCount * 3);
+      const colorArray = new Float32Array(particleCount * 3);
+
+      const colorInside = new THREE.Color(0xffddaa);
+      const colorOutside = new THREE.Color(0x2277ff);
+
+      for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+
+        const radius = Math.pow(Math.random(), 1.5) * 28;
+        const spinAngle = radius * 0.4;
+        const branchAngle = ((i % 3) / 3) * Math.PI * 2;
+
+        const randomX = Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1) * 3;
+        const randomY = Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1) * 1.5;
+        const randomZ = Math.pow(Math.random(), 2) * (Math.random() < 0.5 ? 1 : -1) * 3;
+
+        const x = Math.cos(branchAngle + spinAngle) * radius + randomX;
+        const y = randomY;
+        const z = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+        posArray[i3 + 0] = x;
+        posArray[i3 + 1] = y;
+        posArray[i3 + 2] = z;
+
+        const mixed = colorInside.clone().lerp(colorOutside, radius / 28);
+        colorArray[i3 + 0] = mixed.r;
+        colorArray[i3 + 1] = mixed.g;
+        colorArray[i3 + 2] = mixed.b;
+      }
+
+      particleGeo.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
+      particleGeo.setAttribute("color", new THREE.BufferAttribute(colorArray, 3));
+
+      const particleMat = new THREE.PointsMaterial({
+        size: 0.25,
+        vertexColors: true,
+        blending: THREE.AdditiveBlending,
+        transparent: true,
+        opacity: 0.8,
+        depthWrite: false
+      });
+
+      galaxyParticles = new THREE.Points(particleGeo, particleMat);
+      galaxyParticles.rotation.x = 0.2;
+      galaxyScene.add(galaxyParticles);
+
+      const markerGeo = new THREE.SphereGeometry(0.8, 16, 16);
+      const markerMat = new THREE.MeshBasicMaterial({ color: 0x00ff41 });
+      earthMarker = new THREE.Mesh(markerGeo, markerMat);
+
+      const earthRadius = 16;
+      const earthSpin = earthRadius * 0.4;
+      const earthBranch = 0;
+      earthMarker.position.x = Math.cos(earthBranch + earthSpin) * earthRadius;
+      earthMarker.position.z = Math.sin(earthBranch + earthSpin) * earthRadius;
+
+      galaxyParticles.add(earthMarker);
+
+      window.galaxyControls = new THREE.OrbitControls(galaxyCamera, galaxyRenderer.domElement);
+      window.galaxyControls.enableDamping = true;
+      window.galaxyControls.enableZoom = false;
+
+      function animateGalaxy() {
+        requestAnimationFrame(animateGalaxy);
+
+        galaxyParticles.rotation.y += 0.001;
+
+        const pulse = 1 + Math.sin(Date.now() * 0.005) * 0.3;
+        earthMarker.scale.set(pulse, pulse, pulse);
+
+        window.galaxyControls.update();
+        galaxyRenderer.render(galaxyScene, galaxyCamera);
+      }
+
+      animateGalaxy();
+
+      window.addEventListener("resize", () => {
+        const mapDiv = document.getElementById("galaxy-map");
+        if (!mapDiv || mapDiv.clientWidth === 0) return;
+        galaxyCamera.aspect = mapDiv.clientWidth / mapDiv.clientHeight;
+        galaxyCamera.updateProjectionMatrix();
+        galaxyRenderer.setSize(mapDiv.clientWidth, mapDiv.clientHeight);
+      });
+    }
+
+    // init 3D a moment after load (lets layout settle)
+    setTimeout(() => {
+      init3DSolarSystem();
+      init3DGalaxy();
+    }, 500);
+  </script>
 </body>
 </html>
