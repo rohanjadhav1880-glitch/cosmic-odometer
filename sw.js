@@ -1,4 +1,4 @@
-const CACHE_NAME = "cosmic-v2.5";
+const CACHE_NAME = "cosmic-v2.6";
 
 const ASSETS = [
   "/",
@@ -47,6 +47,7 @@ self.addEventListener("fetch", (event) => {
     caches.match(req).then((cached) => cached || fetch(req))
   );
 });
+
 
 
 
