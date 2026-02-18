@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M98MBQCEM"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -15,11 +14,9 @@
   <title>Cosmic Odometer - Space Travel Calculator</title>
   <link rel="canonical" href="https://cosmicodometer.space" />
 
-  <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="https://fav.farm/🪐" />
 
-  <!-- SEO / Social -->
   <meta name="description" content="Calculate the distance you’ve traveled through space since birth." />
   <meta property="og:title" content="Cosmic Odometer" />
   <meta property="og:description" content="Calculate how far you have traveled through the universe since you were born." />
@@ -28,7 +25,6 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://fav.farm/🪐" />
 
-  <!-- Emoji favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪐</text></svg>" />
 
   <style>
@@ -568,19 +564,19 @@
 <body>
   <canvas id="starfield"></canvas>
 
-  <button id="mobile-toggle-btn" onclick="toggleMobileView()">🌌 VIEW SOLAR SYSTEM</button>
+  <button id="mobile-toggle-btn" onclick="toggleMobileView()" data-i18n="mobile_view_solar">🌌 VIEW SOLAR SYSTEM</button>
 
   <div id="solar-system-container">
     <div id="solar-controls">
-      <button class="toggle-btn active" id="mode-cinematic" onclick="setOrbitMode('cinematic')">CINEMATIC</button>
-      <button class="toggle-btn" id="btn-ff" onclick="toggleFastForward()" style="border-color:#ffd700; color:#ffd700;">⏩ 10X SPEED</button>
-      <button class="toggle-btn" id="mode-live" onclick="setOrbitMode('live')">TODAY (VORTEX)</button>
-      <button class="toggle-btn" id="mode-birth" onclick="setOrbitMode('birth')">BIRTH DATE</button>
+      <button class="toggle-btn active" id="mode-cinematic" onclick="setOrbitMode('cinematic')" data-i18n="btn_cinematic">CINEMATIC</button>
+      <button class="toggle-btn" id="btn-ff" onclick="toggleFastForward()" style="border-color:#ffd700; color:#ffd700;" data-i18n="btn_warp">⏩ WARP</button>
+      <button class="toggle-btn" id="mode-live" onclick="setOrbitMode('live')" data-i18n="btn_live">TODAY (VORTEX)</button>
+      <button class="toggle-btn" id="mode-birth" onclick="setOrbitMode('birth')" data-i18n="btn_birth">BIRTH DATE</button>
 
       <div id="focus-separator" class="separator-line" style="display:none;"></div>
-      <button class="toggle-btn" id="btn-focus" onclick="trackObject('earth')" style="display:none; border-color:#2277ff; color:#2277ff;">🌍 EARTH</button>
-      <button class="toggle-btn" id="btn-v1" onclick="trackObject('v1')" style="display:none; border-color:#ff4444; color:#ff4444;">🔴 VOYAGER 1</button>
-      <button class="toggle-btn" id="btn-v2" onclick="trackObject('v2')" style="display:none; border-color:#4444ff; color:#4444ff;">🔵 VOYAGER 2</button>
+      <button class="toggle-btn" id="btn-focus" onclick="trackObject('earth')" style="display:none; border-color:#2277ff; color:#2277ff;" data-i18n="btn_earth">🌍 EARTH</button>
+      <button class="toggle-btn" id="btn-v1" onclick="trackObject('v1')" style="display:none; border-color:#ff4444; color:#ff4444;" data-i18n="btn_v1">🔴 VOYAGER 1</button>
+      <button class="toggle-btn" id="btn-v2" onclick="trackObject('v2')" style="display:none; border-color:#4444ff; color:#4444ff;" data-i18n="btn_v2">🔵 VOYAGER 2</button>
     </div>
   </div>
 
@@ -593,11 +589,11 @@
     <div id="share-tooltip" data-i18n="copied">Link Copied!</div>
 
     <div class="controls-container">
-      <button class="toggle-btn" id="installBtn" onclick="installPWA()">📲 INSTALL APP</button>
+      <button class="toggle-btn" id="installBtn" onclick="installPWA()" data-i18n="install_app">📲 INSTALL APP</button>
 
       <div class="unit-toggle-group">
-        <button class="toggle-btn active" id="btn-km" onclick="setUnit('km')">KM</button>
-        <button class="toggle-btn" id="btn-mi" onclick="setUnit('mi')">MILES</button>
+        <button class="toggle-btn active" id="btn-km" onclick="setUnit('km')" data-i18n="unit_km">KM</button>
+        <button class="toggle-btn" id="btn-mi" onclick="setUnit('mi')" data-i18n="unit_mi">MILES</button>
       </div>
 
       <button class="toggle-btn icon-btn btn-x" onclick="shareSocial('twitter')" title="Tweet Stats">𝕏</button>
@@ -615,7 +611,7 @@
     </div>
 
     <div class="input-group">
-      <div style="color:#00d4ff; font-size:0.9rem; font-weight:bold; text-transform:uppercase;">ENTER BIRTH DATE:</div>
+      <div style="color:#00d4ff; font-size:0.9rem; font-weight:bold; text-transform:uppercase;" data-i18n="enter_birth">ENTER BIRTH DATE:</div>
 
       <div class="row">
         <input type="date" id="birthDate" />
@@ -638,8 +634,8 @@
 
     <div class="metric session-box">
       <div>
-        <div class="label" style="color:#00ff41">DISTANCE THIS SESSION</div>
-        <div class="label" style="font-size:0.7rem;">(Since opening this page)</div>
+        <div class="label" style="color:#00ff41" data-i18n="dist_session">DISTANCE THIS SESSION</div>
+        <div class="label" style="font-size:0.7rem;" data-i18n="dist_session_sub">(Since opening this page)</div>
       </div>
       <div class="value" id="dist-session" style="color:#00ff41; font-size:1.3rem;">0 km</div>
     </div>
@@ -673,46 +669,44 @@
       <div class="d-title" data-i18n="displacement_title">Net Displacement Estimate</div>
       <div class="d-value" id="dist-vector">0 km</div>
       <div class="d-note">
-        Why is this just an estimate?
+        <span data-i18n="displacement_note">Why is this just an estimate?</span>
         <span onclick="document.getElementById('physics-exp').classList.toggle('active')"
-              style="color:#00d4ff; text-decoration:underline; cursor:pointer;">Reveal the physics.</span>
+              style="color:#00d4ff; text-decoration:underline; cursor:pointer;" data-i18n="reveal_physics">Reveal the physics.</span>
       </div>
 
       <div id="physics-exp" class="result-row" style="border-top:1px solid rgba(255,0,85,0.3); text-align:left; margin-top:10px; padding-top:10px;">
-        <div style="font-size:0.75rem; color:#ff99bb; line-height:1.5;">
-          <strong>Astrophysics constraint:</strong> There is no absolute fixed grid in the universe! This vector uses the
-          600 km/s Cosmic Microwave Background rest frame. However, astronomical margin of error (±15 km/s) means your
-          true current location has an uncertainty radius of several billion kilometers. Einstein says hi! 🪐
+        <div style="font-size:0.75rem; color:#ff99bb; line-height:1.5;" data-i18n="physics_exp">
+          <strong>Astrophysics constraint:</strong> There is no absolute fixed grid in the universe...
         </div>
       </div>
     </div>
 
     <div class="multiplayer-box">
-      <h3>👩‍🚀 Cosmic Connection</h3>
-      <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Compare your flight path with a friend.</div>
+      <h3 data-i18n="conn_title">👩‍🚀 Cosmic Connection</h3>
+      <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;" data-i18n="conn_subtitle">Compare your flight path with a friend.</div>
 
       <div class="friend-input-wrapper">
         <input type="date" id="friendDate" style="border-color:#9d4edd; background:rgba(0,0,0,0.3);" />
-        <button class="compare-btn" onclick="calculateConnection()">CALCULATE GAP</button>
+        <button class="compare-btn" onclick="calculateConnection()" data-i18n="calc_gap">CALCULATE GAP</button>
       </div>
 
       <div id="connection-results" class="result-row">
         <div style="margin-bottom:20px;">
-          <div class="res-label">DISTANCE APART AT BIRTH</div>
+          <div class="res-label" data-i18n="res_gap_title">DISTANCE APART AT BIRTH</div>
           <div class="res-val" id="res-gap">0 km</div>
-          <div style="font-size:0.7rem; color:#9d4edd; margin-top:3px;">The distance Earth traveled between your two birthdays.</div>
+          <div style="font-size:0.7rem; color:#9d4edd; margin-top:3px;" data-i18n="res_gap_desc">The distance Earth traveled between your two birthdays.</div>
         </div>
         <div>
-          <div class="res-label">SHARED JOURNEY</div>
+          <div class="res-label" data-i18n="res_shared_title">SHARED JOURNEY</div>
           <div class="res-val" id="res-shared">0 km</div>
-          <div style="font-size:0.7rem; color:#9d4edd; margin-top:3px;">Distance traveled together since you both existed.</div>
+          <div style="font-size:0.7rem; color:#9d4edd; margin-top:3px;" data-i18n="res_shared_desc">Distance traveled together since you both existed.</div>
         </div>
       </div>
     </div>
 
     <div class="multiplayer-box" style="border-color:#00d4ff; background:rgba(0,212,255,0.05);">
-      <h3 style="color:#00d4ff;">🚀 Party Predictor</h3>
-      <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Predict the exact day you will cross a major cosmic milestone.</div>
+      <h3 style="color:#00d4ff;" data-i18n="party_title">🚀 Party Predictor</h3>
+      <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;" data-i18n="party_subtitle">Predict the exact day you will cross a major cosmic milestone.</div>
 
       <div class="friend-input-wrapper">
         <select id="milestone-target" style="background:rgba(0,0,0,0.3); color:#fff; padding:10px; border:1px solid #00d4ff; border-radius:5px; font-family:inherit; font-size:0.9rem; outline:none;">
@@ -725,7 +719,8 @@
                 style="border-color:#00d4ff; color:#00d4ff;"
                 onclick="calculateFutureMilestone()"
                 onmouseover="this.style.background='#00d4ff'; this.style.color='#000';"
-                onmouseout="this.style.background='rgba(0, 212, 255, 0.2)'; this.style.color='#00d4ff';">
+                onmouseout="this.style.background='rgba(0, 212, 255, 0.2)'; this.style.color='#00d4ff';"
+                data-i18n="predict_btn">
           PREDICT DATE
         </button>
       </div>
@@ -733,7 +728,8 @@
       <div id="milestone-result-container" class="result-row" style="border-color:rgba(0,212,255,0.3);">
         <div class="res-val" id="milestone-result" style="font-size:1.1rem; color:#fff;"></div>
         <a id="share-x-btn" href="#" target="_blank"
-           style="display:none; margin-top:15px; background:#1DA1F2; color:#fff; padding:8px 20px; text-decoration:none; border-radius:5px; font-weight:bold; font-size:0.9rem; border:1px solid #1DA1F2;">
+           style="display:none; margin-top:15px; background:#1DA1F2; color:#fff; padding:8px 20px; text-decoration:none; border-radius:5px; font-weight:bold; font-size:0.9rem; border:1px solid #1DA1F2;"
+           data-i18n="share_x">
           🐦 Share Date to X
         </a>
       </div>
@@ -779,22 +775,21 @@
   </div>
 
   <div class="right-panel" id="milky-way-panel">
-    <h3>🌌 GALACTIC CONTEXT</h3>
+    <h3 data-i18n="gal_context">🌌 GALACTIC CONTEXT</h3>
 
     <div class="galaxy-map" id="galaxy-map">
       <div id="galaxy-3d-container"></div>
-      <div class="you-are-here-label">YOU ARE HERE</div>
+      <div class="you-are-here-label" data-i18n="you_are_here">YOU ARE HERE</div>
     </div>
 
-    <div class="gal-stat"><span class="gal-label">Galactic Speed</span><span class="gal-val">2.1M km/h</span></div>
-    <div class="gal-stat"><span class="gal-label">Dist. to Center</span><span class="gal-val">26,000 LY</span></div>
+    <div class="gal-stat"><span class="gal-label" data-i18n="gal_speed">Galactic Speed</span><span class="gal-val">2.1M km/h</span></div>
+    <div class="gal-stat"><span class="gal-label" data-i18n="dist_center">Dist. to Center</span><span class="gal-val">26,000 LY</span></div>
     <div class="gal-stat" style="border-bottom:none; margin-bottom:0;">
-      <span class="gal-label">Cosmic Orbit Complete</span>
+      <span class="gal-label" data-i18n="cosmic_orbit">Cosmic Orbit Complete</span>
       <span class="gal-val" id="cosmic-orbit-val" style="color:#00ff41;">0.0000%</span>
     </div>
   </div>
 
-  <!-- App logic -->
   <script>
     (function () {
       "use strict";
@@ -863,8 +858,25 @@
           title: "Cosmic Odometer",
           subtitle: "Space Travel Calculator & Age in Seconds",
           copied: "Link Copied!",
+          // Controls
+          install_app: "📲 INSTALL APP",
+          unit_km: "KM",
+          unit_mi: "MILES",
+          btn_cinematic: "CINEMATIC",
+          btn_warp: "⏩ WARP",
+          btn_live: "TODAY (VORTEX)",
+          btn_birth: "BIRTH DATE",
+          btn_earth: "🌍 EARTH",
+          btn_v1: "🔴 VOYAGER 1",
+          btn_v2: "🔵 VOYAGER 2",
+          mobile_view_solar: "🌌 VIEW SOLAR SYSTEM",
+          mobile_view_calc: "🔙 BACK TO CALCULATOR",
+          // Inputs & Dashboard
+          enter_birth: "ENTER BIRTH DATE:",
           latitude: "Latitude",
           mission_duration: "Mission Duration",
+          dist_session: "DISTANCE THIS SESSION",
+          dist_session_sub: "(Since opening this page)",
           rotated: "1. Rotated (Spin)",
           orbited: "2. Orbited Sun",
           solar_travel: "3. Solar System Travel",
@@ -872,11 +884,27 @@
           total_distance: "TOTAL DISTANCE",
           traveling_at: "Traveling at",
           displacement_title: "Net Displacement Estimate",
+          displacement_note: "Why is this just an estimate?",
+          reveal_physics: "Reveal the physics.",
+          physics_exp: "Astrophysics constraint: There is no absolute fixed grid in the universe! This vector uses the 600 km/s Cosmic Microwave Background rest frame. However, astronomical margin of error (±15 km/s) means your true current location has an uncertainty radius of several billion kilometers. Einstein says hi! 🪐",
+          // Social / Milestones
+          conn_title: "👩‍🚀 Cosmic Connection",
+          conn_subtitle: "Compare your flight path with a friend.",
+          calc_gap: "CALCULATE GAP",
+          res_gap_title: "DISTANCE APART AT BIRTH",
+          res_gap_desc: "The distance Earth traveled between your two birthdays.",
+          res_shared_title: "SHARED JOURNEY",
+          res_shared_desc: "Distance traveled together since you both existed.",
+          party_title: "🚀 Party Predictor",
+          party_subtitle: "Predict the exact day you will cross a major cosmic milestone.",
+          predict_btn: "PREDICT DATE",
+          share_x: "🐦 Share Date to X",
           moon_trips: "Moon Round Trips",
           passed_pluto: "Passed Pluto",
           light_year_prog: "Progress to 1 Light Year",
           you_are: "You are",
           ly_away: "LY away.",
+          // Manual
           manual_title: "Flight Manual",
           faq_1_q: "1. What is \"Rotated\"?",
           faq_1_a: "Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.",
@@ -886,7 +914,14 @@
           faq_3_a: "The Sun drags the planets around the Milky Way at ~792,000 km/h (490,000 mph).",
           faq_4_q: "4. What is \"Galactic Travel\"?",
           faq_4_a: "Our Galaxy moves at ~600 km/s (simplified) relative to the cosmic background.",
+          // Footer / Right Panel
           privacy: "🔒 Privacy Promise: Your birth date and location are calculated 100% locally and never saved. We use standard Google Analytics to count anonymous page views.",
+          gal_context: "🌌 GALACTIC CONTEXT",
+          you_are_here: "YOU ARE HERE",
+          gal_speed: "Galactic Speed",
+          dist_center: "Dist. to Center",
+          cosmic_orbit: "Cosmic Orbit Complete",
+          // Units / Misc
           unit_y: "y", unit_mo: "mo", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
           welcome: "Welcome, Time Traveler"
         },
@@ -894,18 +929,47 @@
           title: "Odomètre cosmique",
           subtitle: "Calculateur de voyage spatial & âge en secondes",
           copied: "Lien copié !",
+          install_app: "📲 INSTALLER L'APP",
+          unit_km: "KM",
+          unit_mi: "MILES",
+          btn_cinematic: "CINÉMATIQUE",
+          btn_warp: "⏩ WARP",
+          btn_live: "AUJOURD'HUI (VORTEX)",
+          btn_birth: "DATE DE NAISSANCE",
+          btn_earth: "🌍 TERRE",
+          btn_v1: "🔴 VOYAGER 1",
+          btn_v2: "🔵 VOYAGER 2",
+          mobile_view_solar: "🌌 VOIR SYSTÈME SOLAIRE",
+          mobile_view_calc: "🔙 RETOUR CALCULATEUR",
+          enter_birth: "ENTREZ DATE DE NAISSANCE :",
           latitude: "Latitude",
           mission_duration: "Durée de mission",
+          dist_session: "DISTANCE CETTE SESSION",
+          dist_session_sub: "(Depuis l'ouverture de la page)",
           rotated: "1. Rotation (Spin)",
           orbited: "2. Orbite solaire",
-          solar_travel: "3. Voyage du système solaire",
+          solar_travel: "3. Voyage système solaire",
           galactic_travel: "4. Voyage galactique",
           total_distance: "DISTANCE TOTALE",
           traveling_at: "Vitesse",
           displacement_title: "Estimation linéaire",
+          displacement_note: "Pourquoi est-ce une estimation ?",
+          reveal_physics: "Voir la physique.",
+          physics_exp: "Contrainte astrophysique : Il n'y a pas de grille fixe absolue dans l'univers ! Ce vecteur utilise le référentiel du fond diffus cosmologique (600 km/s). Cependant, la marge d'erreur astronomique (±15 km/s) signifie que votre position réelle a une incertitude de plusieurs milliards de km. Einstein vous dit bonjour ! 🪐",
+          conn_title: "👩‍🚀 Connexion Cosmique",
+          conn_subtitle: "Comparez votre trajectoire avec un ami.",
+          calc_gap: "CALCULER L'ÉCART",
+          res_gap_title: "DISTANCE À LA NAISSANCE",
+          res_gap_desc: "Distance parcourue par la Terre entre vos deux anniversaires.",
+          res_shared_title: "VOYAGE PARTAGÉ",
+          res_shared_desc: "Distance parcourue ensemble depuis que vous existez tous les deux.",
+          party_title: "🚀 Prédicteur de Fête",
+          party_subtitle: "Prédisez le jour exact d'une étape cosmique majeure.",
+          predict_btn: "PRÉDIRE LA DATE",
+          share_x: "🐦 Partager sur X",
           moon_trips: "Allers-retours Lune",
           passed_pluto: "Pluton dépassée",
-          light_year_prog: "Progression vers 1 année-lumière",
+          light_year_prog: "Progression vers 1 AL",
           you_are: "Tu es à",
           ly_away: "AL.",
           manual_title: "Manuel de vol",
@@ -916,8 +980,13 @@
           faq_3_q: "3. Qu’est-ce que « Voyage solaire » ?",
           faq_3_a: "Le Soleil entraîne le système solaire dans la Voie lactée à ~792 000 km/h.",
           faq_4_q: "4. Qu’est-ce que « Voyage galactique » ?",
-          faq_4_a: "Notre galaxie se déplace à ~600 km/s (simplifié) par rapport au fond cosmique.",
+          faq_4_a: "Notre galaxie se déplace à ~600 km/s par rapport au fond cosmique.",
           privacy: "🔒 Promesse de confidentialité : Votre date de naissance et votre position sont calculées 100 % localement et ne sont jamais enregistrées. Nous utilisons Google Analytics pour compter les visites anonymes.",
+          gal_context: "🌌 CONTEXTE GALACTIQUE",
+          you_are_here: "VOUS ÊTES ICI",
+          gal_speed: "Vitesse Galactique",
+          dist_center: "Dist. du Centre",
+          cosmic_orbit: "Orbite Cosmique",
           unit_y: "a", unit_mo: "mo", unit_d: "j", unit_h: "h", unit_min: "min", unit_s: "s",
           welcome: "Bienvenue"
         },
@@ -925,18 +994,47 @@
           title: "Odómetro Cósmico",
           subtitle: "Calculadora de viaje espacial y edad",
           copied: "¡Enlace copiado!",
+          install_app: "📲 INSTALAR APP",
+          unit_km: "KM",
+          unit_mi: "MILLAS",
+          btn_cinematic: "CINEMÁTICA",
+          btn_warp: "⏩ WARP",
+          btn_live: "HOY (VÓRTICE)",
+          btn_birth: "NACIMIENTO",
+          btn_earth: "🌍 TIERRA",
+          btn_v1: "🔴 VOYAGER 1",
+          btn_v2: "🔵 VOYAGER 2",
+          mobile_view_solar: "🌌 VER SISTEMA SOLAR",
+          mobile_view_calc: "🔙 VOLVER A CALCULADORA",
+          enter_birth: "INTRODUCIR NACIMIENTO:",
           latitude: "Latitud",
           mission_duration: "Duración de misión",
+          dist_session: "DISTANCIA ESTA SESIÓN",
+          dist_session_sub: "(Desde que abriste la página)",
           rotated: "1. Rotación (Giro)",
           orbited: "2. Órbita solar",
-          solar_travel: "3. Viaje del sistema solar",
+          solar_travel: "3. Viaje sistema solar",
           galactic_travel: "4. Viaje galáctico",
           total_distance: "DISTANCIA TOTAL",
           traveling_at: "Viajando a",
           displacement_title: "Estimación lineal",
-          moon_trips: "Viajes a la Luna (ida y vuelta)",
+          displacement_note: "¿Por qué es una estimación?",
+          reveal_physics: "Ver la física.",
+          physics_exp: "Restricción astrofísica: ¡No existe una cuadrícula fija absoluta en el universo! Este vector utiliza el marco de fondo cósmico de microondas (600 km/s). Sin embargo, el margen de error astronómico (±15 km/s) significa que tu ubicación real tiene una incertidumbre de miles de millones de km. ¡Einstein dice hola! 🪐",
+          conn_title: "👩‍🚀 Conexión Cósmica",
+          conn_subtitle: "Compara tu trayectoria con un amigo.",
+          calc_gap: "CALCULAR BRECHA",
+          res_gap_title: "DISTANCIA AL NACER",
+          res_gap_desc: "La distancia que viajó la Tierra entre sus dos cumpleaños.",
+          res_shared_title: "VIAJE COMPARTIDO",
+          res_shared_desc: "Distancia viajada juntos desde que ambos existen.",
+          party_title: "🚀 Predictor de Fiesta",
+          party_subtitle: "Predice el día exacto de un hito cósmico.",
+          predict_btn: "PREDECIR FECHA",
+          share_x: "🐦 Compartir en X",
+          moon_trips: "Viajes a la Luna",
           passed_pluto: "Pasado Plutón",
-          light_year_prog: "Progreso a 1 año luz",
+          light_year_prog: "Progreso a 1 Año Luz",
           you_are: "Estás a",
           ly_away: "AL.",
           manual_title: "Manual de vuelo",
@@ -947,8 +1045,13 @@
           faq_3_q: "3. ¿Qué es «Viaje solar»?",
           faq_3_a: "El Sol arrastra el sistema solar por la Vía Láctea a ~792.000 km/h.",
           faq_4_q: "4. ¿Qué es «Viaje galáctico»?",
-          faq_4_a: "Nuestra galaxia se mueve a ~600 km/s (simplificado) relativo al fondo cósmico.",
+          faq_4_a: "Nuestra galaxia se mueve a ~600 km/s relativo al fondo cósmico.",
           privacy: "🔒 Promesa de Privacidad: Tu fecha de nacimiento y ubicación se calculan 100% localmente y nunca se guardan. Usamos Google Analytics para contar visitas anónimas.",
+          gal_context: "🌌 CONTEXTO GALÁCTICO",
+          you_are_here: "ESTÁS AQUÍ",
+          gal_speed: "Velocidad Galáctica",
+          dist_center: "Dist. al Centro",
+          cosmic_orbit: "Órbita Cósmica",
           unit_y: "a", unit_mo: "mo", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
           welcome: "Bienvenido"
         },
@@ -956,8 +1059,23 @@
           title: "宇宙走行距離計",
           subtitle: "宇宙旅行計算機 & 秒単位の年齢",
           copied: "リンクをコピーしました!",
+          install_app: "📲 アプリをインストール",
+          unit_km: "KM",
+          unit_mi: "マイル",
+          btn_cinematic: "シネマティック",
+          btn_warp: "⏩ ワープ",
+          btn_live: "現在 (渦)",
+          btn_birth: "誕生日",
+          btn_earth: "🌍 地球",
+          btn_v1: "🔴 ボイジャー1号",
+          btn_v2: "🔵 ボイジャー2号",
+          mobile_view_solar: "🌌 太陽系を見る",
+          mobile_view_calc: "🔙 計算機に戻る",
+          enter_birth: "生年月日を入力:",
           latitude: "緯度",
           mission_duration: "ミッション経過時間",
+          dist_session: "今回のセッション距離",
+          dist_session_sub: "(ページを開いてから)",
           rotated: "1. 自転距離",
           orbited: "2. 公転距離",
           solar_travel: "3. 太陽系移動距離",
@@ -965,6 +1083,20 @@
           total_distance: "総移動距離",
           traveling_at: "現在の速度",
           displacement_title: "直線推定",
+          displacement_note: "なぜ推定なのですか？",
+          reveal_physics: "物理学を表示。",
+          physics_exp: "天体物理学的制約：宇宙には絶対的な固定グリッドが存在しません！このベクトルは600 km/sの宇宙マイクロ波背景放射の静止系を使用しています。ただし、天文学的な誤差（±15 km/s）があるため、あなたの現在の位置には数十億キロメートルの不確実性があります。アインシュタインが挨拶しています！🪐",
+          conn_title: "👩‍🚀 コズミック接続",
+          conn_subtitle: "友達と飛行経路を比較します。",
+          calc_gap: "ギャップを計算",
+          res_gap_title: "出生時の距離",
+          res_gap_desc: "2人の誕生日の間に地球が移動した距離。",
+          res_shared_title: "共有の旅",
+          res_shared_desc: "両方が存在して以来、一緒に移動した距離。",
+          party_title: "🚀 パーティー予測",
+          party_subtitle: "主要な宇宙のマイルストーンを超える正確な日を予測します。",
+          predict_btn: "日付を予測",
+          share_x: "🐦 Xで共有",
           moon_trips: "月への往復回数",
           passed_pluto: "冥王星通過回数",
           light_year_prog: "1光年への到達度",
@@ -978,8 +1110,13 @@
           faq_3_q: "3. 太陽系移動距離とは？",
           faq_3_a: "太陽は惑星を引き連れて天の川銀河を時速約792,000kmで移動しています。",
           faq_4_q: "4. 銀河系移動距離とは？",
-          faq_4_a: "銀河は宇宙背景に対して約600km/s（簡易）で移動します。",
+          faq_4_a: "銀河は宇宙背景に対して約600km/sで移動します。",
           privacy: "🔒 プライバシーの約束：生年月日と位置情報は100％ローカルで計算され、保存されることはありません。匿名のページビューをカウントするために標準のGoogleアナリティクスを使用しています。",
+          gal_context: "🌌 銀河のコンテキスト",
+          you_are_here: "現在地",
+          gal_speed: "銀河速度",
+          dist_center: "中心までの距離",
+          cosmic_orbit: "宇宙軌道完了",
           unit_y: "年", unit_mo: "ヶ月", unit_d: "日", unit_h: "時間", unit_min: "分", unit_s: "秒",
           welcome: "ようこそ、タイムトラベラー"
         }
@@ -1079,11 +1216,11 @@
 
         if (is3DViewVisibleOnMobile) {
           document.body.classList.add("show-3d-on-mobile");
-          btn.innerHTML = "🔙 BACK TO CALCULATOR";
+          btn.innerHTML = t("mobile_view_calc");
           setTimeout(() => window.dispatchEvent(new Event("resize")), 50);
         } else {
           document.body.classList.remove("show-3d-on-mobile");
-          btn.innerHTML = "🌌 VIEW SOLAR SYSTEM";
+          btn.innerHTML = t("mobile_view_solar");
         }
       }
 
@@ -1821,11 +1958,9 @@
     })();
   </script>
 
-  <!-- Three.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-  <!-- 3D solar system + galaxy -->
   <script>
     function init3DSolarSystem() {
       const container = document.getElementById("solar-system-container");
