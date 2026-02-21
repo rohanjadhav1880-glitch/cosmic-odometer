@@ -2092,7 +2092,7 @@
       let initWidth = container.clientWidth || window.innerWidth;
       let initHeight = container.clientHeight || window.innerHeight;
 
-      const camera = new THREE.PerspectiveCamera(45, initWidth / initHeight, 0.1, 10000);
+      const camera = new THREE.PerspectiveCamera(45, initWidth / initHeight, 0.1, 1000000);
       camera.position.z = 90;
       window.solarCamera = camera;
 
@@ -2267,7 +2267,7 @@
           const theta = u * 2.0 * Math.PI;
           const phi = Math.acos(2.0 * v - 1.0);
           
-          const radius = 130 + (Math.random() * 50); 
+          const radius = 2000 + (Math.random() * 80000); 
           
           oortPos[i*3] = radius * Math.sin(phi) * Math.cos(theta);
           oortPos[i*3+1] = radius * Math.sin(phi) * Math.sin(theta);
