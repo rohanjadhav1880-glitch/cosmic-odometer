@@ -575,6 +575,7 @@
 
       <div id="focus-separator" class="separator-line" style="display:none;"></div>
       <button class="toggle-btn" id="btn-focus" onclick="trackObject('earth')" style="display:none; border-color:#2277ff; color:#2277ff;" data-i18n="btn_earth">🌍 EARTH</button>
+      <button class="toggle-btn" id="btn-iss" onclick="trackObject('iss')" style="display:none; border-color:#00ff41; color:#00ff41;">🛰️ ISS</button>
       <button class="toggle-btn" id="btn-v1" onclick="trackObject('v1')" style="display:none; border-color:#ff4444; color:#ff4444;" data-i18n="btn_v1">🔴 VOYAGER 1</button>
       <button class="toggle-btn" id="btn-v2" onclick="trackObject('v2')" style="display:none; border-color:#4444ff; color:#4444ff;" data-i18n="btn_v2">🔵 VOYAGER 2</button>
     </div>
@@ -682,6 +683,21 @@
       </div>
     </div>
 
+    <div class="multiplayer-box" style="border-color:#333; background:rgba(0,0,0,0.4); margin-bottom:30px;">
+      <h3 style="color:#8892b0; margin-bottom:15px; font-size:1rem; text-transform:uppercase; letter-spacing:2px;">🛰️ Distant Objects</h3>
+      <div class="metric" style="background: rgba(221, 221, 170, 0.05); border-left: 3px solid #ddddaa; margin-bottom:10px;">
+        
+      </div>
+      <div class="metric" style="background: rgba(255, 68, 68, 0.05); border-left: 3px solid #ff4444; margin-bottom:10px;">
+        <div class="label" style="color:#ff4444">🔴 Voyager 1 (Live) <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">Traveling at: 17.0 km/s</div></div>
+        <div class="value" id="dist-v1" style="color:#fff">0 km</div>
+      </div>
+      <div class="metric" style="background: rgba(68, 68, 255, 0.05); border-left: 3px solid #4444ff; margin-bottom:0;">
+        <div class="label" style="color:#4444ff">🔵 Voyager 2 (Live) <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">Traveling at: 15.3 km/s</div></div>
+        <div class="value" id="dist-v2" style="color:#fff">0 km</div>
+      </div>
+    </div>
+
     <div class="multiplayer-box">
       <h3 data-i18n="conn_title">👩‍🚀 Cosmic Connection</h3>
       <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;" data-i18n="conn_subtitle">Compare your flight path with a friend.</div>
@@ -714,7 +730,11 @@
           <option value="100000000000">100 Billion</option>
           <option value="500000000000">500 Billion</option>
           <option value="1000000000000" selected>1 Trillion</option>
+          <option value="2000000000000">2 Trillion</option>
+          <option value="3000000000000">3 Trillion</option>
+          <option value="4000000000000">4 Trillion</option>
           <option value="5000000000000">5 Trillion</option>
+          <option value="9460730472580">1 Light Year</option>
         </select>
         <button class="compare-btn"
                 style="border-color:#00d4ff; color:#00d4ff;"
@@ -826,6 +846,7 @@
 
       const MAX_ROTATION_KM_S = 0.4651;
       const KM_TO_MILES = 0.621371;
+      const AU_TO_KM = 149597870.7; 
       const J2000_MS = new Date("2000-01-01T12:00:00Z").getTime();
 
       // State
@@ -1150,7 +1171,7 @@
           traveling_at: "Viajando a",
           displacement_title: "Estimativa Linear",
           displacement_note: "Por que é uma estimativa?",
-          reveal_physics: "Ver a física.",
+          reveal_physics: "Ver la física.",
           physics_exp: "Restrição astrofísica: Não existe uma grade fixa absoluta no universo! Este vetor usa o referencial da radiação cósmica de fundo (600 km/s). No entanto, a margem de erro astronômica (±15 km/s) significa que sua localização real tem uma incerteza de bilhões de km. Einstein manda um oi! 🪐",
           conn_title: "👩‍🚀 Conexão Cósmica",
           conn_subtitle: "Compare sua trajetória com um amigo.",
@@ -1177,7 +1198,7 @@
           faq_3_a: "O Sol arrasta o sistema solar pela Via Láctea a ~792.000 km/h.",
           faq_4_q: "4. O que é «Viagem Galáctica»?",
           faq_4_a: "Nossa galáxia se move a ~600 km/s em relação ao fundo cósmico.",
-          privacy: "🔒 Promessa de Privacidade: Sua data de nascimento e localização são calculadas 100% localmente e nunca salvas. Usamos o Google Analytics para contar visitas anônimas.",
+          privacy: "🔒 Promesa de Privacidade: Sua data de nascimento e localização são calculadas 100% localmente e nunca salvas. Usamos o Google Analytics para contar visitas anônimas.",
           gal_context: "🌌 CONTEXTO GALÁCTICO",
           you_are_here: "VOCÊ ESTÁ AQUI",
           gal_speed: "Velocidade Galáctica",
@@ -1447,7 +1468,6 @@
           const dGalaxy = secondsAlive * SPEED.GALAXY_KM_S;
           const dTotal = dRot + dOrbit + dSolar + dGalaxy;
 
-          // Net displacement estimate (intentionally simple)
           const dLinear = secondsAlive * (SPEED.GALAXY_KM_S + SPEED.SOLAR_KM_S);
 
           $("dist-rot").innerText = formatDistance(dRot);
@@ -1457,7 +1477,6 @@
           $("dist-total").innerText = formatDistance(dTotal);
           $("dist-vector").innerText = formatDistance(dLinear);
 
-          // Milestones
           const moonTrips = dTotal / DIST.MOON_ROUND_TRIP_KM;
           $("txt-moon").innerText = Math.floor(moonTrips).toLocaleString();
           $("bar-moon").style.width = ((moonTrips % 1) * 100) + "%";
@@ -1479,9 +1498,22 @@
           }
         }
 
-        // Session distance
         const sessionSeconds = (Date.now() - sessionStartMs) / 1000;
         $("dist-session").innerText = formatDistance(sessionSeconds * totalSpeedKmS);
+
+        // --- NEW: Live Distant Object Tracking ---
+        const daysSinceJ2000 = (now.getTime() - J2000_MS) / (1000 * 60 * 60 * 24);
+        
+        // Keplerian approximation for Pluto 
+        const plutoE = ((daysSinceJ2000 + 3764) / 90560) * 2 * Math.PI;
+        const plutoKm = 39.48 * (1 - 0.2488 * Math.cos(plutoE)) * AU_TO_KM;
+        
+        const v1Km = (75.3 + (0.00982 * daysSinceJ2000)) * AU_TO_KM;
+        const v2Km = (60.1 + (0.00865 * daysSinceJ2000)) * AU_TO_KM;
+        
+        if ($("dist-pluto")) $("dist-pluto").innerText = formatDistance(plutoKm);
+        if ($("dist-v1")) $("dist-v1").innerText = formatDistance(v1Km);
+        if ($("dist-v2")) $("dist-v2").innerText = formatDistance(v2Km);
       }
 
       // Friend compare
@@ -1577,6 +1609,7 @@
         $("mode-birth").classList.toggle("active", mode === "birth");
 
         const btnEarth = $("btn-focus");
+        const btnIss = $("btn-iss");
         const btnV1 = $("btn-v1");
         const btnV2 = $("btn-v2");
         const focusSep = $("focus-separator");
@@ -1598,9 +1631,12 @@
         if (mode === "live") {
           focusSep.style.display = "block";
           btnEarth.style.display = "block";
+          if (btnIss) btnIss.style.display = "block";
           btnV1.style.display = "block";
           btnV2.style.display = "block";
           if (ffBtn) ffBtn.style.display = "none";
+          // SHOW ISS ONLY IN LIVE MODE
+          if (window.issGroup) window.issGroup.visible = true;
 
           window.solarCamera.position.set(0, 5, 130);
           window.solarControls.target.set(0, 5, 0);
@@ -1610,8 +1646,11 @@
 
         focusSep.style.display = "none";
         btnEarth.style.display = "none";
+        if (btnIss) btnIss.style.display = "none";
         btnV1.style.display = "none";
         btnV2.style.display = "none";
+        // HIDE ISS IN OTHER MODES
+        if (window.issGroup) window.issGroup.visible = false;
 
         if (mode === "cinematic") {
           if (ffBtn) ffBtn.style.display = "block";
@@ -1621,6 +1660,7 @@
 
         window.trackingTarget = "sun";
         btnEarth.classList.remove("active");
+        if (btnIss) btnIss.classList.remove("active");
         btnV1.classList.remove("active");
         btnV2.classList.remove("active");
 
@@ -1633,6 +1673,7 @@
         window.trackingTarget = (window.trackingTarget === target) ? "sun" : target;
 
         $("btn-focus").classList.toggle("active", window.trackingTarget === "earth");
+        if ($("btn-iss")) $("btn-iss").classList.toggle("active", window.trackingTarget === "iss");
         $("btn-v1").classList.toggle("active", window.trackingTarget === "v1");
         $("btn-v2").classList.toggle("active", window.trackingTarget === "v2");
 
@@ -1649,6 +1690,16 @@
           const sunPos = new THREE.Vector3(0, 5, 0);
           const dir = new THREE.Vector3().subVectors(sunPos, pos).normalize();
           window.solarCamera.position.copy(pos.clone().add(dir.multiplyScalar(6)).add(new THREE.Vector3(0, 3, 0)));
+          return;
+        }
+
+        if (window.trackingTarget === "iss" && window.issGroup) {
+          const pos = new THREE.Vector3();
+          window.issGroup.getWorldPosition(pos);
+          const earthPos = new THREE.Vector3();
+          window.earthMesh.getWorldPosition(earthPos);
+          const dir = new THREE.Vector3().subVectors(earthPos, pos).normalize();
+          window.solarCamera.position.copy(pos.clone().add(dir.multiplyScalar(-2)).add(new THREE.Vector3(0, 1, 0)));
           return;
         }
 
@@ -1732,6 +1783,7 @@
           meshRot: p.mesh.rotation.y
         }));
         const savedMoonRot = window.moonPivot ? window.moonPivot.rotation.y : 0;
+        const savedIssRot = window.issOrbit ? window.issOrbit.rotation.y : 0; 
         const savedTrail = window.trailGroup?.visible ?? false;
         const savedCinematic = window.cinematicTrailGroup?.visible ?? false;
         const savedCamPos = window.solarCamera.position.clone();
@@ -1742,6 +1794,7 @@
           p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
         });
         if (window.moonPivot) window.moonPivot.rotation.y = (birthDays / 27.322) * 2 * Math.PI;
+        if (window.issOrbit) window.issOrbit.rotation.y = (birthDays * 15.54) * 2 * Math.PI; 
 
         if (window.trailGroup) window.trailGroup.visible = false;
         if (window.cinematicTrailGroup) window.cinematicTrailGroup.visible = false;
@@ -1758,6 +1811,7 @@
           p.mesh.rotation.y = savedStates[i].meshRot;
         });
         if (window.moonPivot) window.moonPivot.rotation.y = savedMoonRot;
+        if (window.issOrbit) window.issOrbit.rotation.y = savedIssRot; 
         if (window.trailGroup) window.trailGroup.visible = savedTrail;
         if (window.cinematicTrailGroup) window.cinematicTrailGroup.visible = savedCinematic;
         window.solarCamera.position.copy(savedCamPos);
@@ -2084,10 +2138,11 @@
         { name: "Venus",   size: 0.7, dist: 7,  color: 0xe3bb76, period: 224.70,  offset: 3.16 },
         { name: "Earth",   size: 0.8, dist: 10, color: 0x2277ff, period: 365.25,  offset: 1.75, isEarth: true },
         { name: "Mars",    size: 0.4, dist: 13, color: 0xc1440e, period: 686.98,  offset: 6.20 },
-        { name: "Jupiter", size: 2.2, dist: 17, color: 0xd39c7e, period: 4332.59, offset: 0.60 },
-        { name: "Saturn",  size: 1.8, dist: 22, color: 0xd8ca9d, period: 10759.22,offset: 0.87, hasRings: true },
-        { name: "Uranus",  size: 1.2, dist: 26, color: 0x4b70dd, period: 30685.4, offset: 5.46 },
-        { name: "Neptune", size: 1.2, dist: 30, color: 0x274687, period: 60189.0, offset: 5.31 }
+        { name: "Jupiter", size: 2.2, dist: 20, color: 0xd39c7e, period: 4332.59, offset: 0.60 },
+        { name: "Saturn",  size: 1.8, dist: 27, color: 0xd8ca9d, period: 10759.22,offset: 0.87, hasRings: true },
+        { name: "Uranus",  size: 1.2, dist: 35, color: 0x4b70dd, period: 30685.4, offset: 5.46 },
+        { name: "Neptune", size: 1.2, dist: 40, color: 0x274687, period: 60189.0, offset: 5.31 },
+        { name: "Pluto",   size: 0.2, dist: 50, color: 0xddddaa, period: 90560.0, offset: 2.0 }
       ];
 
       const planetMeshes = [];
@@ -2121,9 +2176,41 @@
           moonMesh.position.x = 1.2;
           moonPivot.add(moonMesh);
 
+          // ISS ORBITAL SETUP
+          const issPivot = new THREE.Group();
+          issPivot.rotation.z = THREE.MathUtils.degToRad(51.6);
+          
+          const issOrbit = new THREE.Group();
+          issPivot.add(issOrbit);
+
+          const issGroup = new THREE.Group();
+          issGroup.position.x = 0.95; 
+          
+          const bodyGeo = new THREE.CylinderGeometry(0.015, 0.015, 0.1, 8);
+          const bodyMat = new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.8 });
+          const body = new THREE.Mesh(bodyGeo, bodyMat);
+          body.rotation.z = Math.PI / 2;
+          issGroup.add(body);
+
+          const panelGeo = new THREE.BoxGeometry(0.08, 0.005, 0.15);
+          const panelMat = new THREE.MeshBasicMaterial({ color: 0x1133aa }); 
+          
+          const panel1 = new THREE.Mesh(panelGeo, panelMat);
+          panel1.position.set(0, 0, 0.08);
+          issGroup.add(panel1);
+
+          const panel2 = new THREE.Mesh(panelGeo, panelMat);
+          panel2.position.set(0, 0, -0.08);
+          issGroup.add(panel2);
+
+          issOrbit.add(issGroup);
+          earthSystemGroup.add(issPivot);
+
           window.earthMesh = mesh;
           window.earthPivot = pivot;
           window.moonPivot = moonPivot;
+          window.issOrbit = issOrbit; 
+          window.issGroup = issGroup; 
         } else {
           const mat = new THREE.MeshStandardMaterial({ color: p.color, roughness: 0.7, metalness: 0.1 });
           mesh = new THREE.Mesh(geo, mat);
@@ -2149,6 +2236,49 @@
       });
 
       window.planetMeshes = planetMeshes;
+
+      // EXPANSION: Create the Asteroid Belt
+      const asteroidGeo = new THREE.BufferGeometry();
+      const astCount = 2500;
+      const astPos = new Float32Array(astCount * 3);
+      
+      for(let i = 0; i < astCount; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const radius = 14.2 + (Math.random() * 2.2); 
+          astPos[i*3] = Math.cos(angle) * radius;
+          astPos[i*3+1] = (Math.random() - 0.5) * 0.8;
+          astPos[i*3+2] = Math.sin(angle) * radius;
+      }
+      
+      asteroidGeo.setAttribute('position', new THREE.BufferAttribute(astPos, 3));
+      const astMat = new THREE.PointsMaterial({color: 0xaaaaaa, size: 0.08, transparent: true, opacity: 0.6});
+      const asteroidBelt = new THREE.Points(asteroidGeo, astMat);
+      systemGroup.add(asteroidBelt);
+      window.asteroidBelt = asteroidBelt;
+
+      // EXPANSION: Create the Oort Cloud (Massive Outer Shell)
+      const oortGeo = new THREE.BufferGeometry();
+      const oortCount = 4000;
+      const oortPos = new Float32Array(oortCount * 3);
+      
+      for(let i = 0; i < oortCount; i++) {
+          const u = Math.random();
+          const v = Math.random();
+          const theta = u * 2.0 * Math.PI;
+          const phi = Math.acos(2.0 * v - 1.0);
+          
+          const radius = 130 + (Math.random() * 50); 
+          
+          oortPos[i*3] = radius * Math.sin(phi) * Math.cos(theta);
+          oortPos[i*3+1] = radius * Math.sin(phi) * Math.sin(theta);
+          oortPos[i*3+2] = radius * Math.cos(phi);
+      }
+      
+      oortGeo.setAttribute('position', new THREE.BufferAttribute(oortPos, 3));
+      const oortMat = new THREE.PointsMaterial({color: 0x667788, size: 0.15, transparent: true, opacity: 0.4});
+      const oortCloud = new THREE.Points(oortGeo, oortMat);
+      systemGroup.add(oortCloud);
+      window.oortCloud = oortCloud;
 
       // Voyagers
       const voyagerData = [
@@ -2218,7 +2348,13 @@
       window.cinematicTrailGroup.add(sunLineC);
 
       window.update3DTrails = function () {
-        while (window.trailGroup.children.length > 0) window.trailGroup.remove(window.trailGroup.children[0]);
+        while (window.trailGroup.children.length > 0) {
+            const child = window.trailGroup.children[0];
+            if (child.geometry) child.geometry.dispose();
+            if (child.material) child.material.dispose();
+            window.trailGroup.remove(child);
+        }
+
         if (window.orbitMode !== "live") return;
 
         const birthVal = document.getElementById("birthDate").value;
@@ -2320,12 +2456,15 @@
       function animate3D() {
         requestAnimationFrame(animate3D);
         sun.rotation.y += 0.005;
+        if (window.asteroidBelt) window.asteroidBelt.rotation.y += 0.0005;
+        if (window.oortCloud) window.oortCloud.rotation.y += 0.0001; 
 
         if (window.solarControls && window.solarControls.enabled) {
           let targetPos = new THREE.Vector3(0, 5, 0);
           if (window.trackingTarget === "earth" && window.earthMesh) window.earthMesh.getWorldPosition(targetPos);
           else if (window.trackingTarget === "v1" && window.v1Mesh && window.v1Mesh.visible) window.v1Mesh.getWorldPosition(targetPos);
           else if (window.trackingTarget === "v2" && window.v2Mesh && window.v2Mesh.visible) window.v2Mesh.getWorldPosition(targetPos);
+          else if (window.trackingTarget === "iss" && window.issGroup) window.issGroup.getWorldPosition(targetPos);
 
           window.solarControls.target.lerp(targetPos, 0.1);
           window.solarControls.update();
@@ -2339,11 +2478,12 @@
           updateVoyagers(cinematicDaysElapsed, nowMs);
 
           if (window.moonPivot) window.moonPivot.rotation.y = (cinematicDaysElapsed / 27.322) * 2 * Math.PI;
+          if (window.issOrbit) window.issOrbit.rotation.y = (cinematicDaysElapsed * 15.54) * 2 * Math.PI;
 
           planetMeshes.forEach((p) => {
             const orbits = cinematicDaysElapsed / p.data.period;
             p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
-            p.mesh.rotation.y += 0.01;
+            p.mesh.rotation.y += 0.01; // Fake spinning allowed here
           });
 
           cinematicTrails.forEach((ct) => {
@@ -2381,6 +2521,7 @@
           updateVoyagers(nowDays, nowMs);
 
           if (window.moonPivot) window.moonPivot.rotation.y = (nowDays / 27.322) * 2 * Math.PI;
+          if (window.issOrbit) window.issOrbit.rotation.y = (nowDays * 15.54) * 2 * Math.PI;
 
           const utc = new Date();
           const utcHours = utc.getUTCHours() + (utc.getUTCMinutes() / 60) + (utc.getUTCSeconds() / 3600);
@@ -2394,22 +2535,34 @@
               const TEXTURE_OFFSET = -Math.PI / 2;
               p.mesh.rotation.y = (timeFraction * Math.PI * 2) + TEXTURE_OFFSET;
             } else {
-              p.mesh.rotation.y += 0.01;
+              p.mesh.rotation.y = 0; // 100% Realtime static
             }
           });
         } else {
           const birthVal = document.getElementById("birthDate").value;
-          const targetMs = birthVal ? new Date(birthVal + "T12:00").getTime() : Date.now();
+          const timeVal = document.getElementById("birthTime").value || "12:00";
+          const targetMs = birthVal ? new Date(birthVal + "T" + timeVal).getTime() : Date.now();
           const birthDays = (targetMs - J2000) / (1000 * 60 * 60 * 24);
 
           updateVoyagers(birthDays, targetMs);
 
           if (window.moonPivot) window.moonPivot.rotation.y = (birthDays / 27.322) * 2 * Math.PI;
+          if (window.issOrbit) window.issOrbit.rotation.y = (birthDays * 15.54) * 2 * Math.PI;
+
+          const birthDateObj = new Date(targetMs);
+          const utcHours = birthDateObj.getUTCHours() + (birthDateObj.getUTCMinutes() / 60) + (birthDateObj.getUTCSeconds() / 3600);
+          const timeFraction = utcHours / 24;
 
           planetMeshes.forEach((p) => {
             const orbits = birthDays / p.data.period;
             p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
-            p.mesh.rotation.y += 0.01;
+            
+            if (p.data.isEarth) {
+              const TEXTURE_OFFSET = -Math.PI / 2;
+              p.mesh.rotation.y = (timeFraction * Math.PI * 2) + TEXTURE_OFFSET;
+            } else {
+              p.mesh.rotation.y = 0; // 100% Realtime static
+            }
           });
         }
 
