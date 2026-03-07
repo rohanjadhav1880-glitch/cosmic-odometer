@@ -785,21 +785,7 @@
     </div>
 
 
-    <div class="displacement-box">
-      <div class="d-title" data-i18n="displacement_title">Net Displacement Estimate</div>
-      <div class="d-value" id="dist-vector">0 km</div>
-      <div class="d-note">
-        <span data-i18n="displacement_note">Why is this just an estimate?</span>
-        <span onclick="document.getElementById('physics-exp').classList.toggle('active')"
-              style="color:#00d4ff; text-decoration:underline; cursor:pointer;" data-i18n="reveal_physics">Reveal the physics.</span>
-      </div>
 
-      <div id="physics-exp" class="result-row" style="border-top:1px solid rgba(255,0,85,0.3); text-align:left; margin-top:10px; padding-top:10px;">
-        <div style="font-size:0.75rem; color:#ff99bb; line-height:1.5;" data-i18n="physics_exp">
-          <strong>Astrophysics constraint:</strong> There is no absolute fixed grid in the universe...
-        </div>
-      </div>
-    </div>
 
     <div class="multiplayer-box" style="border-color:#333; background:rgba(0,0,0,0.4); margin-bottom:30px;">
       <h3 style="color:#8892b0; margin-bottom:15px; font-size:1rem; text-transform:uppercase; letter-spacing:2px;" data-i18n="dist_obj_title">🛰️ Distant Objects</h3>
@@ -1065,11 +1051,6 @@
           <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_17_s">[Source: NASA Planetary Fact Sheet]</div>
         </div>
         <div class="ig-card">
-          <h4 data-i18n="ig_18_t">🧭 Net Displacement</h4>
-          <p data-i18n="ig_18_d">Your "Total Distance" tracks the winding, spiraling path you've taken through space. The Net Displacement Estimate strips out all the circles. If you had stopped orbiting and simply traveled in a perfectly straight line relative to the Cosmic Microwave Background since birth, this is exactly how far away from your original starting coordinate you would be right now.</p>
-          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_18_s">[Source: Vector Addition of Earth + Solar + Galactic Velocities]</div>
-        </div>
-        <div class="ig-card">
           <h4 data-i18n="ig_19_t">🛰️ Distant Objects</h4>
           <p data-i18n="ig_19_d">Using Keplerian math approximations and known launch telemetry from NASA, we track the live, oscillating distances of famous man-made and natural objects. This includes the incredibly fast Voyager probes leaving the solar system, the James Webb Space Telescope maintaining its L2 orbit, and the highly elliptical 75-year orbit of Halley's Comet.</p>
           <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_19_s">[Source: NASA JPL Horizons / Keplerian Elements]</div>
@@ -1192,10 +1173,6 @@
           galactic_travel: "4. Galactic Travel",
           total_distance: "TOTAL DISTANCE",
           traveling_at: "Traveling at",
-          displacement_title: "Net Displacement Estimate",
-          displacement_note: "Why is this just an estimate?",
-          reveal_physics: "Reveal the physics.",
-          physics_exp: "Astrophysics constraint: There is no absolute fixed grid in the universe! This vector uses the 600 km/s Cosmic Microwave Background rest frame. However, astronomical margin of error (±15 km/s) means your true current location has an uncertainty radius of several billion kilometers. Einstein says hi! 🪐",
           // Social / Milestones
           conn_title: "👩‍🚀 Cosmic Connection",
           conn_subtitle: "Compare your flight path with a friend.",
@@ -1304,9 +1281,6 @@
           ig_17_t: "🪐 Planet Ages",
           ig_17_d: "Time is relative to the rock you are standing on. A \"year\" is just the time it takes a planet to orbit the sun. We divide your total age in Earth days by the precise orbital periods of Mercury (88 days), Venus (225 days), Mars (687 days), Jupiter (11.8 years), Saturn (29.4 years), and Neptune (164.8 years) to calculate your true localized age.",
           ig_17_s: "[Source: NASA Planetary Fact Sheet]",
-          ig_18_t: "🧭 Net Displacement",
-          ig_18_d: "Your \"Total Distance\" tracks the winding, spiraling path you've taken through space. The Net Displacement Estimate strips out all the circles. If you had stopped orbiting and simply traveled in a perfectly straight line relative to the Cosmic Microwave Background since birth, this is exactly how far away from your original starting coordinate you would be right now.",
-          ig_18_s: "[Source: Vector Addition of Earth + Solar + Galactic Velocities]",
           ig_19_t: "🛰️ Distant Objects",
           ig_19_d: "Using Keplerian math approximations and known launch telemetry from NASA, we track the live, oscillating distances of famous man-made and natural objects. This includes the incredibly fast Voyager probes leaving the solar system, the James Webb Space Telescope maintaining its L2 orbit, and the highly elliptical 75-year orbit of Halley's Comet.",
           ig_19_s: "[Source: NASA JPL Horizons / Keplerian Elements]",
@@ -1374,10 +1348,6 @@
           galactic_travel: "4. Voyage galactique",
           total_distance: "DISTANCE TOTALE",
           traveling_at: "Vitesse",
-          displacement_title: "Estimation linéaire",
-          displacement_note: "Pourquoi est-ce une estimation ?",
-          reveal_physics: "Voir la physique.",
-          physics_exp: "Contrainte astrophysique : Il n'y a pas de grille fixe absolue dans l'univers ! Ce vecteur utilise le référentiel du fond diffus cosmologique (600 km/s). Cependant, la marge d'erreur astronomique (±15 km/s) signifie que votre position réelle a une incertitude de plusieurs milliards de km. Einstein vous dit bonjour ! 🪐",
           conn_title: "👩‍🚀 Connexion Cosmique",
           conn_subtitle: "Comparez votre trajectoire avec un ami.",
           calc_gap: "CALCULER L'ÉCART",
@@ -1482,9 +1452,6 @@
           ig_17_t: "🪐 Âge des Planètes",
           ig_17_d: "Le temps est relatif au rocher sur lequel vous vous tenez. Nous divisons votre âge total par les périodes orbitales précises de Mercure, Vénus, Mars, Jupiter, Saturne et Neptune pour calculer votre âge localisé.",
           ig_17_s: "[Source : Fiche d'Information Planétaire de la NASA]",
-          ig_18_t: "🧭 Déplacement Net",
-          ig_18_d: "Si vous arrêtiez d'orbiter et voyagiez en ligne droite parfaite par rapport au fond diffus cosmologique depuis votre naissance, c'est exactement à cette distance que vous seriez de vos coordonnées de départ.",
-          ig_18_s: "[Source : Addition Vectorielle des Vitesses Terrestre + Solaire + Galactique]",
           ig_19_t: "🛰️ Objets Distants",
           ig_19_d: "En utilisant des approximations keplériennes et la télémétrie de la NASA, nous suivons les distances en direct d'objets célèbres. Cela inclut les sondes Voyager, le télescope James Webb, et la comète de Halley.",
           ig_19_s: "[Source : NASA JPL Horizons / Éléments Keplériens]",
@@ -1551,10 +1518,6 @@
           galactic_travel: "4. Viaje galáctico",
           total_distance: "DISTANCIA TOTAL",
           traveling_at: "Viajando a",
-          displacement_title: "Estimación lineal",
-          displacement_note: "¿Por qué es una estimación?",
-          reveal_physics: "Ver la física.",
-          physics_exp: "Restricción astrofísica: ¡No existe una cuadrícula fija absoluta en el universo! Este vector utiliza el marco de fondo cósmico de microondas (600 km/s). Sin embargo, el margen de error astronómico (±15 km/s) significa que tu ubicación real tiene una incertidumbre de miles de millones de km. ¡Einstein dice hola! 🪐",
           conn_title: "👩‍🚀 Conexión Cósmica",
           conn_subtitle: "Compara tu trayectoria con un amigo.",
           calc_gap: "CALCULAR BRECHA",
@@ -1659,9 +1622,6 @@
           ig_17_t: "🪐 Edades Planetarias",
           ig_17_d: "Un 'año' es el tiempo que tarda un planeta en orbitar el sol. Dividimos tu edad en días terrestres por los períodos orbitales precisos de Mercurio, Venus, Marte, Júpiter, Saturno y Neptuno para calcular tu verdadera edad localizada.",
           ig_17_s: "[Fuente: Hoja de Datos Planetarios de la NASA]",
-          ig_18_t: "🧭 Desplazamiento Neto",
-          ig_18_d: "Si hubieras dejado de orbitar y viajado en una línea perfectamente recta relativa al Fondo Cósmico de Microondas desde tu nacimiento, esto es exactamente a qué distancia estarías de tu coordenada inicial original.",
-          ig_18_s: "[Fuente: Adición Vectorial Terrestre + Solar + Galáctica]",
           ig_19_t: "🛰️ Objetos Distantes",
           ig_19_d: "Usando aproximaciones matemáticas Keplerianas y la telemetría de la NASA, rastreamos las distancias en vivo de las sondas Voyager, el Telescopio James Webb y el cometa Halley.",
           ig_19_s: "[Fuente: NASA JPL Horizons / Elementos Keplerianos]",
@@ -1728,10 +1688,6 @@
           galactic_travel: "4. 銀河系移動距離",
           total_distance: "総移動距離",
           traveling_at: "現在の速度",
-          displacement_title: "直線推定",
-          displacement_note: "なぜ推定なのですか？",
-          reveal_physics: "物理学を表示。",
-          physics_exp: "天体物理学的制約：宇宙には絶対的な固定グリッドが存在しません！このベクトルは600 km/sの宇宙マイクロ波背景放射の静止系を使用しています。ただし、天文学的な誤差（±15 km/s）があるため、あなたの現在の位置には数十億キロメートルの不確実性があります。アインシュタインが挨拶しています！🪐",
           conn_title: "👩‍🚀 コズミック接続",
           conn_subtitle: "友達と飛行経路を比較します。",
           calc_gap: "ギャップを計算",
@@ -1836,9 +1792,6 @@
           ig_17_t: "🪐 惑星年齢",
           ig_17_d: "時間はあなたが立っている岩に相対的です。「1年」とは、惑星が太陽を回るのにかかる時間です。あなたの地球日での総年齢を、水星、金星、火星、木星、土星、海王星の正確な公転周期で割り、あなたの真の局所的な年齢を計算します。",
           ig_17_s: "[出典: NASA 惑星ファクトシート]",
-          ig_18_t: "🧭 直線推定",
-          ig_18_d: "もしあなたが誕生以来、宇宙マイクロ波背景放射に対して完全に一直線に移動していたとしたら、これがあなたの元の出発座標から正確にどれだけ離れているかを示します。",
-          ig_18_s: "[出典: 地球＋太陽＋銀河の速度のベクトル加算]",
           ig_19_t: "🛰️ 遠くの物体",
           ig_19_d: "ケプラーの数学的近似値とNASAの既知の打ち上げテレメトリを使用して、ボイジャー探査機、ジェイムズ・ウェッブ宇宙望遠鏡、ハレー彗星などの有名な人工物や自然の物体のライブの距離を追跡します。",
           ig_19_s: "[出典: NASA JPL Horizons / ケプラー要素]",
@@ -1905,10 +1858,6 @@
           galactic_travel: "4. Viagem Galáctica",
           total_distance: "DISTÂNCIA TOTAL",
           traveling_at: "Viajando a",
-          displacement_title: "Estimativa Linear",
-          displacement_note: "Por que é uma estimativa?",
-          reveal_physics: "Ver la física.",
-          physics_exp: "Restrição astrofísica: Não existe uma grade fixa absoluta no universo! Este vetor usa o referencial da radiação cósmica de fundo (600 km/s). No entanto, a margem de erro astronômica (±15 km/s) significa que sua localização real tem uma incerteza de bilhões de km. Einstein manda um oi! 🪐",
           conn_title: "👩‍🚀 Conexão Cósmica",
           conn_subtitle: "Compare sua trajetória com um amigo.",
           calc_gap: "CALCULAR INTERVALO",
@@ -2013,9 +1962,6 @@
           ig_17_t: "🪐 Idades Planetárias",
           ig_17_d: "O tempo é relativo à rocha em que você está. Um 'ano' é o tempo que um planeta leva para orbitar o sol. Dividimos sua idade total em dias terrestres pelos períodos orbitais precisos de Mercúrio, Vênus, Marte, Júpiter, Saturno e Netuno para calcular sua verdadeira idade localizada.",
           ig_17_s: "[Fonte: Ficha Técnica Planetária da NASA]",
-          ig_18_t: "🧭 Deslocamento Líquido",
-          ig_18_d: "Se você parasse de orbitar e viajasse em uma linha perfeitamente reta em relação à Radiação Cósmica de Fundo desde o nascimento, a exatamente essa distância você estaria da sua coordenada de partida original.",
-          ig_18_s: "[Fonte: Adição Vetorial das Velocidades da Terra + Sol + Galáxia]",
           ig_19_t: "🛰️ Objetos Distantes",
           ig_19_d: "Usando aproximações matemáticas keplerianas e telemetria de lançamento da NASA, rastreamos as distâncias ativas de objetos como as sondas Voyager, o Telescópio James Webb e o Cometa Halley.",
           ig_19_s: "[Fonte: NASA JPL Horizons / Elementos Keplerianos]",
@@ -2473,14 +2419,13 @@
              }
           }
 
-          const dLinear = secondsAlive * (SPEED.GALAXY_KM_S + SPEED.SOLAR_KM_S);
+
 
           $("dist-rot").innerText = formatDistance(dRot);
           $("dist-orbit").innerText = formatDistance(dOrbit);
           $("dist-solar").innerText = formatDistance(dSolar);
           $("dist-galaxy").innerText = formatDistance(dGalaxy);
           $("dist-total").innerText = formatDistance(dTotal);
-          $("dist-vector").innerText = formatDistance(dLinear);
 
           const dPhoton = secondsAlive * SPEED_OF_LIGHT_KM_S;
           $("dist-photon").innerText = formatDistance(dPhoton);
