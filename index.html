@@ -244,18 +244,6 @@
       overflow: hidden;
       text-align: center;
     }
-    .displacement-box::before {
-      content: "COSMIC GPS";
-      position: absolute;
-      top: 0;
-      left: 0;
-      background: #ff0055;
-      color: #000;
-      padding: 3px 10px;
-      font-size: 0.7rem;
-      font-weight: bold;
-      border-radius: 13px 0 10px 0;
-    }
     .d-title { color: #ff0055; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
     .d-value { color: #fff; font-size: 1.4rem; font-weight: bold; text-shadow: 0 0 10px rgba(255, 0, 85, 0.5); font-variant-numeric: tabular-nums; }
     .d-note { font-size: 0.75rem; color: #ff99bb; margin-top: 10px; opacity: 0.8; line-height: 1.4; }
@@ -292,6 +280,30 @@
       border-radius: 5px;
     }
     .compare-btn:hover { background: #9d4edd; color: #000; }
+
+    #update-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 10000;
+      background: #00ff41;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      animation: pulseUpdate 2s infinite;
+    }
+    @keyframes pulseUpdate {
+      0% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
+      50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(0, 255, 65, 0.8); }
+      100% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
+    }
 
     .result-row { margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(157, 78, 221, 0.3); display: none; }
     .result-row.active { display: block; animation: fadeIn 0.5s; }
@@ -558,10 +570,80 @@
       .toggle-btn { padding: 5px 8px; font-size: 0.7rem; }
       .total-box { overflow: hidden; }
     }
+
+    body.warp-mode h1 { text-shadow: 0 0 40px #00d4ff, 0 0 80px #00d4ff; animation: shake 0.1s infinite; }
+    body.warp-mode .container { border-color: #00d4ff; box-shadow: 0 0 100px rgba(0, 212, 255, 0.4); }
+    @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, -1px); } }
+
+    body.blackhole-mode {
+      animation: blackholeSuck 4s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+      overflow: hidden;
+    }
+    @keyframes blackholeSuck {
+      0% { transform: scale(1) rotate(0deg); filter: blur(0px); }
+      30% { transform: scale(0.8) rotate(5deg) skewX(10deg); filter: blur(2px) contrast(1.5); }
+      70% { transform: scale(0.1, 4) rotate(180deg) skewX(45deg); filter: blur(5px) brightness(0.5); opacity: 0.8; }
+      100% { transform: scale(0) rotate(720deg) skewX(90deg); opacity: 0; filter: blur(15px); }
+    }
+    .infographic-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(15px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .infographic-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+    .infographic-content {
+      background: linear-gradient(135deg, rgba(11, 13, 23, 0.95), rgba(20, 25, 40, 0.95));
+      border: 1px solid #00d4ff;
+      box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+      border-radius: 15px;
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px;
+      position: relative;
+    }
+    .close-modal {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: transparent;
+      border: none;
+      color: #ff4444;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .close-modal:hover { text-shadow: 0 0 10px #ff4444; }
+    .ig-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .ig-card {
+      background: rgba(0, 0, 0, 0.4);
+      border-left: 3px solid #00d4ff;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .ig-card h4 { margin: 0 0 10px 0; color: #00d4ff; font-size: 1.1rem; }
+    .ig-card p { font-size: 0.85rem; color: #ccc; line-height: 1.5; margin: 0; }
   </style>
 </head>
 
 <body>
+  <button id="update-btn" onclick="updateSite()"></button>
   <canvas id="starfield"></canvas>
 
   <button id="mobile-toggle-btn" onclick="toggleMobileView()" data-i18n="mobile_view_solar">🌌 VIEW SOLAR SYSTEM</button>
@@ -629,9 +711,12 @@
       </div>
     </div>
 
-    <div class="time-box">
-      <div class="time-label" data-i18n="mission_duration">Mission Duration</div>
+    
+    <div class="time-box" style="position:relative;">
+      <div class="time-label" id="duration-label" data-i18n="mission_duration">Mission Duration</div>
       <div class="time-display" id="time-display-text">Calculating...</div>
+      <button onclick="togglePlanetAge()" style="margin-top:10px; background:transparent; border:1px solid #00d4ff; color:#00d4ff; padding:3px 8px; border-radius:5px; font-size:0.65rem; cursor:pointer;">🪐 SWITCH TO PLANET YEARS</button>
+      <div id="planet-age-display" style="display:none; margin-top:15px; font-size:0.85rem; color:#ffd700; grid-template-columns: 1fr 1fr; gap:10px;"></div>
     </div>
 
     <div class="metric session-box">
@@ -654,6 +739,7 @@
       <div class="label" data-i18n="solar_travel">3. Solar System Travel</div>
       <div class="value" id="dist-solar">0 km</div>
     </div>
+    
     <div class="metric">
       <div class="label" data-i18n="galactic_travel">4. Galactic Travel</div>
       <div class="value" id="dist-galaxy">0 km</div>
@@ -666,6 +752,38 @@
       </div>
       <div class="value" id="dist-total" style="color:#00d4ff; font-size:1.3rem;">0 km</div>
     </div>
+
+    <div class="metric" style="background: linear-gradient(90deg, rgba(255, 215, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%); border: 1px solid #ffd700; margin-bottom: 30px;">
+      <div>
+        <div class="label" style="color:#ffd700" data-i18n="photon_title">⚡ IF YOU WERE A PHOTON</div>
+        <div class="label" style="font-size:0.7rem; color:#aaa;" data-i18n="photon_sub">(Distance light has traveled since your birth)</div>
+      </div>
+      <div class="value" id="dist-photon" style="color:#ffd700; font-size:1.3rem;">0 km</div>
+    </div>
+
+    <div class="displacement-box" style="background: rgba(157, 78, 221, 0.1); border-color: #9d4edd; margin-bottom: 30px;">
+      <div class="d-title" style="color: #c77dff;" data-i18n="astro_title">Astrophysics Engine</div>
+      <div style="text-align: left; font-size: 0.85rem; margin-top: 15px; color: #ddd; line-height: 1.6;">
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_time">⏱️ Time Dilation:</span> Due to Special Relativity (moving at ~600 km/s), you are <span id="time-dilation" style="color:#ffd700; font-weight:bold; font-size:1rem;">0</span> seconds younger than a stationary observer.</div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_micro">🧠 Micro-Relativity:</span> Due to Earth's gravity, your head is exactly <span id="micro-relativity" style="color:#ff0055; font-weight:bold; font-size:1rem;">0</span> nanoseconds older than your feet.</div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_exp">🌌 Universal Expansion:</span> Since birth, the universe has expanded, pushing the Virgo Cluster <span id="hubble-expansion" style="color:#ffd700; font-weight:bold; font-size:1rem;">0 km</span> further away.</div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_col">💥 Galactic Collision:</span> The Andromeda Galaxy is <span id="andromeda-approach" style="color:#ff4444; font-weight:bold; font-size:1rem;">0 km</span> closer to hitting the Milky Way than when you were born.</div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_zod">✨ Zodiac Context:</span> Earth was facing <span id="zodiac-sign" style="color:#00d4ff; font-weight:bold; font-size:1rem;">---</span> when you were born.</div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_hor">🏃 Cosmic Horizon:</span> Since birth, <span id="stars-lost" style="color:#ff4444; font-weight:bold; font-size:1rem;">0</span> stars have slipped over the horizon and are forever unreachable.</div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_sup">💥 Supernovae:</span> Roughly <span id="supernova-count" style="color:#ff9600; font-weight:bold; font-size:1rem;">0</span> stars have exploded in the observable universe since you were born.</div>
+        <div><span data-i18n="astro_neu">👻 Neutrino Shower:</span> Approximately <span id="neutrino-count" style="color:#00ff41; font-weight:bold; font-size:1rem;">0</span> solar neutrinos have passed through your body.</div>
+      </div>
+    </div>
+
+    <div class="displacement-box" style="background: rgba(0, 255, 136, 0.1); border-color: #00ff88; margin-bottom: 30px;">
+      <div class="d-title" style="color: #00ff88;" data-i18n="human_title">The Human Engine</div>
+      <div style="text-align: left; font-size: 0.85rem; margin-top: 15px; color: #ddd; line-height: 1.6;">
+        <div style="margin-bottom: 8px;"><span data-i18n="human_heart">❤️ Heartbeats:</span> Your heart has beaten approximately <span id="bio-heart" style="color:#ff4444; font-weight:bold; font-size:1rem;">0</span> times.</div>
+        <div style="margin-bottom: 8px;"><span data-i18n="human_breath">🫁 Breaths:</span> You have taken roughly <span id="bio-breaths" style="color:#00d4ff; font-weight:bold; font-size:1rem;">0</span> breaths.</div>
+        <div><span data-i18n="human_cell">🩸 Cells Replaced:</span> Your body has generated <span id="bio-cells" style="color:#ffd700; font-weight:bold; font-size:1rem;">0</span> new cells to keep you alive during this cosmic journey.</div>
+      </div>
+    </div>
+
 
     <div class="displacement-box">
       <div class="d-title" data-i18n="displacement_title">Net Displacement Estimate</div>
@@ -684,9 +802,18 @@
     </div>
 
     <div class="multiplayer-box" style="border-color:#333; background:rgba(0,0,0,0.4); margin-bottom:30px;">
-      <h3 style="color:#8892b0; margin-bottom:15px; font-size:1rem; text-transform:uppercase; letter-spacing:2px;">🛰️ Distant Objects</h3>
-      <div class="metric" style="background: rgba(221, 221, 170, 0.05); border-left: 3px solid #ddddaa; margin-bottom:10px;">
-        
+      <h3 style="color:#8892b0; margin-bottom:15px; font-size:1rem; text-transform:uppercase; letter-spacing:2px;" data-i18n="dist_obj_title">🛰️ Distant Objects</h3>
+      <div class="metric" style="background: rgba(255, 150, 0, 0.05); border-left: 3px solid #ff9600; margin-bottom:10px;">
+        <div class="label" style="color:#ff9600">☀️ Parker Solar Probe <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">Traveling at: 176 km/s</div></div>
+        <div class="value" id="dist-parker" style="color:#fff">0 km</div>
+      </div>
+      <div class="metric" style="background: rgba(200, 200, 255, 0.05); border-left: 3px solid #c8c8ff; margin-bottom:10px;">
+        <div class="label" style="color:#c8c8ff">🔭 JWST <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">L2 Orbit</div></div>
+        <div class="value" id="dist-jwst" style="color:#fff">0 km</div>
+      </div>
+      <div class="metric" style="background: rgba(150, 255, 255, 0.05); border-left: 3px solid #96ffff; margin-bottom:10px;">
+        <div class="label" style="color:#96ffff">☄️ Halley's Comet <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">Orbiting Sun</div></div>
+        <div class="value" id="dist-halley" style="color:#fff">0 km</div>
       </div>
       <div class="metric" style="background: rgba(255, 68, 68, 0.05); border-left: 3px solid #ff4444; margin-bottom:10px;">
         <div class="label" style="color:#ff4444">🔴 Voyager 1 (Live) <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">Traveling at: 17.0 km/s</div></div>
@@ -702,9 +829,12 @@
       <h3 data-i18n="conn_title">👩‍🚀 Cosmic Connection</h3>
       <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;" data-i18n="conn_subtitle">Compare your flight path with a friend.</div>
 
-      <div class="friend-input-wrapper">
-        <input type="date" id="friendDate" style="border-color:#9d4edd; background:rgba(0,0,0,0.3);" />
-        <button class="compare-btn" onclick="calculateConnection()" data-i18n="calc_gap">CALCULATE GAP</button>
+      <div class="friend-input-wrapper" id="friend-inputs-container">
+        <input type="date" class="friend-date-input" style="border-color:#9d4edd; background:rgba(0,0,0,0.3); padding:10px; border-radius:5px; color:#fff; font-family:inherit;" />
+      </div>
+      <div style="display:flex; gap:10px; justify-content:center; margin-bottom:15px; flex-wrap:wrap;">
+        <button class="compare-btn" style="width:auto; padding:8px 15px; font-size:0.8rem;" onclick="addFriendInput()">➕ ADD CREW MEMBER</button>
+        <button class="compare-btn" style="width:auto; padding:8px 15px; font-size:0.8rem; background:#9d4edd; color:#000;" onclick="calculateConnection()">🚀 CALCULATE FLEET</button>
       </div>
 
       <div id="connection-results" class="result-row">
@@ -756,7 +886,21 @@
       </div>
     </div>
 
+    <div class="multiplayer-box" style="border-color:#ff9600; background:rgba(255,150,0,0.05);">
+      <h3 style="color:#ff9600;" data-i18n="lookback_title">🔭 The Lookback Telescope</h3>
+      <div style="font-size:0.85rem; color:#ddd; line-height:1.6; text-align:left;">
+        <span data-i18n="lookback_desc">Light takes time to travel through space. Because of this, looking up at the night sky is literally looking back in time.</span>
+        <div style="margin-top:15px; padding:15px; background:rgba(0,0,0,0.5); border-left:3px solid #ff9600; border-radius:5px;">
+          To witness the exact day you were born, an alien telescope would need to be floating near <strong id="lookback-star" style="color:#ffd700; font-size:1.1rem;">---</strong>.
+          <div style="font-size:0.75rem; color:#888; margin-top:5px;" id="lookback-desc">The light from your first day on Earth is currently sweeping past this location.</div>
+        </div>
+      </div>
+    </div>
+
     <div class="milestone-section">
+      <h3 style="color:#ffd700; margin-bottom:5px; font-size:1rem; text-transform:uppercase; letter-spacing:2px; text-align:center;">🏆 Cosmic Passport</h3>
+      <div id="achievements-container" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom: 15px;">
+      </div>
       <div class="progress-card">
         <div class="p-header"><span data-i18n="moon_trips">Moon Round Trips</span><span id="txt-moon" style="color:#ffd700">0</span></div>
         <div class="p-bar-bg"><div class="p-bar-fill" id="bar-moon" style="background:linear-gradient(90deg,#00d4ff,#ffffff);"></div></div>
@@ -809,6 +953,139 @@
       <span class="gal-label" data-i18n="cosmic_orbit">Cosmic Orbit Complete</span>
       <span class="gal-val" id="cosmic-orbit-val" style="color:#00ff41;">0.0000%</span>
     </div>
+
+    <div style="margin-top:20px; padding-top:20px; border-top:1px dashed rgba(255,255,255,0.2); text-align:left;">
+      <h3 style="color:#00d4ff; font-size:0.9rem; margin-bottom:10px;" data-i18n="cosmic_addr_title">📍 YOUR COSMIC ADDRESS</h3>
+      <div style="font-size:0.75rem; color:#ccc; line-height:1.8; border-left:2px solid #00d4ff; padding-left:10px;">
+        <div><strong style="color:#fff;" data-i18n="ca_planet">Planet:</strong> <span data-i18n="ca_earth">Earth</span></div>
+        <div><strong style="color:#fff;" data-i18n="ca_system">System:</strong> <span data-i18n="ca_solar">The Solar System</span></div>
+        <div><strong style="color:#fff;" data-i18n="ca_cloud">Cloud:</strong> <span data-i18n="ca_lic">Local Interstellar Cloud</span></div>
+        <div><strong style="color:#fff;" data-i18n="ca_arm">Arm:</strong> <span data-i18n="ca_orion">Orion Cygnus Arm</span></div>
+        <div><strong style="color:#fff;" data-i18n="ca_galaxy">Galaxy:</strong> <span data-i18n="ca_mw">The Milky Way</span></div>
+        <div><strong style="color:#fff;" data-i18n="ca_group">Group:</strong> <span data-i18n="ca_lg">The Local Group</span></div>
+        <div><strong style="color:#fff;" data-i18n="ca_supercluster">Supercluster:</strong> <span data-i18n="ca_virgo">Virgo Supercluster</span></div>
+        <div style="color:#00d4ff; font-weight:bold; margin-top:5px;" data-i18n="ca_laniakea">Laniakea Supercluster</div>
+      </div>
+      <button class="compare-btn" style="margin-top:20px; font-size:0.8rem; background:rgba(0,212,255,0.1); border-color:#00d4ff; color:#00d4ff;" onclick="document.getElementById('info-modal').classList.add('active')" onmouseover="this.style.background='#00d4ff'; this.style.color='#000';" onmouseout="this.style.background='rgba(0, 212, 255, 0.1)'; this.style.color='#00d4ff';" data-i18n="view_ig">
+        📊 VIEW DETAILED INFOGRAPHIC
+      </button>
+    </div>
+  </div>
+
+  <div id="info-modal" class="infographic-modal">
+    <div class="infographic-content">
+      <button class="close-modal" onclick="document.getElementById('info-modal').classList.remove('active')">&times;</button>
+      <h2 style="color:#00d4ff; margin-top:0; text-align:center; letter-spacing:3px; text-transform:uppercase;" data-i18n="ig_title">How the Math Works</h2>
+      <p style="text-align:center; color:#aaa; font-size:0.9rem;" data-i18n="ig_sub">A breakdown of every astrophysical calculation driving the Cosmic Odometer.</p>
+      
+      <div class="ig-grid">
+        <div class="ig-card">
+          <h4 data-i18n="ig_1_t">🌍 1. Rotated (Spin)</h4>
+          <p data-i18n="ig_1_d">Earth is not just a sphere, it is an oblate spheroid that completes a full rotation every 23 hours, 56 minutes, and 4 seconds. The speed at which you travel due to this rotation depends entirely on your latitude. At the equator (0°), you are moving at roughly 1,674 km/h (0.465 km/s). As you move closer to the poles, this speed drops to nearly zero. The app calculates your exact continuous angular velocity based on the latitude slider.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_1_s">[Source: Standard Earth Geometry / WGS 84]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_2_t">☀️ 2. Orbited Sun</h4>
+          <p data-i18n="ig_2_d">Earth does not sit still; it is constantly in freefall around the Sun. To complete its massive elliptical orbit (one year), Earth must travel at an average velocity of roughly 107,000 km/h (29.78 km/s). Every second you are alive, you are being dragged nearly 30 kilometers through the vacuum of the inner solar system. This is your standard "yearly lap".</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_2_s">[Source: Kepler's Laws of Planetary Motion]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_3_t">🌌 3. Solar Travel</h4>
+          <p data-i18n="ig_3_d">The Sun is caught in the immense gravitational pull of the Milky Way galaxy. It drags the Earth, the planets, and the entire Oort Cloud along with it as it orbits the supermassive black hole at the galactic center (Sagittarius A*). To complete its 225-million-year orbit, our entire solar system is hurtling through the Orion Arm at roughly 792,000 km/h (220 km/s).</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_3_s">[Source: International Astronomical Union (IAU)]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_4_t">🚀 4. Galactic Travel</h4>
+          <p data-i18n="ig_4_d">The Milky Way itself is not stationary. It is falling toward the Great Attractor and being pushed by the Dipole Repeller. When measured against the absolute rest frame of the universe (the Cosmic Microwave Background radiation left over from the Big Bang), our entire galaxy is moving through deep space at a staggering ~2.1 million km/h (600 km/s).</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_4_s">[Source: COBE / WMAP / Planck Satellite Data]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_5_t">⏱️ Time Dilation</h4>
+          <p data-i18n="ig_5_d">According to Einstein's theory of Special Relativity, the faster you move through space, the slower you move through time. Because Earth is flying through the universe at 600 km/s, your biological clock is ticking slightly slower than someone sitting completely still outside the galaxy. We calculate your exact "time debt" using the Lorentz Factor.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_5_s">[Source: Lorentz Factor / Special Relativity]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_6_t">🧠 Micro-Relativity</h4>
+          <p data-i18n="ig_6_d">Einstein's theory of General Relativity proves that gravity also slows down time (gravitational time dilation). Because your feet are closer to the Earth's center of mass than your head is, time literally moves slower for your feet. Using the precise formula Δt = t * (g * h) / c², we calculate the exact nanosecond difference in age between your head and toes.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_6_s">[Source: Einstein's General Relativity (NIST optical clock experiments)]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_7_t">💥 Universal Expansion</h4>
+          <p data-i18n="ig_7_d">The universe is not just expanding; the expansion is accelerating due to Dark Energy. The fabric of space itself is stretching, pushing distant objects away from us. We use the Hubble Constant (roughly 70 km/s/Mpc) to calculate that the nearby Virgo Supercluster is actively being pushed away from Earth at roughly 1,150 km/s.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_7_s">[Source: The Hubble Constant (H0) ~70 km/s/Mpc]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_8_t">☄️ Galactic Collision</h4>
+          <p data-i18n="ig_8_d">While the broader universe expands outward, objects that are close together are gravitationally bound. Our closest galactic neighbor, the Andromeda Galaxy, is locked in a gravitational dance with the Milky Way. It is actively falling toward us at roughly 110 km/s. This counter tracks exactly how much closer it has gotten to hitting us since you were born.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_8_s">[Source: Hubble Space Telescope / Gaia Telemetry]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_9_t">🏃 Cosmic Horizon</h4>
+          <p data-i18n="ig_9_d">Because the expansion of the universe is accelerating, distant galaxies are eventually pushed away from us faster than the speed of light. Once this happens, their light can never reach Earth again, and they slip over the "Cosmological Event Horizon." We estimate that roughly 22,000 stars disappear from our observable universe every single second.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_9_s">[Source: Cosmological Event Horizon approximations]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_10_t">💥 Supernovae</h4>
+          <p data-i18n="ig_10_d">Stars are constantly dying. In our observable universe, a massive star runs out of fuel and detonates in a catastrophic supernova explosion roughly every 30 seconds. This live counter tracks the estimated total number of star deaths that have illuminated the universe during your specific lifetime.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_10_s">[Source: Vera C. Rubin Observatory / Cosmic Star Formation History]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_11_t">👻 Neutrino Shower</h4>
+          <p data-i18n="ig_11_d">The nuclear fusion happening inside the Sun constantly blasts out ghostly, near-massless particles called neutrinos. They pass right through solid matter. Roughly 100 trillion solar neutrinos pass through every square centimeter of Earth per second. We calculate how many pass through the ~10,000 cm² surface area of an average human body.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_11_s">[Source: Standard Solar Model (SSM)]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_12_t">🫀 The Human Engine</h4>
+          <p data-i18n="ig_12_d">To contrast the massive scales of the cosmos with the microscopic scales of human biology, this engine tracks the physical work your body has done to keep you alive. Based on medical averages, it tracks your heartbeats (~69 bpm), breaths (~15 per minute), and the staggering ~3.8 million cells your body replaces every single second.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_12_s">[Source: Human Biology / Medical Averages]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_13_t">🔭 Lookback Telescope</h4>
+          <p data-i18n="ig_13_d">Because the speed of light is finite, looking into space is literally looking back in time. The light reflecting off Earth on the day you were born has been traveling outward ever since. Your exact age in years is the radius (in Light-Years) of your "life bubble". We cross-reference this radius with real star distances to see where an alien would need to be to watch you being born right now.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_13_s">[Source: Speed of Light (c) / Hipparcos Star Catalog]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_14_t">⚡ Photon Travel</h4>
+          <p data-i18n="ig_14_d">The absolute speed limit of the universe is the speed of light (299,792.458 km/s). This metric ignores the physical movement of the Earth and instead calculates exactly how far a single photon, emitted from Earth at the exact millisecond of your birth, has traveled through the vacuum of space.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_14_s">[Source: Special Relativity / c constant]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_15_t">👩‍🚀 Cosmic Connection</h4>
+          <p data-i18n="ig_15_d">Because the Solar System is moving at 2.1 million km/h, the Earth never occupies the same space twice. When your friend was born, the Earth was in a completely different part of the universe than it was when you were born. We calculate the exact physical distance in kilometers between your two distinct birthplaces in the void of space.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_15_s">[Source: CMB Rest Frame Kinematics]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_16_t">✨ Zodiac Context</h4>
+          <p data-i18n="ig_16_d">Astrology usually ignores the actual physical positions of the stars. Using the official, mathematically defined constellation boundaries set by the International Astronomical Union (IAU) in 1930, we calculate exactly which star cluster the Earth was physically facing on the exact day you were born.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_16_s">[Source: International Astronomical Union (IAU) Constellation Boundaries]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_17_t">🪐 Planet Ages</h4>
+          <p data-i18n="ig_17_d">Time is relative to the rock you are standing on. A "year" is just the time it takes a planet to orbit the sun. We divide your total age in Earth days by the precise orbital periods of Mercury (88 days), Venus (225 days), Mars (687 days), Jupiter (11.8 years), Saturn (29.4 years), and Neptune (164.8 years) to calculate your true localized age.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_17_s">[Source: NASA Planetary Fact Sheet]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_18_t">🧭 Net Displacement</h4>
+          <p data-i18n="ig_18_d">Your "Total Distance" tracks the winding, spiraling path you've taken through space. The Net Displacement Estimate strips out all the circles. If you had stopped orbiting and simply traveled in a perfectly straight line relative to the Cosmic Microwave Background since birth, this is exactly how far away from your original starting coordinate you would be right now.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_18_s">[Source: Vector Addition of Earth + Solar + Galactic Velocities]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_19_t">🛰️ Distant Objects</h4>
+          <p data-i18n="ig_19_d">Using Keplerian math approximations and known launch telemetry from NASA, we track the live, oscillating distances of famous man-made and natural objects. This includes the incredibly fast Voyager probes leaving the solar system, the James Webb Space Telescope maintaining its L2 orbit, and the highly elliptical 75-year orbit of Halley's Comet.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_19_s">[Source: NASA JPL Horizons / Keplerian Elements]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_20_t">🚀 Party Predictor</h4>
+          <p data-i18n="ig_20_d">By compiling your average total speed (Rotation + Orbit + Solar + Galactic), we can project your trajectory into the future. We use basic kinematics to predict the exact future date when you will cross massive, incomprehensible spatial thresholds, like flying your first Trillion miles or crossing a full Light Year.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_20_s">[Source: Basic Kinematics (Time = Distance / Velocity)]</div>
+        </div>
+        <div class="ig-card">
+          <h4 data-i18n="ig_21_t">🏆 Cosmic Passport</h4>
+          <p data-i18n="ig_21_d">Human brains cannot comprehend millions or billions of kilometers. To make these massive distances tangible, we convert your total cosmic distance into familiar milestones. We track exactly how many times you could have flown to the Moon and back, or how many times you could have passed Pluto based on standard astronomical unit distances.</p>
+          <div style="font-size:0.7rem; color:#00d4ff; margin-top:5px; opacity:0.8;" data-i18n="ig_21_s">[Source: Lunar Laser Ranging / New Horizons Mission Data]</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -828,6 +1105,7 @@
       window.generateReceipt = generateReceipt;
 
       window.changeLanguage = changeLanguage;
+      
       window.calculateConnection = calculateConnection;
       window.calculateFutureMilestone = calculateFutureMilestone;
 
@@ -837,6 +1115,9 @@
         PLUTO_KM: 5900000000,
         LIGHT_YEAR_KM: 9460730472580
       };
+      
+      const SPEED_OF_LIGHT_KM_S = 299792.458;
+      const HUBBLE_EXPANSION_KM_S = 1150; // Virgo Cluster recession velocity (~16.5 Mpc * 70 km/s/Mpc)
 
       const SPEED = {
         ORBIT_KM_S: 29.78,
@@ -858,7 +1139,9 @@
       let currentLang = "en";
 
       let currentRotationSpeedKmS = MAX_ROTATION_KM_S;
-      const sessionStartMs = Date.now();
+            const sessionStartMs = Date.now();
+      let isWarpMode = false;
+      let showPlanetAge = false;
 
       // 3D flags shared with the Three.js code
       window.orbitMode = "cinematic";
@@ -866,7 +1149,11 @@
       window.cinematicSpeedMult = 1;
 
       // DOM helpers
-      const $ = (id) => document.getElementById(id);
+      const domCache = {};
+      const $ = (id) => {
+        if (!domCache[id]) domCache[id] = document.getElementById(id);
+        return domCache[id];
+      };
 
       const dateInput = $("birthDate");
       const timeInput = $("birthTime");
@@ -945,7 +1232,120 @@
           cosmic_orbit: "Cosmic Orbit Complete",
           // Units / Misc
           unit_y: "y", unit_mo: "mo", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
-          welcome: "Welcome, Time Traveler"
+          welcome: "Welcome, Time Traveler",
+          photon_title: "⚡ IF YOU WERE A PHOTON",
+          photon_sub: "(Distance light has traveled since your birth)",
+          astro_title: "Astrophysics Engine",
+          astro_time: "⏱️ Time Dilation:",
+          astro_micro: "🧠 Micro-Relativity:",
+          astro_exp: "🌌 Universal Expansion:",
+          astro_col: "💥 Galactic Collision:",
+          astro_zod: "✨ Zodiac Context:",
+          astro_hor: "🏃 Cosmic Horizon:",
+          astro_sup: "💥 Supernovae:",
+          astro_neu: "👻 Neutrino Shower:",
+          human_title: "The Human Engine",
+          human_heart: "❤️ Heartbeats:",
+          human_breath: "🫁 Breaths:",
+          human_cell: "🩸 Cells Replaced:",
+          lookback_title: "🔭 The Lookback Telescope",
+          lookback_desc: "Light takes time to travel through space. Because of this, looking up at the night sky is literally looking back in time.",
+          dist_obj_title: "🛰️ Distant Objects",
+          ig_title: "How the Math Works",
+          ig_sub: "A breakdown of every astrophysical calculation driving the Cosmic Odometer.",
+          ig_1_t: "🌍 1. Rotated (Spin)",
+          ig_1_d: "Earth is not just a sphere, it is an oblate spheroid that completes a full rotation every 23 hours, 56 minutes, and 4 seconds. The speed at which you travel due to this rotation depends entirely on your latitude. At the equator (0°), you are moving at roughly 1,674 km/h (0.465 km/s). As you move closer to the poles, this speed drops to nearly zero. The app calculates your exact continuous angular velocity based on the latitude slider.",
+          ig_1_s: "[Source: Standard Earth Geometry / WGS 84]",
+          ig_2_t: "☀️ 2. Orbited Sun",
+          ig_2_d: "Earth does not sit still; it is constantly in freefall around the Sun. To complete its massive elliptical orbit (one year), Earth must travel at an average velocity of roughly 107,000 km/h (29.78 km/s). Every second you are alive, you are being dragged nearly 30 kilometers through the vacuum of the inner solar system. This is your standard \"yearly lap\".",
+          ig_2_s: "[Source: Kepler's Laws of Planetary Motion]",
+          ig_3_t: "🌌 3. Solar Travel",
+          ig_3_d: "The Sun is caught in the immense gravitational pull of the Milky Way galaxy. It drags the Earth, the planets, and the entire Oort Cloud along with it as it orbits the supermassive black hole at the galactic center (Sagittarius A*). To complete its 225-million-year orbit, our entire solar system is hurtling through the Orion Arm at roughly 792,000 km/h (220 km/s).",
+          ig_3_s: "[Source: International Astronomical Union (IAU)]",
+          ig_4_t: "🚀 4. Galactic Travel",
+          ig_4_d: "The Milky Way itself is not stationary. It is falling toward the Great Attractor and being pushed by the Dipole Repeller. When measured against the absolute rest frame of the universe (the Cosmic Microwave Background radiation left over from the Big Bang), our entire galaxy is moving through deep space at a staggering ~2.1 million km/h (600 km/s).",
+          ig_4_s: "[Source: COBE / WMAP / Planck Satellite Data]",
+          ig_5_t: "⏱️ Time Dilation",
+          ig_5_d: "According to Einstein's theory of Special Relativity, the faster you move through space, the slower you move through time. Because Earth is flying through the universe at 600 km/s, your biological clock is ticking slightly slower than someone sitting completely still outside the galaxy. We calculate your exact \"time debt\" using the Lorentz Factor.",
+          ig_5_s: "[Source: Lorentz Factor / Special Relativity]",
+          ig_6_t: "🧠 Micro-Relativity",
+          ig_6_d: "Einstein's theory of General Relativity proves that gravity also slows down time (gravitational time dilation). Because your feet are closer to the Earth's center of mass than your head is, time literally moves slower for your feet. Using the precise formula Δt = t * (g * h) / c², we calculate the exact nanosecond difference in age between your head and toes.",
+          ig_6_s: "[Source: Einstein's General Relativity (NIST optical clock experiments)]",
+          ig_7_t: "💥 Universal Expansion",
+          ig_7_d: "The universe is not just expanding; the expansion is accelerating due to Dark Energy. The fabric of space itself is stretching, pushing distant objects away from us. We use the Hubble Constant (roughly 70 km/s/Mpc) to calculate that the nearby Virgo Supercluster is actively being pushed away from Earth at roughly 1,150 km/s.",
+          ig_7_s: "[Source: The Hubble Constant (H0) ~70 km/s/Mpc]",
+          ig_8_t: "☄️ Galactic Collision",
+          ig_8_d: "While the broader universe expands outward, objects that are close together are gravitationally bound. Our closest galactic neighbor, the Andromeda Galaxy, is locked in a gravitational dance with the Milky Way. It is actively falling toward us at roughly 110 km/s. This counter tracks exactly how much closer it has gotten to hitting us since you were born.",
+          ig_8_s: "[Source: Hubble Space Telescope / Gaia Telemetry]",
+          ig_9_t: "🏃 Cosmic Horizon",
+          ig_9_d: "Because the expansion of the universe is accelerating, distant galaxies are eventually pushed away from us faster than the speed of light. Once this happens, their light can never reach Earth again, and they slip over the \"Cosmological Event Horizon.\" We estimate that roughly 22,000 stars disappear from our observable universe every single second.",
+          ig_9_s: "[Source: Cosmological Event Horizon approximations]",
+          ig_10_t: "💥 Supernovae",
+          ig_10_d: "Stars are constantly dying. In our observable universe, a massive star runs out of fuel and detonates in a catastrophic supernova explosion roughly every 30 seconds. This live counter tracks the estimated total number of star deaths that have illuminated the universe during your specific lifetime.",
+          ig_10_s: "[Source: Vera C. Rubin Observatory / Cosmic Star Formation History]",
+          ig_11_t: "👻 Neutrino Shower",
+          ig_11_d: "The nuclear fusion happening inside the Sun constantly blasts out ghostly, near-massless particles called neutrinos. They pass right through solid matter. Roughly 100 trillion solar neutrinos pass through every square centimeter of Earth per second. We calculate how many pass through the ~10,000 cm² surface area of an average human body.",
+          ig_11_s: "[Source: Standard Solar Model (SSM)]",
+          ig_12_t: "🫀 The Human Engine",
+          ig_12_d: "To contrast the massive scales of the cosmos with the microscopic scales of human biology, this engine tracks the physical work your body has done to keep you alive. Based on medical averages, it tracks your heartbeats (~69 bpm), breaths (~15 per minute), and the staggering ~3.8 million cells your body replaces every single second.",
+          ig_12_s: "[Source: Human Biology / Medical Averages]",
+          ig_13_t: "🔭 Lookback Telescope",
+          ig_13_d: "Because the speed of light is finite, looking into space is literally looking back in time. The light reflecting off Earth on the day you were born has been traveling outward ever since. Your exact age in years is the radius (in Light-Years) of your \"life bubble\". We cross-reference this radius with real star distances to see where an alien would need to be to watch you being born right now.",
+          ig_13_s: "[Source: Speed of Light (c) / Hipparcos Star Catalog]",
+          ig_14_t: "⚡ Photon Travel",
+          ig_14_d: "The absolute speed limit of the universe is the speed of light (299,792.458 km/s). This metric ignores the physical movement of the Earth and instead calculates exactly how far a single photon, emitted from Earth at the exact millisecond of your birth, has traveled through the vacuum of space.",
+          ig_14_s: "[Source: Special Relativity / c constant]",
+          ig_15_t: "👩‍🚀 Cosmic Connection",
+          ig_15_d: "Because the Solar System is moving at 2.1 million km/h, the Earth never occupies the same space twice. When your friend was born, the Earth was in a completely different part of the universe than it was when you were born. We calculate the exact physical distance in kilometers between your two distinct birthplaces in the void of space.",
+          ig_15_s: "[Source: CMB Rest Frame Kinematics]",
+          ig_16_t: "✨ Zodiac Context",
+          ig_16_d: "Astrology usually ignores the actual physical positions of the stars. Using the official, mathematically defined constellation boundaries set by the International Astronomical Union (IAU) in 1930, we calculate exactly which star cluster the Earth was physically facing on the exact day you were born.",
+          ig_16_s: "[Source: International Astronomical Union (IAU) Constellation Boundaries]",
+          ig_17_t: "🪐 Planet Ages",
+          ig_17_d: "Time is relative to the rock you are standing on. A \"year\" is just the time it takes a planet to orbit the sun. We divide your total age in Earth days by the precise orbital periods of Mercury (88 days), Venus (225 days), Mars (687 days), Jupiter (11.8 years), Saturn (29.4 years), and Neptune (164.8 years) to calculate your true localized age.",
+          ig_17_s: "[Source: NASA Planetary Fact Sheet]",
+          ig_18_t: "🧭 Net Displacement",
+          ig_18_d: "Your \"Total Distance\" tracks the winding, spiraling path you've taken through space. The Net Displacement Estimate strips out all the circles. If you had stopped orbiting and simply traveled in a perfectly straight line relative to the Cosmic Microwave Background since birth, this is exactly how far away from your original starting coordinate you would be right now.",
+          ig_18_s: "[Source: Vector Addition of Earth + Solar + Galactic Velocities]",
+          ig_19_t: "🛰️ Distant Objects",
+          ig_19_d: "Using Keplerian math approximations and known launch telemetry from NASA, we track the live, oscillating distances of famous man-made and natural objects. This includes the incredibly fast Voyager probes leaving the solar system, the James Webb Space Telescope maintaining its L2 orbit, and the highly elliptical 75-year orbit of Halley's Comet.",
+          ig_19_s: "[Source: NASA JPL Horizons / Keplerian Elements]",
+          ig_20_t: "🚀 Party Predictor",
+          ig_20_d: "By compiling your average total speed (Rotation + Orbit + Solar + Galactic), we can project your trajectory into the future. We use basic kinematics to predict the exact future date when you will cross massive, incomprehensible spatial thresholds, like flying your first Trillion miles or crossing a full Light Year.",
+          ig_20_s: "[Source: Basic Kinematics (Time = Distance / Velocity)]",
+          ig_21_t: "🏆 Cosmic Passport",
+          ig_21_d: "Human brains cannot comprehend millions or billions of kilometers. To make these massive distances tangible, we convert your total cosmic distance into familiar milestones. We track exactly how many times you could have flown to the Moon and back, or how many times you could have passed Pluto based on standard astronomical unit distances.",
+          ig_21_s: "[Source: Lunar Laser Ranging / New Horizons Mission Data]",
+          planet_ages_title: "Ages on Other Worlds",
+          lookback_deep: "Deep Space",
+          lookback_dyn_1: "You are {age} years old. The light from your first day hasn't even reached the nearest star (Alpha Centauri, 4.37 LY) yet!",
+          lookback_dyn_2: "{age} Light-Years Away",
+          lookback_dyn_3: "The physical light emitted from Earth on the day you were born is currently traveling through deep space. It most recently swept past {star} ({dist} LY)!",
+          cosmic_addr_title: "📍 YOUR COSMIC ADDRESS",
+          ca_planet: "Planet:",
+          ca_earth: "Earth",
+          ca_system: "System:",
+          ca_solar: "The Solar System",
+          ca_cloud: "Cloud:",
+          ca_lic: "Local Interstellar Cloud",
+          ca_arm: "Arm:",
+          ca_orion: "Orion Cygnus Arm",
+          ca_galaxy: "Galaxy:",
+          ca_mw: "The Milky Way",
+          ca_group: "Group:",
+          ca_lg: "The Local Group",
+          ca_supercluster: "Supercluster:",
+          ca_virgo: "Virgo Supercluster",
+          ca_laniakea: "Laniakea Supercluster",
+          view_ig: "📊 VIEW DETAILED INFOGRAPHIC",
+          err_no_date: "Please enter your birth date first!",
+          ms_passed: "You already passed this milestone!",
+          ms_bigger: "(Pick a bigger target)",
+          ms_cross: "You will cross this milestone on:",
+          update_available: "UPDATE AVAILABLE",
+          mercury: "Mercury", venus: "Venus", earth: "Earth", mars: "Mars", jupiter: "Jupiter", saturn: "Saturn", uranus: "Uranus", neptune: "Neptune", pluto: "Pluto", moon: "Moon",
+          halley: "Halley's Comet", parker: "Parker Solar Probe", iss: "ISS", v1: "Voyager 1", v2: "Voyager 2", jwst: "JWST",
+          capricorn: "Capricorn", aquarius: "Aquarius", pisces: "Pisces", aries: "Aries", taurus: "Taurus", gemini: "Gemini", cancer: "Cancer", leo: "Leo", virgo: "Virgo", libra: "Libra", scorpius: "Scorpius", ophiuchus: "Ophiuchus", sagittarius: "Sagittarius"
         },
         fr: {
           title: "Odomètre cosmique",
@@ -1010,7 +1410,119 @@
           dist_center: "Dist. du Centre",
           cosmic_orbit: "Orbite Cosmique",
           unit_y: "a", unit_mo: "mo", unit_d: "j", unit_h: "h", unit_min: "min", unit_s: "s",
-          welcome: "Bienvenue"
+          welcome: "Bienvenue",
+          photon_title: "⚡ SI VOUS ÉTIEZ UN PHOTON",
+          photon_sub: "(Distance parcourue par la lumière depuis votre naissance)",
+          astro_title: "Moteur Astrophysique",
+          astro_time: "⏱️ Dilatation du Temps :",
+          astro_micro: "🧠 Micro-Relativité :",
+          astro_exp: "🌌 Expansion Universelle :",
+          astro_col: "💥 Collision Galactique :",
+          astro_zod: "✨ Contexte Zodiaque :",
+          astro_hor: "🏃 Horizon Cosmique :",
+          astro_sup: "💥 Supernovas :",
+          astro_neu: "👻 Pluie de Neutrinos :",
+          human_title: "Le Moteur Humain",
+          human_heart: "❤️ Battements de Coeur :",
+          human_breath: "🫁 Respirations :",
+          human_cell: "🩸 Cellules Remplacées :",
+          lookback_title: "🔭 Le Télescope Rétrospectif",
+          lookback_desc: "La lumière met du temps à voyager. À cause de cela, regarder le ciel étoilé, c'est regarder dans le passé.",
+          dist_obj_title: "🛰️ Objets Distants",
+          ig_title: "Comment fonctionnent les calculs",
+          ig_sub: "Une décomposition de tous les calculs astrophysiques qui alimentent l'Odomètre Cosmique.",
+          ig_1_t: "🌍 1. Rotation (Spin)",
+          ig_1_d: "La Terre n'est pas une simple sphère, c'est un sphéroïde aplati qui fait un tour complet en 23 heures, 56 minutes et 4 secondes. La vitesse de votre rotation dépend entièrement de votre latitude. À l'équateur (0°), vous vous déplacez à environ 1 674 km/h (0,465 km/s). Aux pôles, cette vitesse tombe à presque zéro.",
+          ig_1_s: "[Source : Géométrie standard de la Terre / WGS 84]",
+          ig_2_t: "☀️ 2. Orbite Solaire",
+          ig_2_d: "La Terre ne reste pas immobile ; elle est en chute libre constante autour du Soleil. Pour boucler son orbite (un an), elle voyage à une vitesse moyenne de 107 000 km/h (29,78 km/s). C'est votre 'tour annuel' standard.",
+          ig_2_s: "[Source : Lois de Kepler sur le mouvement des planètes]",
+          ig_3_t: "🌌 3. Voyage du Système Solaire",
+          ig_3_d: "Le Soleil est pris dans la gravité de la Voie Lactée. Il entraîne la Terre et les planètes alors qu'il orbite autour du trou noir supermassif au centre galactique. Pour accomplir son orbite de 225 millions d'années, notre système solaire file à travers le Bras d'Orion à environ 792 000 km/h (220 km/s).",
+          ig_3_s: "[Source : Union Astronomique Internationale (UAI)]",
+          ig_4_t: "🚀 4. Voyage Galactique",
+          ig_4_d: "La Voie Lactée elle-même n'est pas stationnaire. Lorsqu'elle est mesurée par rapport au fond diffus cosmologique (le rayonnement restant du Big Bang), notre galaxie entière se déplace à une vitesse stupéfiante de ~2,1 millions km/h (600 km/s).",
+          ig_4_s: "[Source : Données des satellites COBE / WMAP / Planck]",
+          ig_5_t: "⏱️ Dilatation du Temps",
+          ig_5_d: "Selon la relativité restreinte d'Einstein, plus vous vous déplacez vite dans l'espace, plus vous avancez lentement dans le temps. Parce que la Terre vole à 600 km/s, vous vieillissez légèrement plus lentement que quelqu'un d'immobile en dehors de la galaxie.",
+          ig_5_s: "[Source : Facteur de Lorentz / Relativité Restreinte]",
+          ig_6_t: "🧠 Micro-Relativité",
+          ig_6_d: "La relativité générale d'Einstein prouve que la gravité ralentit aussi le temps. Vos pieds étant plus proches du centre de masse de la Terre que votre tête, le temps s'écoule littéralement plus lentement pour vos pieds. Nous calculons la différence exacte en nanosecondes.",
+          ig_6_s: "[Source : Relativité Générale d'Einstein]",
+          ig_7_t: "💥 Expansion Universelle",
+          ig_7_d: "L'univers est en expansion à cause de l'énergie noire. Le tissu même de l'espace s'étire, repoussant les objets lointains. Nous utilisons la constante de Hubble (~70 km/s/Mpc) pour calculer que le Superamas de la Vierge est repoussé à environ 1 150 km/s.",
+          ig_7_s: "[Source : Constante de Hubble (H0) ~70 km/s/Mpc]",
+          ig_8_t: "☄️ Collision Galactique",
+          ig_8_d: "Notre plus proche voisine, la galaxie d'Andromède, est verrouillée dans une danse gravitationnelle avec la Voie Lactée. Elle tombe activement vers nous à environ 110 km/s. Ce compteur suit de combien elle s'est rapprochée depuis votre naissance.",
+          ig_8_s: "[Source : Télescope Spatial Hubble / Télémétrie Gaia]",
+          ig_9_t: "🏃 Horizon Cosmique",
+          ig_9_d: "Parce que l'expansion de l'univers s'accélère, les galaxies lointaines sont repoussées plus vite que la lumière. Une fois que cela se produit, leur lumière ne peut plus jamais atteindre la Terre. Environ 22 000 étoiles disparaissent de notre univers observable chaque seconde.",
+          ig_9_s: "[Source : Approximations de l'Horizon Événementiel Cosmologique]",
+          ig_10_t: "💥 Supernovas",
+          ig_10_d: "Les étoiles meurent constamment. Dans notre univers observable, une étoile massive explose en supernova environ toutes les 30 secondes. Ce compteur suit le nombre total estimé de morts d'étoiles pendant votre vie.",
+          ig_10_s: "[Source : Observatoire Vera C. Rubin / Histoire de la Formation Stellaire]",
+          ig_11_t: "👻 Pluie de Neutrinos",
+          ig_11_d: "La fusion nucléaire à l'intérieur du Soleil éjecte constamment des particules fantomatiques appelées neutrinos. Ils traversent la matière solide. Environ 100 billions de neutrinos solaires traversent chaque centimètre carré de la Terre par seconde.",
+          ig_11_s: "[Source : Modèle Solaire Standard (SSM)]",
+          ig_12_t: "🫀 Le Moteur Humain",
+          ig_12_d: "Pour contraster les échelles massives du cosmos avec la biologie humaine, ce moteur suit le travail physique de votre corps. Basé sur des moyennes médicales : ~69 battements par minute, ~15 respirations par minute, et ~3,8 millions de cellules remplacées par seconde.",
+          ig_12_s: "[Source : Biologie Humaine / Moyennes Médicales]",
+          ig_13_t: "🔭 Le Télescope Rétrospectif",
+          ig_13_d: "La lumière prend du temps pour voyager. Votre âge exact en années est le rayon (en années-lumière) de votre 'bulle de vie'. Nous croisons ce rayon avec la distance réelle des étoiles pour voir d'où un extraterrestre pourrait regarder votre naissance en ce moment.",
+          ig_13_s: "[Source : Vitesse de la Lumière (c) / Catalogue Hipparcos]",
+          ig_14_t: "⚡ Voyage des Photons",
+          ig_14_d: "La limite de vitesse absolue de l'univers est la vitesse de la lumière (299 792,458 km/s). Cette métrique calcule la distance qu'un photon, émis depuis la Terre à la milliseconde de votre naissance, a parcourue dans le vide spatial.",
+          ig_14_s: "[Source : Relativité Restreinte / Constante c]",
+          ig_15_t: "👩‍🚀 Connexion Cosmique",
+          ig_15_d: "Parce que le système solaire se déplace à 2,1 millions de km/h, la Terre n'occupe jamais deux fois le même espace. Nous calculons la distance physique exacte en kilomètres entre vos deux lieux de naissance distincts dans le vide de l'espace.",
+          ig_15_s: "[Source : Cinématique du Fond Diffus Cosmologique]",
+          ig_16_t: "✨ Contexte Zodiaque",
+          ig_16_d: "L'astrologie ignore souvent les positions physiques réelles. En utilisant les frontières officielles définies par l'Union Astronomique Internationale (UAI) en 1930, nous calculons exactement quel amas d'étoiles la Terre regardait le jour de votre naissance.",
+          ig_16_s: "[Source : Frontières de l'Union Astronomique Internationale (UAI)]",
+          ig_17_t: "🪐 Âge des Planètes",
+          ig_17_d: "Le temps est relatif au rocher sur lequel vous vous tenez. Nous divisons votre âge total par les périodes orbitales précises de Mercure, Vénus, Mars, Jupiter, Saturne et Neptune pour calculer votre âge localisé.",
+          ig_17_s: "[Source : Fiche d'Information Planétaire de la NASA]",
+          ig_18_t: "🧭 Déplacement Net",
+          ig_18_d: "Si vous arrêtiez d'orbiter et voyagiez en ligne droite parfaite par rapport au fond diffus cosmologique depuis votre naissance, c'est exactement à cette distance que vous seriez de vos coordonnées de départ.",
+          ig_18_s: "[Source : Addition Vectorielle des Vitesses Terrestre + Solaire + Galactique]",
+          ig_19_t: "🛰️ Objets Distants",
+          ig_19_d: "En utilisant des approximations keplériennes et la télémétrie de la NASA, nous suivons les distances en direct d'objets célèbres. Cela inclut les sondes Voyager, le télescope James Webb, et la comète de Halley.",
+          ig_19_s: "[Source : NASA JPL Horizons / Éléments Keplériens]",
+          ig_20_t: "🚀 Prédicteur de Fête",
+          ig_20_d: "En compilant votre vitesse totale moyenne, nous projetons votre trajectoire dans le futur pour prédire la date exacte à laquelle vous franchirez des seuils massifs, comme 1 Trillion de kilomètres ou 1 Année-Lumière.",
+          ig_20_s: "[Source : Cinématique de base (Temps = Distance / Vitesse)]",
+          ig_21_t: "🏆 Passeport Cosmique",
+          ig_21_d: "Pour rendre ces distances tangibles, nous convertissons votre distance totale en jalons familiers. Nous suivons combien de fois vous auriez pu voler jusqu'à la Lune ou passer Pluton.",
+          ig_21_s: "[Source : Télémétrie Laser Lunaire / Données New Horizons]",
+          lookback_deep: "Espace Profond",
+          lookback_dyn_1: "Vous avez {age} ans. La lumière de votre premier jour n'a même pas encore atteint l'étoile la plus proche (Alpha Centauri, 4,37 AL) !",
+          lookback_dyn_2: "À {age} Années-Lumière",
+          lookback_dyn_3: "La lumière physique émise par la Terre le jour de votre naissance voyage actuellement dans l'espace profond. Elle a récemment dépassé {star} ({dist} AL) !",
+          cosmic_addr_title: "📍 VOTRE ADRESSE COSMIQUE",
+          ca_planet: "Planète :",
+          ca_earth: "Terre",
+          ca_system: "Système :",
+          ca_solar: "Le Système Solaire",
+          ca_cloud: "Nuage :",
+          ca_lic: "Nuage Interstellaire Local",
+          ca_arm: "Bras :",
+          ca_orion: "Bras d'Orion",
+          ca_galaxy: "Galaxie :",
+          ca_mw: "La Voie Lactée",
+          ca_group: "Groupe :",
+          ca_lg: "Le Groupe Local",
+          ca_supercluster: "Superamas :",
+          ca_virgo: "Superamas de la Vierge",
+          ca_laniakea: "Superamas Laniakea",
+          view_ig: "📊 VOIR L'INFOGRAPHIE DÉTAILLÉE",
+          err_no_date: "Veuillez d'abord entrer votre date de naissance !",
+          ms_passed: "Vous avez déjà franchi cette étape !",
+          ms_bigger: "(Choisissez une cible plus grande)",
+          ms_cross: "Vous franchirez cette étape le :",
+          update_available: "MISE À JOUR DISPONIBLE",
+          mercury: "Mercure", venus: "Vénus", earth: "Terre", mars: "Mars", jupiter: "Jupiter", saturn: "Saturne", uranus: "Uranus", neptune: "Neptune", pluto: "Pluton", moon: "Lune",
+          halley: "Comète de Halley", parker: "Sonde Parker", iss: "ISS", v1: "Voyager 1", v2: "Voyager 2", jwst: "JWST",
+          capricorn: "Capricorne", aquarius: "Verseau", pisces: "Poissons", aries: "Bélier", taurus: "Taureau", gemini: "Gémeaux", cancer: "Cancer", leo: "Lion", virgo: "Vierge", libra: "Balance", scorpius: "Scorpion", ophiuchus: "Ophiuchus", sagittarius: "Sagittaire"
         },
         es: {
           title: "Odómetro Cósmico",
@@ -1075,7 +1587,119 @@
           dist_center: "Dist. al Centro",
           cosmic_orbit: "Órbita Cósmica",
           unit_y: "a", unit_mo: "mo", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
-          welcome: "Bienvenido"
+          welcome: "Bienvenido",
+          photon_title: "⚡ SI FUERAS UN FOTÓN",
+          photon_sub: "(Distancia que ha viajado la luz desde tu nacimiento)",
+          astro_title: "Motor Astrofísico",
+          astro_time: "⏱️ Dilatación del Tiempo:",
+          astro_micro: "🧠 Micro-Relatividad:",
+          astro_exp: "🌌 Expansión Universal:",
+          astro_col: "💥 Colisión Galáctica:",
+          astro_zod: "✨ Contexto Zodiacal:",
+          astro_hor: "🏃 Horizonte Cósmico:",
+          astro_sup: "💥 Supernovas:",
+          astro_neu: "👻 Lluvia de Neutrinos:",
+          human_title: "El Motor Humano",
+          human_heart: "❤️ Latidos:",
+          human_breath: "🫁 Respiraciones:",
+          human_cell: "🩸 Células Reemplazadas:",
+          lookback_title: "🔭 El Telescopio Retrospectivo",
+          lookback_desc: "La luz tarda tiempo en viajar por el espacio. Por eso, mirar el cielo nocturno es literalmente mirar al pasado.",
+          dist_obj_title: "🛰️ Objetos Distantes",
+          ig_title: "Cómo Funcionan las Matemáticas",
+          ig_sub: "Un desglose de todos los cálculos astrofísicos que impulsan el Odómetro Cósmico.",
+          ig_1_t: "🌍 1. Rotación (Giro)",
+          ig_1_d: "La Tierra no es solo una esfera, es un esferoide oblato que completa una rotación en 23 horas, 56 minutos y 4 segundos. La velocidad a la que viajas por esta rotación depende de tu latitud. En el ecuador (0°), te mueves a ~1.674 km/h (0,465 km/s). En los polos, cae a casi cero.",
+          ig_1_s: "[Fuente: Geometría Terrestre Estándar / WGS 84]",
+          ig_2_t: "☀️ 2. Órbita Solar",
+          ig_2_d: "La Tierra está en caída libre constante alrededor del Sol. Para completar su enorme órbita elíptica (un año), viaja a una velocidad media de ~107.000 km/h (29,78 km/s). Esta es tu 'vuelta anual'.",
+          ig_2_s: "[Fuente: Leyes de Kepler del Movimiento Planetario]",
+          ig_3_t: "🌌 3. Viaje del Sistema Solar",
+          ig_3_d: "El Sol es arrastrado por la gravedad de la Vía Láctea. Arrastra a la Tierra y a todos los planetas mientras orbita el agujero negro supermasivo en el centro galáctico. Para completar su órbita de 225 millones de años, nuestro sistema solar avanza por el Brazo de Orión a ~792.000 km/h (220 km/s).",
+          ig_3_s: "[Fuente: Unión Astronómica Internacional (IAU)]",
+          ig_4_t: "🚀 4. Viaje Galáctico",
+          ig_4_d: "La Vía Láctea no está quieta. Se mueve hacia el Gran Atractor. Cuando se mide contra el marco de reposo absoluto del universo (la radiación de Fondo Cósmico de Microondas), toda nuestra galaxia se mueve por el espacio profundo a unos asombrosos ~2,1 millones de km/h (600 km/s).",
+          ig_4_s: "[Fuente: Datos de los satélites COBE / WMAP / Planck]",
+          ig_5_t: "⏱️ Dilatación del Tiempo",
+          ig_5_d: "Según la Relatividad Especial de Einstein, cuanto más rápido te mueves por el espacio, más lento te mueves por el tiempo. Como la Tierra vuela por el universo a 600 km/s, tu reloj biológico avanza un poco más lento que alguien que está completamente quieto fuera de la galaxia.",
+          ig_5_s: "[Fuente: Factor de Lorentz / Relatividad Especial]",
+          ig_6_t: "🧠 Micro-Relatividad",
+          ig_6_d: "La Relatividad General de Einstein prueba que la gravedad también ralentiza el tiempo. Como tus pies están más cerca del centro de masa de la Tierra que tu cabeza, el tiempo literalmente se mueve más lento para tus pies. Calculamos la diferencia exacta en nanosegundos para un humano de 1,7m.",
+          ig_6_s: "[Fuente: Relatividad General de Einstein]",
+          ig_7_t: "💥 Expansión Universal",
+          ig_7_d: "El universo se expande, y esa expansión se acelera por la Energía Oscura. El tejido del espacio mismo se estira. Usamos la Constante de Hubble (~70 km/s/Mpc) para calcular que el Supercúmulo de Virgo está siendo alejado activamente de la Tierra a ~1.150 km/s.",
+          ig_7_s: "[Fuente: La Constante de Hubble (H0) ~70 km/s/Mpc]",
+          ig_8_t: "☄️ Colisión Galáctica",
+          ig_8_d: "Mientras el universo se expande, los objetos cercanos están atados gravitacionalmente. Nuestra vecina, la Galaxia de Andrómeda, está cayendo activamente hacia nosotros a ~110 km/s. Este contador rastrea cuánto se ha acercado desde que naciste.",
+          ig_8_s: "[Fuente: Telescopio Espacial Hubble / Telemetría Gaia]",
+          ig_9_t: "🏃 Horizonte Cósmico",
+          ig_9_d: "Como la expansión del universo se acelera, las galaxias distantes eventualmente son alejadas más rápido que la velocidad de la luz. Su luz nunca volverá a alcanzar la Tierra. Estimamos que unas 22.000 estrellas desaparecen de nuestro universo observable cada segundo.",
+          ig_9_s: "[Fuente: Aproximaciones del Horizonte de Eventos Cosmológico]",
+          ig_10_t: "💥 Supernovas",
+          ig_10_d: "Las estrellas mueren constantemente. En nuestro universo observable, una estrella masiva explota en una supernova catastrófica aproximadamente cada 30 segundos. Este contador rastrea el número total de muertes estelares estimadas durante tu vida.",
+          ig_10_s: "[Fuente: Observatorio Vera C. Rubin / Historia de Formación Estelar]",
+          ig_11_t: "👻 Lluvia de Neutrinos",
+          ig_11_d: "La fusión nuclear dentro del Sol dispara constantemente partículas fantasmales llamadas neutrinos, que atraviesan la materia sólida. Unos 100 billones de neutrinos solares atraviesan cada centímetro cuadrado de la Tierra por segundo.",
+          ig_11_s: "[Fuente: Modelo Solar Estándar (SSM)]",
+          ig_12_t: "🫀 El Motor Humano",
+          ig_12_d: "Para contrastar el cosmos con la biología humana, esto rastrea el trabajo físico de tu cuerpo. Basado en promedios médicos: ~69 latidos por minuto, ~15 respiraciones por minuto y los ~3,8 millones de células que tu cuerpo reemplaza cada segundo.",
+          ig_12_s: "[Fuente: Biología Humana / Promedios Médicos]",
+          ig_13_t: "🔭 Telescopio Retrospectivo",
+          ig_13_d: "Tu edad exacta en años es el radio (en Años Luz) de tu 'burbuja de vida'. Cruzamos este radio con las distancias estelares reales para ver desde dónde un alienígena podría ver la luz de tu nacimiento llegando justo en este momento.",
+          ig_13_s: "[Fuente: Velocidad de la Luz (c) / Catálogo Hipparcos]",
+          ig_14_t: "⚡ Viaje del Fotón",
+          ig_14_d: "El límite de velocidad absoluta del universo es la velocidad de la luz (299.792,458 km/s). Esta métrica calcula exactamente qué tan lejos ha viajado un fotón, emitido desde la Tierra en el milisegundo exacto de tu nacimiento, a través del espacio.",
+          ig_14_s: "[Fuente: Relatividad Especial / Constante c]",
+          ig_15_t: "👩‍🚀 Conexión Cósmica",
+          ig_15_d: "Como el Sistema Solar se mueve a 2,1 millones de km/h, la Tierra nunca ocupa el mismo espacio dos veces. Calculamos la distancia física exacta en kilómetros entre tus dos lugares de nacimiento distintos en el vacío del espacio.",
+          ig_15_s: "[Fuente: Cinemática del Marco de Reposo del CMB]",
+          ig_16_t: "✨ Contexto Zodiacal",
+          ig_16_d: "Usando los límites oficiales de las constelaciones definidos por la Unión Astronómica Internacional (IAU) en 1930, calculamos exactamente a qué cúmulo de estrellas miraba la Tierra en el momento de tu nacimiento.",
+          ig_16_s: "[Fuente: Límites de Constelaciones de la IAU]",
+          ig_17_t: "🪐 Edades Planetarias",
+          ig_17_d: "Un 'año' es el tiempo que tarda un planeta en orbitar el sol. Dividimos tu edad en días terrestres por los períodos orbitales precisos de Mercurio, Venus, Marte, Júpiter, Saturno y Neptuno para calcular tu verdadera edad localizada.",
+          ig_17_s: "[Fuente: Hoja de Datos Planetarios de la NASA]",
+          ig_18_t: "🧭 Desplazamiento Neto",
+          ig_18_d: "Si hubieras dejado de orbitar y viajado en una línea perfectamente recta relativa al Fondo Cósmico de Microondas desde tu nacimiento, esto es exactamente a qué distancia estarías de tu coordenada inicial original.",
+          ig_18_s: "[Fuente: Adición Vectorial Terrestre + Solar + Galáctica]",
+          ig_19_t: "🛰️ Objetos Distantes",
+          ig_19_d: "Usando aproximaciones matemáticas Keplerianas y la telemetría de la NASA, rastreamos las distancias en vivo de las sondas Voyager, el Telescopio James Webb y el cometa Halley.",
+          ig_19_s: "[Fuente: NASA JPL Horizons / Elementos Keplerianos]",
+          ig_20_t: "🚀 Predictor de Fiesta",
+          ig_20_d: "Compilando tu velocidad total promedio, proyectamos tu trayectoria hacia el futuro para predecir la fecha exacta en que cruzarás umbrales espaciales masivos, como volar tu primer billón de kilómetros.",
+          ig_20_s: "[Fuente: Cinemática Básica (Tiempo = Distancia / Velocidad)]",
+          ig_21_t: "🏆 Pasaporte Cósmico",
+          ig_21_d: "Para hacer tangibles estas distancias, rastreamos exactamente cuántas veces podrías haber volado a la Luna y vuelto, o cuántas veces podrías haber pasado Plutón.",
+          ig_21_s: "[Fuente: Telemetría Láser Lunar / Datos de New Horizons]",
+          lookback_deep: "Espacio Profundo",
+          lookback_dyn_1: "Tienes {age} años. ¡La luz de tu primer día ni siquiera ha alcanzado la estrella más cercana (Alfa Centauri, 4.37 AL) todavía!",
+          lookback_dyn_2: "A {age} Años Luz",
+          lookback_dyn_3: "La luz física emitida por la Tierra el día que naciste viaja actualmente por el espacio profundo. ¡Pasó recientemente por {star} ({dist} AL)!",
+          cosmic_addr_title: "📍 TU DIRECCIÓN CÓSMICA",
+          ca_planet: "Planeta:",
+          ca_earth: "Tierra",
+          ca_system: "Sistema:",
+          ca_solar: "El Sistema Solar",
+          ca_cloud: "Nube:",
+          ca_lic: "Nube Interestelar Local",
+          ca_arm: "Brazo:",
+          ca_orion: "Brazo de Orión",
+          ca_galaxy: "Galaxia:",
+          ca_mw: "La Vía Láctea",
+          ca_group: "Grupo:",
+          ca_lg: "El Grupo Local",
+          ca_supercluster: "Supercúmulo:",
+          ca_virgo: "Supercúmulo de Virgo",
+          ca_laniakea: "Supercúmulo de Laniakea",
+          view_ig: "📊 VER INFOGRAFÍA DETALLADA",
+          err_no_date: "¡Por favor, ingresa tu fecha de nacimiento primero!",
+          ms_passed: "¡Ya pasaste este hito!",
+          ms_bigger: "(Elige un objetivo mayor)",
+          ms_cross: "Cruzarás este hito el:",
+          update_available: "ACTUALIZACIÓN DISPONIBLE",
+          mercury: "Mercurio", venus: "Venus", earth: "Tierra", mars: "Marte", jupiter: "Júpiter", saturn: "Saturno", uranus: "Urano", neptune: "Neptuno", pluto: "Plutón", moon: "Luna",
+          halley: "Cometa Halley", parker: "Sonda Parker", iss: "ISS", v1: "Voyager 1", v2: "Voyager 2", jwst: "JWST",
+          capricorn: "Capricornio", aquarius: "Acuario", pisces: "Piscis", aries: "Aries", taurus: "Tauro", gemini: "Géminis", cancer: "Cáncer", leo: "Leo", virgo: "Virgo", libra: "Libra", scorpius: "Escorpio", ophiuchus: "Ofiuco", sagittarius: "Sagitario"
         },
         jp: {
           title: "宇宙走行距離計",
@@ -1140,7 +1764,119 @@
           dist_center: "中心までの距離",
           cosmic_orbit: "宇宙軌道完了",
           unit_y: "年", unit_mo: "ヶ月", unit_d: "日", unit_h: "時間", unit_min: "分", unit_s: "秒",
-          welcome: "ようこそ、タイムトラベラー"
+          welcome: "ようこそ、タイムトラベラー",
+          photon_title: "⚡ もしあなたが光子だったら",
+          photon_sub: "(誕生から光が移動した距離)",
+          astro_title: "天体物理学エンジン",
+          astro_time: "⏱️ 時間の遅れ:",
+          astro_micro: "🧠 微小相対性理論:",
+          astro_exp: "🌌 宇宙の膨張:",
+          astro_col: "💥 銀河の衝突:",
+          astro_zod: "✨ ゾディアックの文脈:",
+          astro_hor: "🏃 宇宙の地平線:",
+          astro_sup: "💥 超新星:",
+          astro_neu: "👻 ニュートリノシャワー:",
+          human_title: "ヒューマンエンジン",
+          human_heart: "❤️ 心拍数:",
+          human_breath: "🫁 呼吸数:",
+          human_cell: "🩸 細胞の入れ替わり:",
+          lookback_title: "🔭 ルックバック望遠鏡",
+          lookback_desc: "光が宇宙を移動するには時間がかかります。そのため、夜空を見上げることは文字通り過去を見ていることになります。",
+          dist_obj_title: "🛰️ 遠くの物体",
+          ig_title: "計算の仕組み",
+          ig_sub: "コズミックオドメーターを動かす全ての天体物理学計算の解説。",
+          ig_1_t: "🌍 1. 自転（スピン）",
+          ig_1_d: "地球は単なる球体ではなく、23時間56分4秒で1回転する扁球です。自転によって移動する速度は、緯度によって完全に異なります。赤道（0°）では、約1,674 km/h（0.465 km/s）で移動しています。極に近づくにつれて、この速度はほぼゼロに落ちます。",
+          ig_1_s: "[出典: 標準地球モデル / WGS 84]",
+          ig_2_t: "☀️ 2. 公転（太陽を回る）",
+          ig_2_d: "地球は静止していません。常に太陽の周りを自由落下しています。巨大な楕円軌道を完了する（1年）ために、地球は平均速度約107,000 km/h（29.78 km/s）で移動する必要があります。これが標準的な「年間の周回」です。",
+          ig_2_s: "[出典: ケプラーの惑星運動の法則]",
+          ig_3_t: "🌌 3. 太陽系の移動",
+          ig_3_d: "太陽は天の川銀河の巨大な重力に捕らえられています。太陽は地球、惑星、そしてオールトの雲全体を引き連れて、銀河中心（いて座A*）の超大質量ブラックホールの周りを回っています。私たちの太陽系は、約792,000 km/h（220 km/s）でオリオン腕を突き進んでいます。",
+          ig_3_s: "[出典: 国際天文学連合 (IAU)]",
+          ig_4_t: "🚀 4. 銀河系の移動",
+          ig_4_d: "天の川銀河自体も静止していません。グレート・アトラクターに向かって落ちており、ダイポール・リペラーに押されています。宇宙の絶対静止系（宇宙マイクロ波背景放射）に対して測定すると、私たちの銀河全体は約210万 km/h（600 km/s）という驚異的な速度で深宇宙を移動しています。",
+          ig_4_s: "[出典: COBE / WMAP / Planck 衛星データ]",
+          ig_5_t: "⏱️ 時間の遅れ",
+          ig_5_d: "アインシュタインの特殊相対性理論によると、空間を速く移動するほど、時間の進み方は遅くなります。地球は宇宙を600 km/sで飛んでいるため、あなたの体内時計は、銀河の外で完全に静止している人よりもわずかに遅く進んでいます。",
+          ig_5_s: "[出典: ローレンツ因子 / 特殊相対性理論]",
+          ig_6_t: "🧠 微小相対性理論",
+          ig_6_d: "アインシュタインの一般相対性理論は、重力も時間を遅らせることを証明しています。あなたの足は頭よりも地球の重心に近いため、足の方が文字通り時間が遅く進みます。1.7mの人間について、頭と足の年齢の正確なナノ秒の差を計算します。",
+          ig_6_s: "[出典: アインシュタインの一般相対性理論]",
+          ig_7_t: "💥 宇宙の膨張",
+          ig_7_d: "宇宙は膨張しているだけでなく、ダークエネルギーによって加速しています。空間そのものが伸び、遠くの物体を遠ざけています。ハッブル定数（約70 km/s/Mpc）を使用して、近くのおとめ座超銀河団が約1,150 km/sで地球から遠ざかっていることを計算します。",
+          ig_7_s: "[出典: ハッブル定数 (H0) ~70 km/s/Mpc]",
+          ig_8_t: "☄️ 銀河の衝突",
+          ig_8_d: "宇宙全体が外に向かって膨張している一方で、互いに近い物体は重力で結びついています。私たちの最も近い隣人であるアンドロメダ銀河は、約110 km/sで私たちに向かって落ちてきています。このカウンターは、あなたが生まれてからどれだけ近づいたかを追跡します。",
+          ig_8_s: "[出典: ハッブル宇宙望遠鏡 / Gaia テレメトリ]",
+          ig_9_t: "🏃 宇宙の地平線",
+          ig_9_d: "宇宙の膨張が加速しているため、遠くの銀河は最終的に光速よりも速く遠ざけられます。そうなると、その光は二度と地球に届かなくなり、「宇宙の事象の地平線」の向こう側に滑り落ちます。毎秒約22,000個の星が観測可能な宇宙から消え去っていると推定されます。",
+          ig_9_s: "[出典: 宇宙論的事象の地平線の近似値]",
+          ig_10_t: "💥 超新星",
+          ig_10_d: "星は常に死を迎えています。観測可能な宇宙では、約30秒ごとに巨大な星が燃料を使い果たし、壊滅的な超新星爆発を起こしています。このライブカウンターは、あなたの生涯に宇宙を照らした星の死の推定総数を追跡します。",
+          ig_10_s: "[出典: ヴェラ・C・ルービン天文台 / 宇宙の星形成の歴史]",
+          ig_11_t: "👻 ニュートリノシャワー",
+          ig_11_d: "太陽の内部で起きている核融合は、ニュートリノと呼ばれる幽霊のような素粒子を絶えず放出しています。それらは固体を通り抜けます。毎秒約100兆個の太陽ニュートリノが地球の1平方センチメートルを通過します。",
+          ig_11_s: "[出典: 標準太陽モデル (SSM)]",
+          ig_12_t: "🫀 ヒューマンエンジン",
+          ig_12_d: "宇宙の巨大なスケールと人間の生物学の微小なスケールを対比させるため、あなたの体を生かし続けるための物理的な働きを追跡します。医学的平均に基づき、心拍数（~69 bpm）、呼吸数（~15 回/分）、毎秒380万個の細胞の入れ替わりを追跡します。",
+          ig_12_s: "[出典: 人間生物学 / 医学的平均値]",
+          ig_13_t: "🔭 ルックバック望遠鏡",
+          ig_13_d: "光の速度は有限であるため、宇宙を見ることは文字通り過去を見ることです。あなたの生まれた日に地球を反射した光は、それ以来ずっと外に向かって移動しています。あなたの正確な年齢は、あなたの「ライフバブル」の半径（光年）です。",
+          ig_13_s: "[出典: 光速 (c) / ヒッパルコス星表]",
+          ig_14_t: "⚡ 光子の旅",
+          ig_14_d: "宇宙の絶対的な制限速度は光速（299,792.458 km/s）です。この指標は、地球の物理的な移動を無視し、あなたが生まれた正確なミリ秒に地球から放出された単一の光子が真空の宇宙をどれだけ移動したかを計算します。",
+          ig_14_s: "[出典: 特殊相対性理論 / c定数]",
+          ig_15_t: "👩‍🚀 コズミック接続",
+          ig_15_d: "太陽系は210万 km/hで移動しているため、地球が同じ空間を2度占めることはありません。あなたの友人が生まれたとき、地球はあなたが生まれた時とは全く違う場所にありました。宇宙空間における2つの異なる出生地の間の正確な物理的距離を計算します。",
+          ig_15_s: "[出典: CMB 静止系の運動学]",
+          ig_16_t: "✨ ゾディアックの文脈",
+          ig_16_d: "占星術は通常、星の実際の物理的な位置を無視します。1930年に国際天文学連合（IAU）によって設定された公式の星座の境界線を使用して、あなたが生まれたその日に地球が正確にどの星団に直面していたかを計算します。",
+          ig_16_s: "[出典: 国際天文学連合 (IAU) の星座の境界]",
+          ig_17_t: "🪐 惑星年齢",
+          ig_17_d: "時間はあなたが立っている岩に相対的です。「1年」とは、惑星が太陽を回るのにかかる時間です。あなたの地球日での総年齢を、水星、金星、火星、木星、土星、海王星の正確な公転周期で割り、あなたの真の局所的な年齢を計算します。",
+          ig_17_s: "[出典: NASA 惑星ファクトシート]",
+          ig_18_t: "🧭 直線推定",
+          ig_18_d: "もしあなたが誕生以来、宇宙マイクロ波背景放射に対して完全に一直線に移動していたとしたら、これがあなたの元の出発座標から正確にどれだけ離れているかを示します。",
+          ig_18_s: "[出典: 地球＋太陽＋銀河の速度のベクトル加算]",
+          ig_19_t: "🛰️ 遠くの物体",
+          ig_19_d: "ケプラーの数学的近似値とNASAの既知の打ち上げテレメトリを使用して、ボイジャー探査機、ジェイムズ・ウェッブ宇宙望遠鏡、ハレー彗星などの有名な人工物や自然の物体のライブの距離を追跡します。",
+          ig_19_s: "[出典: NASA JPL Horizons / ケプラー要素]",
+          ig_20_t: "🚀 パーティー予測",
+          ig_20_d: "あなたの平均総速度をまとめることで、軌道を未来に予測できます。基本的な運動学を使用して、最初の1兆マイルを飛んだり、1光年を超えたりするような、空間的なしきい値を超える正確な未来の日付を予測します。",
+          ig_20_s: "[出典: 基本的な運動学 (時間 = 距離 / 速度)]",
+          ig_21_t: "🏆 コズミックパスポート",
+          ig_21_d: "これらの巨大な距離を実感できるように、総宇宙距離をおなじみのマイルストーンに変換します。月に何回往復できたか、または冥王星を何回通過できたかを正確に追跡します。",
+          ig_21_s: "[出典: 月レーザー測距 / ニュー・ホライズンズ ミッションデータ]",
+          lookback_deep: "深宇宙",
+          lookback_dyn_1: "あなたは{age}歳です。あなたの生まれた日の光は、最も近い星（アルファ・ケンタウリ、4.37光年）にさえまだ到達していません！",
+          lookback_dyn_2: "{age}光年離れた場所",
+          lookback_dyn_3: "あなたが生まれた日に地球から放出された物理的な光は、現在深宇宙を移動しています。それは最近{star}（{dist}光年）を通過しました！",
+          cosmic_addr_title: "📍 あなたの宇宙の住所",
+          ca_planet: "惑星:",
+          ca_earth: "地球",
+          ca_system: "星系:",
+          ca_solar: "太陽系",
+          ca_cloud: "星間雲:",
+          ca_lic: "局所恒星間雲",
+          ca_arm: "腕:",
+          ca_orion: "オリオン腕",
+          ca_galaxy: "銀河:",
+          ca_mw: "天の川銀河",
+          ca_group: "銀河群:",
+          ca_lg: "局所銀河群",
+          ca_supercluster: "超銀河団:",
+          ca_virgo: "おとめ座超銀河団",
+          ca_laniakea: "ラニアケア超銀河団",
+          view_ig: "📊 詳細なインフォグラフィックを見る",
+          err_no_date: "まず生年月日を入力してください！",
+          ms_passed: "あなたはすでにこのマイルストーンを通過しています！",
+          ms_bigger: "（より大きな目標を選択してください）",
+          ms_cross: "あなたはこのマイルストーンを次に通過します：",
+          update_available: "アップデートが利用可能です",
+          mercury: "水星", venus: "金星", earth: "地球", mars: "火星", jupiter: "木星", saturn: "土星", uranus: "天王星", neptune: "海王星", pluto: "冥王星", moon: "月",
+          halley: "ハレー彗星", parker: "パーカー・ソーラー・プローブ", iss: "ISS", v1: "ボイジャー1号", v2: "ボイジャー2号", jwst: "ジェイムズ・ウェッブ宇宙望遠鏡",
+          capricorn: "山羊座", aquarius: "みずがめ座", pisces: "うお座", aries: "おひつじ座", taurus: "おうし座", gemini: "ふたご座", cancer: "かに座", leo: "しし座", virgo: "おとめ座", libra: "てんびん座", scorpius: "さそり座", ophiuchus: "へびつかい座", sagittarius: "いて座"
         },
         pt: {
           title: "Odômetro Cósmico",
@@ -1205,7 +1941,119 @@
           dist_center: "Dist. ao Centro",
           cosmic_orbit: "Órbita Cósmica",
           unit_y: "a", unit_mo: "m", unit_d: "d", unit_h: "h", unit_min: "min", unit_s: "s",
-          welcome: "Bem-vindo, Viajante do Tempo"
+          welcome: "Bem-vindo, Viajante do Tempo",
+          photon_title: "⚡ SE VOCÊ FOSSE UM FÓTON",
+          photon_sub: "(Distância que a luz viajou desde o seu nascimento)",
+          astro_title: "Motor Astrofísico",
+          astro_time: "⏱️ Dilatação do Tempo:",
+          astro_micro: "🧠 Micro-Relatividade:",
+          astro_exp: "🌌 Expansão Universal:",
+          astro_col: "💥 Colisão Galáctica:",
+          astro_zod: "✨ Contexto do Zodíaco:",
+          astro_hor: "🏃 Horizonte Cósmico:",
+          astro_sup: "💥 Supernovas:",
+          astro_neu: "👻 Chuva de Neutrinos:",
+          human_title: "O Motor Humano",
+          human_heart: "❤️ Batimentos Cardíacos:",
+          human_breath: "🫁 Respirações:",
+          human_cell: "🩸 Células Substituídas:",
+          lookback_title: "🔭 O Telescópio Retrospectivo",
+          lookback_desc: "A luz leva tempo para viajar pelo espaço. Por causa disso, olhar para o céu noturno é literalmente olhar para o passado.",
+          dist_obj_title: "🛰️ Objetos Distantes",
+          ig_title: "Como a Matemática Funciona",
+          ig_sub: "Um detalhamento de cada cálculo astrofísico que impulsiona o Odômetro Cósmico.",
+          ig_1_t: "🌍 1. Rotação (Giro)",
+          ig_1_d: "A Terra não é apenas uma esfera, é um esferoide oblato que completa uma rotação total a cada 23 horas, 56 minutos e 4 segundos. A velocidade na qual você viaja devido a essa rotação depende inteiramente da sua latitude. No equador (0°), você está se movendo a aproximadamente 1.674 km/h (0,465 km/s).",
+          ig_1_s: "[Fonte: Geometria Padrão da Terra / WGS 84]",
+          ig_2_t: "☀️ 2. Órbita Solar",
+          ig_2_d: "A Terra não fica parada; está constantemente em queda livre ao redor do Sol. Para completar sua enorme órbita elíptica (um ano), a Terra deve viajar a uma velocidade média de aproximadamente 107.000 km/h (29,78 km/s). Esta é a sua 'volta anual'.",
+          ig_2_s: "[Fonte: Leis de Kepler do Movimento Planetário]",
+          ig_3_t: "🌌 3. Viagem do Sistema Solar",
+          ig_3_d: "O Sol está preso na imensa atração gravitacional da galáxia Via Láctea. Ele arrasta a Terra, os planetas e toda a Nuvem de Oort enquanto orbita o buraco negro supermassivo no centro galáctico. Para completar sua órbita de 225 milhões de anos, nosso sistema solar viaja a ~792.000 km/h (220 km/s).",
+          ig_3_s: "[Fonte: União Astronômica Internacional (IAU)]",
+          ig_4_t: "🚀 4. Viagem Galáctica",
+          ig_4_d: "A própria Via Láctea não é estacionária. Ela está caindo em direção ao Grande Atrator. Quando medida em relação ao referencial de repouso absoluto do universo (a Radiação Cósmica de Fundo), nossa galáxia inteira está se movendo através do espaço profundo a impressionantes ~2,1 milhões de km/h (600 km/s).",
+          ig_4_s: "[Fonte: Dados dos satélites COBE / WMAP / Planck]",
+          ig_5_t: "⏱️ Dilatação do Tempo",
+          ig_5_d: "De acordo com a teoria da Relatividade Especial de Einstein, quanto mais rápido você se move pelo espaço, mais devagar você se move pelo tempo. Como a Terra voa pelo universo a 600 km/s, seu relógio biológico está correndo um pouco mais devagar do que o de alguém parado fora da galáxia.",
+          ig_5_s: "[Fonte: Fator de Lorentz / Relatividade Especial]",
+          ig_6_t: "🧠 Micro-Relatividade",
+          ig_6_d: "A teoria da Relatividade Geral de Einstein prova que a gravidade também retarda o tempo. Como seus pés estão mais próximos do centro de massa da Terra do que sua cabeça, o tempo literalmente se move mais devagar para seus pés. Calculamos a diferença exata em nanossegundos.",
+          ig_6_s: "[Fonte: Relatividade Geral de Einstein]",
+          ig_7_t: "💥 Expansão Universal",
+          ig_7_d: "O universo não está apenas se expandindo; a expansão está acelerando devido à Energia Escura. O próprio tecido do espaço está se esticando. Usamos a Constante de Hubble (~70 km/s/Mpc) para calcular que o Superaglomerado de Virgem está sendo ativamente afastado da Terra a aproximadamente 1.150 km/s.",
+          ig_7_s: "[Fonte: A Constante de Hubble (H0) ~70 km/s/Mpc]",
+          ig_8_t: "☄️ Colisão Galáctica",
+          ig_8_d: "Enquanto o universo se expande, objetos próximos estão ligados gravitacionalmente. Nossa vizinha, a Galáxia de Andrômeda, está caindo ativamente em nossa direção a aproximadamente 110 km/s. Este contador rastreia exatamente o quanto ela se aproximou de nos atingir desde o seu nascimento.",
+          ig_8_s: "[Fonte: Telescópio Espacial Hubble / Telemetria Gaia]",
+          ig_9_t: "🏃 Horizonte Cósmico",
+          ig_9_d: "Como a expansão do universo está acelerando, as galáxias distantes são eventualmente empurradas para longe de nós mais rápido que a velocidade da luz. Uma vez que isso acontece, a luz delas nunca mais pode chegar à Terra. Estimamos que cerca de 22.000 estrelas desapareçam de nosso universo observável a cada segundo.",
+          ig_9_s: "[Fonte: Aproximações do Horizonte de Eventos Cosmológico]",
+          ig_10_t: "💥 Supernovas",
+          ig_10_d: "As estrelas estão constantemente morrendo. Em nosso universo observável, uma estrela massiva fica sem combustível e detona em uma explosão de supernova a cada 30 segundos. Este contador rastreia o número total estimado de mortes de estrelas durante a sua vida.",
+          ig_10_s: "[Fonte: Observatório Vera C. Rubin / História da Formação Estelar Cósmica]",
+          ig_11_t: "👻 Chuva de Neutrinos",
+          ig_11_d: "A fusão nuclear dentro do Sol dispara constantemente partículas fantasmagóricas chamadas neutrinos. Eles passam direto pela matéria sólida. Cerca de 100 trilhões de neutrinos solares passam por cada centímetro quadrado da Terra por segundo.",
+          ig_11_s: "[Fonte: Modelo Solar Padrão (SSM)]",
+          ig_12_t: "🫀 O Motor Humano",
+          ig_12_d: "Para contrastar as escalas massivas do cosmos com as escalas microscópicas da biologia humana, este motor rastreia o trabalho físico que seu corpo fez. Baseado em médias médicas: ~69 bpm, ~15 respirações por minuto, e ~3,8 milhões de células substituídas por segundo.",
+          ig_12_s: "[Fonte: Biologia Humana / Médias Médicas]",
+          ig_13_t: "🔭 O Telescópio Retrospectivo",
+          ig_13_d: "A luz refletida na Terra no dia em que você nasceu viaja para fora desde então. Sua idade exata em anos é o raio (em Anos-Luz) da sua 'bolha de vida'. Nós cruzamos esse raio com as distâncias reais das estrelas para ver de onde um alienígena precisaria estar para ver você nascendo agora.",
+          ig_13_s: "[Fonte: Velocidade da Luz (c) / Catálogo Hipparcos]",
+          ig_14_t: "⚡ Viagem do Fóton",
+          ig_14_d: "O limite absoluto de velocidade do universo é a velocidade da luz (299.792,458 km/s). Esta métrica ignora o movimento físico da Terra e calcula até onde um fóton, emitido da Terra no exato milissegundo do seu nascimento, viajou através do vácuo do espaço.",
+          ig_14_s: "[Fonte: Relatividade Especial / Constante c]",
+          ig_15_t: "👩‍🚀 Conexão Cósmica",
+          ig_15_d: "Como o Sistema Solar está se movendo a 2,1 milhões de km/h, a Terra nunca ocupa o mesmo espaço duas vezes. Quando seu amigo nasceu, a Terra estava em uma parte completamente diferente do universo. Calculamos a distância física exata em quilômetros entre seus locais de nascimento.",
+          ig_15_s: "[Fonte: Cinemática do Referencial CMB]",
+          ig_16_t: "✨ Contexto do Zodíaco",
+          ig_16_d: "A astrologia geralmente ignora as posições físicas reais das estrelas. Usando as fronteiras oficiais das constelações definidas pela União Astronômica Internacional (IAU) em 1930, calculamos exatamente para qual aglomerado de estrelas a Terra estava voltada no seu nascimento.",
+          ig_16_s: "[Fonte: Fronteiras de Constelações da União Astronômica Internacional (IAU)]",
+          ig_17_t: "🪐 Idades Planetárias",
+          ig_17_d: "O tempo é relativo à rocha em que você está. Um 'ano' é o tempo que um planeta leva para orbitar o sol. Dividimos sua idade total em dias terrestres pelos períodos orbitais precisos de Mercúrio, Vênus, Marte, Júpiter, Saturno e Netuno para calcular sua verdadeira idade localizada.",
+          ig_17_s: "[Fonte: Ficha Técnica Planetária da NASA]",
+          ig_18_t: "🧭 Deslocamento Líquido",
+          ig_18_d: "Se você parasse de orbitar e viajasse em uma linha perfeitamente reta em relação à Radiação Cósmica de Fundo desde o nascimento, a exatamente essa distância você estaria da sua coordenada de partida original.",
+          ig_18_s: "[Fonte: Adição Vetorial das Velocidades da Terra + Sol + Galáxia]",
+          ig_19_t: "🛰️ Objetos Distantes",
+          ig_19_d: "Usando aproximações matemáticas keplerianas e telemetria de lançamento da NASA, rastreamos as distâncias ativas de objetos como as sondas Voyager, o Telescópio James Webb e o Cometa Halley.",
+          ig_19_s: "[Fonte: NASA JPL Horizons / Elementos Keplerianos]",
+          ig_20_t: "🚀 Previsão de Festa",
+          ig_20_d: "Compilando sua velocidade total média (Rotação + Órbita + Solar + Galáctica), usamos cinemática básica para prever a data exata em que você cruzará limites espaciais massivos, como voar seu primeiro Trilhão de milhas ou cruzar um Ano-Luz.",
+          ig_20_s: "[Fonte: Cinemática Básica (Tempo = Distância / Velocidade)]",
+          ig_21_t: "🏆 Passaporte Cósmico",
+          ig_21_d: "Cérebros humanos não conseguem compreender bilhões de quilômetros. Para tornar essas distâncias tangíveis, rastreamos exatamente quantas vezes você poderia ter voado para a Lua e voltado, ou passado por Plutão.",
+          ig_21_s: "[Fonte: Telemetria Lunar a Laser / Dados da Missão New Horizons]",
+          lookback_deep: "Espaço Profundo",
+          lookback_dyn_1: "Você tem {age} anos. A luz do seu primeiro dia ainda nem alcançou a estrela mais próxima (Alpha Centauri, 4,37 AL)!",
+          lookback_dyn_2: "A {age} Anos-Luz",
+          lookback_dyn_3: "A luz física emitida da Terra no dia em que você nasceu viaja atualmente pelo espaço profundo. Passou recentemente por {star} ({dist} AL)!",
+          cosmic_addr_title: "📍 SEU ENDEREÇO CÓSMICO",
+          ca_planet: "Planeta:",
+          ca_earth: "Terra",
+          ca_system: "Sistema:",
+          ca_solar: "O Sistema Solar",
+          ca_cloud: "Nuvem:",
+          ca_lic: "Nuvem Interestelar Local",
+          ca_arm: "Braço:",
+          ca_orion: "Braço de Órion",
+          ca_galaxy: "Galáxia:",
+          ca_mw: "A Via Láctea",
+          ca_group: "Grupo:",
+          ca_lg: "O Grupo Local",
+          ca_supercluster: "Superaglomerado:",
+          ca_virgo: "Superaglomerado de Virgem",
+          ca_laniakea: "Superaglomerado Laniakea",
+          view_ig: "📊 VER INFOGRÁFICO DETALHADO",
+          err_no_date: "Por favor, insira sua data de nascimento primeiro!",
+          ms_passed: "Você já passou por esse marco!",
+          ms_bigger: "(Escolha um alvo maior)",
+          ms_cross: "Você cruzará este marco em:",
+          update_available: "ATUALIZAÇÃO DISPONÍVEL",
+          mercury: "Mercúrio", venus: "Vênus", earth: "Terra", mars: "Marte", jupiter: "Júpiter", saturn: "Saturno", uranus: "Urano", neptune: "Netuno", pluto: "Plutão", moon: "Lua",
+          halley: "Cometa Halley", parker: "Sonda Parker Solar", iss: "ISS", v1: "Voyager 1", v2: "Voyager 2", jwst: "JWST",
+          capricorn: "Capricórnio", aquarius: "Aquário", pisces: "Peixes", aries: "Áries", taurus: "Touro", gemini: "Gêmeos", cancer: "Câncer", leo: "Leão", virgo: "Virgem", libra: "Libra", scorpius: "Escorpião", ophiuchus: "Ofiúco", sagittarius: "Sagitário"
         }
       };
 
@@ -1238,14 +2086,35 @@
       }
 
       // Service worker
+      let newWorker;
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          navigator.serviceWorker.register("/sw.js").then(
-            (registration) => console.log("SW registered:", registration),
-            (err) => console.log("SW registration failed:", err)
-          );
+          navigator.serviceWorker.register("/sw.js").then(reg => {
+            reg.addEventListener("updatefound", () => {
+              newWorker = reg.installing;
+              newWorker.addEventListener("statechange", () => {
+                if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                  const btn = $("update-btn");
+                  btn.innerText = t("update_available") || "UPDATE AVAILABLE";
+                  btn.style.display = "block";
+                }
+              });
+            });
+          });
+        });
+
+        let refreshing;
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (refreshing) return;
+          window.location.reload();
+          refreshing = true;
         });
       }
+
+      window.updateSite = function() {
+        if (newWorker) newWorker.postMessage({ action: "skipWaiting" });
+        else window.location.reload(true); // Force reload if SW logic fails
+      };
 
       // Save user preferences (localStorage + URL)
       function initData() {
@@ -1340,7 +2209,23 @@
         $("latDisplay").innerText = Math.abs(lat) + hem;
 
         const radians = lat * (Math.PI / 180);
-        currentRotationSpeedKmS = MAX_ROTATION_KM_S * Math.cos(radians);
+        
+        let altKm = 0;
+        const altInput = $("altRange");
+        if(altInput) {
+            altKm = Number(altInput.value);
+            let altLabel = altKm + " km";
+            if (altKm === 0) altLabel += " (Sea Level)";
+            else if (altKm === 9) altLabel = "8.8 km (Mt. Everest)";
+            else if (altKm === 11) altLabel = "11 km (Commercial Jet)";
+            else if (altKm === 400) altLabel = "400 km (ISS)";
+            $("altDisplay").innerText = altLabel;
+        }
+        
+        const earthRadiusKm = 6371;
+        const newRadius = earthRadiusKm + altKm;
+        const speedAtEquator = (newRadius * 2 * Math.PI) / 86400; // km/s
+        currentRotationSpeedKmS = speedAtEquator * Math.cos(radians);
 
         let speed = currentRotationSpeedKmS;
         let unitLabel = useMiles ? "mi/s" : "km/s";
@@ -1366,7 +2251,7 @@
           val = km * KM_TO_MILES;
           unit = " mi";
         }
-        return Math.floor(val).toLocaleString() + unit;
+        return val.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + unit;
       }
 
       function getShareData() {
@@ -1437,6 +2322,32 @@
         return { years, months, days, hours, mins, secs };
       }
 
+
+      window.togglePlanetAge = function() {
+        showPlanetAge = !showPlanetAge;
+        $("planet-age-display").style.display = showPlanetAge ? "grid" : "none";
+        $("time-display-text").style.display = showPlanetAge ? "none" : "flex";
+        $("duration-label").innerText = showPlanetAge ? "Ages on Other Worlds" : t("mission_duration");
+      };
+
+      function updatePlanetAges(secondsAlive) {
+        if (!showPlanetAge) return;
+        const years = secondsAlive / (365.25 * 24 * 3600);
+        const planets = [
+          { name: "Mercury", rotPeriod: 1407.6, factor: 0.241 },
+          { name: "Venus", rotPeriod: -5832.5, factor: 0.615 },
+          { name: "Mars", rotPeriod: 24.623, factor: 1.881 },
+          { name: "Jupiter", rotPeriod: 9.925, factor: 11.86 },
+          { name: "Saturn", rotPeriod: 10.656, factor: 29.45 },
+          { name: "Neptune", rotPeriod: 16.11, factor: 164.8 }
+        ];
+        $("planet-age-display").innerHTML = planets.map(p => `
+          <div style="text-align:left; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:3px;">
+            <span style="color:#8892b0">${p.name}:</span> ${(years / p.factor).toFixed(2)}
+          </div>
+        `).join("");
+      }
+
       // Main dashboard update
       function updateDashboard() {
         const birthStr = `${dateInput.value}T${timeInput.value}`;
@@ -1461,12 +2372,106 @@
         const secondsAlive = (now - birthDate) / 1000;
         const totalSpeedKmS = currentRotationSpeedKmS + SPEED.ORBIT_KM_S + SPEED.SOLAR_KM_S + SPEED.GALAXY_KM_S;
 
+        // Astronomical Constellations (IAU Boundaries)
+        function getConstellation(date) {
+          const m = date.getMonth() + 1;
+          const d = date.getDate();
+          const val = m * 100 + d; // MMDD format
+          if (val >= 119 && val <= 215) return t("capricorn");
+          if (val >= 216 && val <= 311) return t("aquarius");
+          if (val >= 312 && val <= 418) return t("pisces");
+          if (val >= 419 && val <= 513) return t("aries");
+          if (val >= 514 && val <= 619) return t("taurus");
+          if (val >= 620 && val <= 720) return t("gemini");
+          if (val >= 721 && val <= 809) return t("cancer");
+          if (val >= 810 && val <= 915) return t("leo");
+          if (val >= 916 && val <= 1030) return t("virgo");
+          if (val >= 1031 && val <= 1122) return t("libra");
+          if (val >= 1123 && val <= 1129) return t("scorpius");
+          if (val >= 1130 && val <= 1217) return t("ophiuchus");
+          return t("sagittarius");
+        }
+        if($("zodiac-sign")) $("zodiac-sign").innerText = getConstellation(birthDate);
+        if($("current-constellation")) $("current-constellation").innerText = getConstellation(now);
+
         if (secondsAlive > 0) {
           const dRot = secondsAlive * currentRotationSpeedKmS;
           const dOrbit = secondsAlive * SPEED.ORBIT_KM_S;
           const dSolar = secondsAlive * SPEED.SOLAR_KM_S;
           const dGalaxy = secondsAlive * SPEED.GALAXY_KM_S;
-          const dTotal = dRot + dOrbit + dSolar + dGalaxy;
+          const dTotal = (dRot + dOrbit + dSolar + dGalaxy) * (isWarpMode ? 500 : 1);
+
+          // Time Dilation
+          const v = 600; // km/s
+          const c = SPEED_OF_LIGHT_KM_S;
+          const lorentzFactor = Math.sqrt(1 - (v*v)/(c*c));
+          const timeDilatedSeconds = secondsAlive - (secondsAlive * lorentzFactor);
+          if($("time-dilation")) $("time-dilation").innerText = timeDilatedSeconds.toFixed(4);
+
+          // Hubble Expansion
+          const expansionDist = secondsAlive * HUBBLE_EXPANSION_KM_S;
+          if($("hubble-expansion")) $("hubble-expansion").innerText = formatDistance(expansionDist);
+
+          // Micro-Relativity (General Relativity difference for 1.7m height)
+          // formula: Δt = t * (g * h) / c^2 
+          // (9.81 * 1.7) / (299792458^2) = ~1.85e-16 seconds per second
+          const microRelativityNs = secondsAlive * 0.000000185; 
+          if($("micro-relativity")) $("micro-relativity").innerText = microRelativityNs.toFixed(6);
+
+          // Galactic Collision (Andromeda approach at ~110 km/s)
+          const andromedaDist = secondsAlive * 110;
+          if($("andromeda-approach")) $("andromeda-approach").innerText = formatDistance(andromedaDist);
+
+                    // Horizon Loss (Approx 20,000 stars per second slip away globally in observable universe)
+          const starsLost = secondsAlive * 22000; 
+          if($("stars-lost")) $("stars-lost").innerText = starsLost.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+          // Supernovae: ~30 per second in the observable universe
+          const supernovae = secondsAlive * 30;
+          if($("supernova-count")) $("supernova-count").innerText = supernovae.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+          // Neutrinos: ~100 trillion per second per cm^2. Avg human cross section is ~10,000 cm^2. (Yields ~1 Quintillion / sec)
+          const neutrinosTrillion = secondsAlive * 10000;
+          if($("neutrino-count")) $("neutrino-count").innerText = neutrinosTrillion.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) + " Trillion";
+
+          // The Human Engine
+          const heartbeats = secondsAlive * 1.15; // roughly 69 bpm
+          const breaths = secondsAlive * 0.25; // roughly 15 breaths per min
+          const cells = secondsAlive * 3800000; // ~3.8 million cells per sec
+          if($("bio-heart")) $("bio-heart").innerText = heartbeats.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
+          if($("bio-breaths")) $("bio-breaths").innerText = breaths.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
+          if($("bio-cells")) $("bio-cells").innerText = cells.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+          updatePlanetAges(secondsAlive);
+
+          // Lookback Telescope
+          const ageYears = secondsAlive / (365.25 * 24 * 3600);
+          if ($("lookback-star")) {
+             if (ageYears < 4.37) {
+                 $("lookback-star").innerText = t("lookback_deep");
+                 $("lookback-desc").innerText = t("lookback_dyn_1").replace("{age}", ageYears.toFixed(2));
+             } else {
+                 const lookbackStars = [
+                    { name: "Alpha Centauri", dist: 4.37 },
+                    { name: "Sirius", dist: 8.6 },
+                    { name: "Procyon", dist: 11.4 },
+                    { name: "Altair", dist: 16.7 },
+                    { name: "Vega", dist: 25.0 },
+                    { name: "Arcturus", dist: 36.7 },
+                    { name: "Capella", dist: 42.9 },
+                    { name: "Castor", dist: 51.6 },
+                    { name: "Aldebaran", dist: 65.3 },
+                    { name: "Regulus", dist: 79.3 },
+                    { name: "Polaris", dist: 323 }
+                 ];
+                 let passedStar = lookbackStars[0];
+                 for(let i=0; i<lookbackStars.length; i++) {
+                     if (ageYears >= lookbackStars[i].dist) passedStar = lookbackStars[i];
+                 }
+                 $("lookback-star").innerText = t("lookback_dyn_2").replace("{age}", ageYears.toFixed(2));
+                 $("lookback-desc").innerText = t("lookback_dyn_3").replace("{star}", passedStar.name).replace("{dist}", passedStar.dist);
+             }
+          }
 
           const dLinear = secondsAlive * (SPEED.GALAXY_KM_S + SPEED.SOLAR_KM_S);
 
@@ -1476,6 +2481,9 @@
           $("dist-galaxy").innerText = formatDistance(dGalaxy);
           $("dist-total").innerText = formatDistance(dTotal);
           $("dist-vector").innerText = formatDistance(dLinear);
+
+          const dPhoton = secondsAlive * SPEED_OF_LIGHT_KM_S;
+          $("dist-photon").innerText = formatDistance(dPhoton);
 
           const moonTrips = dTotal / DIST.MOON_ROUND_TRIP_KM;
           $("txt-moon").innerText = Math.floor(moonTrips).toLocaleString();
@@ -1490,6 +2498,16 @@
           $("bar-light").style.width = Math.min(lyProgress, 100) + "%";
           $("light-years-raw").innerText = Math.max(0, 1 - (dTotal / DIST.LIGHT_YEAR_KM)).toFixed(5);
 
+          // Achievements
+          let badges = [];
+          if (dTotal > DIST.MOON_ROUND_TRIP_KM / 2) badges.push("🌕 Moon Lander");
+          if (dTotal > 149597870) badges.push("☀️ 1 AU Reached");
+          if (dTotal > DIST.PLUTO_KM) badges.push("🧊 Kuiper Belt Explorer");
+          if (dTotal > DIST.LIGHT_YEAR_KM / 1000) badges.push("✨ Interstellar Rookie");
+          if (badges.length === 0) badges.push("🚀 Liftoff");
+          
+          if($("achievements-container")) $("achievements-container").innerHTML = badges.map(b => `<div style="background:rgba(255,215,0,0.1); border:1px solid #ffd700; color:#ffd700; padding:5px 10px; border-radius:15px; font-size:0.75rem; font-weight:bold;">${b}</div>`).join('');
+          
           const cosmicOrbitVal = $("cosmic-orbit-val");
           if (cosmicOrbitVal) {
             const ageYears = secondsAlive / (365.25 * 24 * 3600);
@@ -1511,40 +2529,65 @@
         const v1Km = (75.3 + (0.00982 * daysSinceJ2000)) * AU_TO_KM;
         const v2Km = (60.1 + (0.00865 * daysSinceJ2000)) * AU_TO_KM;
         
+        // Approximations for Parker, JWST, Halley
+        const jwstKm = 1500000; // Roughly constant from Earth
+        const parkerKm = 10000000 + Math.abs(Math.sin(daysSinceJ2000 / 88 * Math.PI)) * 140000000; // Oscillates
+        
+        const halleyPeriodDays = 75.3 * 365.25;
+        const halleyE = ((daysSinceJ2000 + 5000) / halleyPeriodDays) * 2 * Math.PI; // Last perihelion ~1986
+        const halleyKm = 17.8 * (1 - 0.967 * Math.cos(halleyE)) * AU_TO_KM;
+
         if ($("dist-pluto")) $("dist-pluto").innerText = formatDistance(plutoKm);
         if ($("dist-v1")) $("dist-v1").innerText = formatDistance(v1Km);
         if ($("dist-v2")) $("dist-v2").innerText = formatDistance(v2Km);
+        if ($("dist-jwst")) $("dist-jwst").innerText = formatDistance(jwstKm);
+        if ($("dist-parker")) $("dist-parker").innerText = formatDistance(parkerKm);
+        if ($("dist-halley")) $("dist-halley").innerText = formatDistance(halleyKm);
       }
 
       // Friend compare
+      window.addFriendInput = function() {
+        const container = $("friend-inputs-container");
+        const input = document.createElement("input");
+        input.type = "date";
+        input.className = "friend-date-input";
+        input.style = "border-color:#9d4edd; background:rgba(0,0,0,0.3); padding:10px; border-radius:5px; color:#fff; font-family:inherit;";
+        container.appendChild(input);
+      };
+
       function calculateConnection() {
         const myDate = new Date(dateInput.value + "T12:00");
-        const friendDateStr = $("friendDate").value;
-        if (!friendDateStr) {
-          alert("Please enter a friend's birth date!");
+        
+        const inputs = document.querySelectorAll(".friend-date-input");
+        let dates = [myDate];
+        inputs.forEach(inp => {
+          if(inp.value) dates.push(new Date(inp.value + "T12:00"));
+        });
+        
+        if (dates.length < 2) {
+          alert("Please enter at least one friend's birth date!");
           return;
         }
 
-        const friendDate = new Date(friendDateStr + "T12:00");
-
-        const diffMs = Math.abs(myDate - friendDate);
-        const diffSeconds = diffMs / 1000;
-
+        dates.sort((a, b) => a - b);
+        
         const systemVelocity = SPEED.ORBIT_KM_S + SPEED.SOLAR_KM_S + SPEED.GALAXY_KM_S;
-        const gapDistanceKm = diffSeconds * systemVelocity;
+        
+        let maxGapMs = dates[dates.length-1] - dates[0];
+        const gapDistanceKm = (maxGapMs / 1000) * systemVelocity;
 
-        const youngerDate = (myDate > friendDate) ? myDate : friendDate;
+        const youngestDate = dates[dates.length-1];
         const now = new Date();
 
         let sharedDistanceKm = 0;
-        if (now > youngerDate) {
-          const sharedSeconds = (now - youngerDate) / 1000;
-          sharedDistanceKm = sharedSeconds * (currentRotationSpeedKmS + systemVelocity);
+        if (now > youngestDate) {
+          const sharedSeconds = (now - youngestDate) / 1000;
+          sharedDistanceKm = sharedSeconds * (currentRotationSpeedKmS + systemVelocity) * dates.length; // Total Fleet Distance
         }
 
         $("connection-results").classList.add("active");
         $("res-gap").innerText = formatDistance(gapDistanceKm);
-        $("res-shared").innerText = formatDistance(sharedDistanceKm);
+        $("res-shared").innerText = formatDistance(sharedDistanceKm) + " (Combined)";
       }
 
       // Milestone predictor
@@ -1554,7 +2597,7 @@
         $("milestone-result-container").classList.add("active");
 
         if (!birthDateStr) {
-          $("milestone-result").innerHTML = "<span style='color:#ff4444;'>Please enter your birth date first!</span>";
+          $("milestone-result").innerHTML = `<span style='color:#ff4444;'>${t("err_no_date")}</span>`;
           $("share-x-btn").style.display = "none";
           return;
         }
@@ -1574,7 +2617,7 @@
         const unitLabel = useMiles ? "Miles" : "Kilometers";
 
         if (currentKm >= targetKm) {
-          $("milestone-result").innerHTML = "You already passed this milestone! <br><span style='font-size:0.8rem; color:#888; font-weight:normal; margin-top:5px; display:inline-block;'>(Pick a bigger target)</span>";
+          $("milestone-result").innerHTML = `${t("ms_passed")} <br><span style='font-size:0.8rem; color:#888; font-weight:normal; margin-top:5px; display:inline-block;'>${t("ms_bigger")}</span>`;
           $("share-x-btn").style.display = "none";
           return;
         }
@@ -1585,7 +2628,7 @@
 
         const formattedDate = futureDate.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
         $("milestone-result").innerHTML =
-          `You will cross this milestone on:<br><span style='color:#00d4ff; font-size:1.4rem; display:block; margin-top:10px;'>${formattedDate} 🪐</span>`;
+          `${t("ms_cross")}<br><span style='color:#00d4ff; font-size:1.4rem; display:block; margin-top:10px;'>${formattedDate} 🪐</span>`;
 
         let targetFormatted = "";
         if (targetVal >= 1000000000000) targetFormatted = (targetVal / 1000000000000) + " Trillion";
@@ -1693,15 +2736,20 @@
           return;
         }
 
+        
         if (window.trackingTarget === "iss" && window.issGroup) {
           const pos = new THREE.Vector3();
           window.issGroup.getWorldPosition(pos);
           const earthPos = new THREE.Vector3();
           window.earthMesh.getWorldPosition(earthPos);
-          const dir = new THREE.Vector3().subVectors(earthPos, pos).normalize();
-          window.solarCamera.position.copy(pos.clone().add(dir.multiplyScalar(-2)).add(new THREE.Vector3(0, 1, 0)));
+          
+          // Position camera at ISS looking directly at Earth
+          const directionToEarth = new THREE.Vector3().subVectors(earthPos, pos).normalize();
+          window.solarCamera.position.copy(pos.clone().add(directionToEarth.multiplyScalar(-0.5))); 
+          window.solarCamera.lookAt(earthPos);
           return;
         }
+
 
         if (window.trackingTarget === "v1" && window.v1Mesh) {
           const pos = new THREE.Vector3();
@@ -1793,7 +2841,7 @@
           const orbits = birthDays / p.data.period;
           p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
         });
-        if (window.moonPivot) window.moonPivot.rotation.y = (birthDays / 27.322) * 2 * Math.PI;
+        if (window.moonPivot) window.moonPivot.rotation.y = Math.PI + ((birthDays - 5.2597) / 29.53059) * 2 * Math.PI;
         if (window.issOrbit) window.issOrbit.rotation.y = (birthDays * 15.54) * 2 * Math.PI; 
 
         if (window.trailGroup) window.trailGroup.visible = false;
@@ -1842,12 +2890,12 @@
           ctx.textAlign = "center";
           ctx.fillStyle = "#00d4ff";
           ctx.font = 'bold 40px "Courier New", monospace';
-          ctx.fillText("COSMIC ODOMETER", width / 2, y);
+          ctx.fillText((t("title") || "COSMIC ODOMETER").toUpperCase(), width / 2, y);
 
           y += 40;
           ctx.fillStyle = "#8892b0";
           ctx.font = '20px "Courier New", monospace';
-          ctx.fillText("OFFICIAL TRAVEL LOG", width / 2, y);
+          ctx.fillText((t("manual_title") || "OFFICIAL TRAVEL LOG").toUpperCase(), width / 2, y);
 
           y += 30;
           ctx.strokeStyle = "#00d4ff";
@@ -1857,7 +2905,7 @@
           y += 45;
           ctx.fillStyle = "#ff0055";
           ctx.font = 'bold 18px "Courier New", monospace';
-          ctx.fillText("ORBITAL ALIGNMENT AT LAUNCH", width / 2, y);
+          ctx.fillText((t("ig_1_t") ? t("ig_1_t").toUpperCase() : "ORBITAL ALIGNMENT AT LAUNCH"), width / 2, y);
 
           y += 25;
           const size = 320;
@@ -1889,17 +2937,17 @@
           ctx.textAlign = "left";
           ctx.fillStyle = "#8892b0";
           ctx.font = '20px "Courier New", monospace';
-          ctx.fillText("PASSENGER ORIGIN:", margin, y);
+          ctx.fillText((t("ca_planet") || "PASSENGER ORIGIN:").toUpperCase(), margin, y);
 
           y += 30;
           ctx.fillStyle = "#ffffff";
           ctx.font = 'bold 28px "Courier New", monospace';
-          ctx.fillText("EARTH / " + birthDateStr, margin, y);
+          ctx.fillText((t("ca_earth") || "EARTH").toUpperCase() + " / " + birthDateStr, margin, y);
 
           y += 60;
           ctx.fillStyle = "#8892b0";
           ctx.font = '20px "Courier New", monospace';
-          ctx.fillText("TOTAL DISTANCE:", margin, y);
+          ctx.fillText((t("total_distance") || "TOTAL DISTANCE:").toUpperCase(), margin, y);
 
           y += 40;
           ctx.fillStyle = "#00d4ff";
@@ -1909,7 +2957,7 @@
           y += 60;
           ctx.fillStyle = "#8892b0";
           ctx.font = '20px "Courier New", monospace';
-          ctx.fillText("VELOCITY:", margin, y);
+          ctx.fillText((t("traveling_at") || "VELOCITY:").toUpperCase(), margin, y);
 
           y += 30;
           ctx.fillStyle = "#ff0055";
@@ -1925,13 +2973,13 @@
           ctx.textAlign = "center";
           ctx.fillStyle = "#ffd700";
           ctx.font = 'bold 24px "Courier New", monospace';
-          ctx.fillText("FLIGHT MILESTONES", width / 2, y);
+          ctx.fillText((t("ig_21_t") || "FLIGHT MILESTONES").toUpperCase().replace("🏆 ", ""), width / 2, y);
 
           y += 40;
           ctx.font = '20px "Courier New", monospace';
           ctx.textAlign = "left";
           ctx.fillStyle = "#8892b0";
-          ctx.fillText("MOON ROUND TRIPS:", margin, y);
+          ctx.fillText((t("moon_trips") || "MOON ROUND TRIPS:").toUpperCase(), margin, y);
           ctx.textAlign = "right";
           ctx.fillStyle = "#ffffff";
           ctx.fillText(moonTrips, width - margin, y);
@@ -1939,7 +2987,7 @@
           y += 40;
           ctx.textAlign = "left";
           ctx.fillStyle = "#8892b0";
-          ctx.fillText("PASSED PLUTO:", margin, y);
+          ctx.fillText((t("passed_pluto") || "PASSED PLUTO:").toUpperCase(), margin, y);
           ctx.textAlign = "right";
           ctx.fillStyle = "#ffffff";
           ctx.fillText(plutoTrips, width - margin, y);
@@ -1947,7 +2995,7 @@
           y += 40;
           ctx.textAlign = "left";
           ctx.fillStyle = "#8892b0";
-          ctx.fillText("1 LIGHT YEAR PROGRESS:", margin, y);
+          ctx.fillText((t("light_year_prog") || "1 LIGHT YEAR PROGRESS:").toUpperCase(), margin, y);
           ctx.textAlign = "right";
           ctx.fillStyle = "#ffffff";
           ctx.fillText(lyProgress, width - margin, y);
@@ -1961,7 +3009,7 @@
           ctx.textAlign = "center";
           ctx.fillStyle = "#00ff41";
           ctx.font = 'bold 24px "Courier New", monospace';
-          ctx.fillText("NEXT MAJOR ETA", width / 2, y);
+          ctx.fillText((t("predict_btn") || "NEXT MAJOR ETA").toUpperCase(), width / 2, y);
 
           y += 40;
           ctx.font = '20px "Courier New", monospace';
@@ -1975,7 +3023,7 @@
           y += 40;
           ctx.textAlign = "left";
           ctx.fillStyle = "#8892b0";
-          ctx.fillText("PROJECTED DATE:", margin, y);
+          ctx.fillText("ETA:", margin, y);
           ctx.textAlign = "right";
           ctx.fillStyle = "#00ff41";
           ctx.fillText(projectedEta, width - margin, y);
@@ -2011,12 +3059,118 @@
       });
       timeInput.addEventListener("change", () => { updateDashboard(); saveData(); });
       latRange.addEventListener("input", () => { updateRotation(); saveData(); });
+      const altRange = $("altRange");
+      if(altRange) altRange.addEventListener("input", () => { updateRotation(); saveData(); });
 
       // Boot
+      
+      // Warp Easter Egg
+      let warpBuffer = "";
+      window.addEventListener("keydown", (e) => {
+        warpBuffer += e.key.toLowerCase();
+        
+        if (warpBuffer.endsWith("warp")) {
+          isWarpMode = !isWarpMode;
+          document.body.classList.toggle("warp-mode", isWarpMode);
+          warpBuffer = "";
+          if (isWarpMode) {
+             const h1 = document.querySelector("h1");
+             h1.innerText = "WARP SPEED ACTIVE";
+             setTimeout(() => h1.innerText = t("title"), 3000);
+          }
+        }
+
+        if (warpBuffer.endsWith("blackhole")) {
+          document.body.classList.add("blackhole-mode");
+          warpBuffer = "";
+          setTimeout(() => {
+            document.body.classList.remove("blackhole-mode");
+          }, 3000);
+        }
+
+        if (warpBuffer.endsWith("ufo")) {
+          warpBuffer = "";
+          
+          const panels = document.querySelectorAll(".displacement-box");
+          const targetPanel = panels[0]; // Target the first displacement box (Human Engine)
+
+          if (targetPanel) {
+            const rect = targetPanel.getBoundingClientRect();
+            
+            const ufo = document.createElement("div");
+            ufo.id = "ufo-easter-egg";
+            ufo.innerHTML = "🛸<div id='tractor-beam'></div>";
+            document.body.appendChild(ufo);
+
+            ufo.style.position = "fixed";
+            ufo.style.left = "-100px";
+            ufo.style.top = (rect.top - 80) + "px";
+            ufo.style.fontSize = "4rem";
+            ufo.style.zIndex = "9999";
+            ufo.style.textAlign = "center";
+            ufo.style.transition = "all 2s ease-in-out";
+
+            const beam = ufo.querySelector("#tractor-beam");
+            beam.style.width = "0px";
+            beam.style.height = "0px";
+            beam.style.background = "rgba(0, 255, 65, 0.5)";
+            beam.style.margin = "0 auto";
+            beam.style.clipPath = "polygon(20% 0, 80% 0, 100% 100%, 0% 100%)";
+            beam.style.transition = "all 0.5s ease";
+
+            // 1. Fly in and hover
+            setTimeout(() => {
+              ufo.style.left = (rect.left + rect.width / 2 - 40) + "px";
+            }, 100);
+
+            // 2. Drop tractor beam
+            setTimeout(() => {
+              beam.style.width = "80px";
+              beam.style.height = (rect.height + 80) + "px";
+              beam.style.transform = "translateY(-10px)";
+              beam.style.boxShadow = "0 0 20px #00ff41";
+            }, 2100);
+
+            // 3. Abduct panel (spin and shrink into UFO)
+            setTimeout(() => {
+              targetPanel.style.transition = "all 1.5s ease-in";
+              targetPanel.style.transform = "translateY(-200px) scale(0.1) rotate(720deg)";
+              targetPanel.style.opacity = "0";
+            }, 2600);
+
+            // 4. Retract beam & fly away
+            setTimeout(() => {
+              beam.style.width = "0px";
+              beam.style.height = "0px";
+              ufo.style.left = "120vw";
+              ufo.style.top = "-100px"; 
+            }, 4500);
+
+            // 5. Cleanup and safely restore panel
+            setTimeout(() => {
+              if(ufo.parentNode) ufo.parentNode.removeChild(ufo);
+              targetPanel.style.transition = "all 0.5s ease-out";
+              targetPanel.style.transform = "none";
+              targetPanel.style.opacity = "1";
+            }, 6500);
+          }
+        }
+
+        if (warpBuffer.length > 15) warpBuffer = warpBuffer.substring(1);
+      });
+
       initData();
       updateRotation();
       updateDashboard();
-      setInterval(updateDashboard, 100);
+      let lastTick = 0;
+      function tick(time) { 
+        if (time - lastTick > 66) { // ~15 fps throttle for DOM updates
+          updateDashboard(); 
+          lastTick = time;
+        }
+        requestAnimationFrame(tick); 
+      } 
+      requestAnimationFrame(tick);
 
       // Starfield
       const starCanvas = $("starfield");
@@ -2034,20 +3188,29 @@
       window.addEventListener("resize", resizeStars);
       resizeStars();
 
-      const stars = Array(800).fill(0).map(() => ({
+      const isMobile = window.innerWidth < 768;
+
+      const stars = Array(isMobile ? 300 : 800).fill(0).map(() => ({
         x: (Math.random() - 0.5) * w * 2,
         y: (Math.random() - 0.5) * h * 2,
         z: Math.random() * w,
         pz: 0
       }));
 
-      function animateStars() {
+      let lastStarTick = 0;
+      function animateStars(time) {
         if (!isAnimating) return;
+        
+        if (isMobile && time - lastStarTick < 33) {
+          requestAnimationFrame(animateStars);
+          return;
+        }
+        lastStarTick = time;
 
         starCtx.clearRect(-w / 2, -h / 2, w, h);
 
         for (const s of stars) {
-          s.z -= 25;
+          s.z -= (isWarpMode ? 150 : 25);
 
           if (s.z <= 0) {
             s.z = w;
@@ -2065,7 +3228,7 @@
 
           starCtx.beginPath();
           starCtx.strokeStyle = `rgba(255, 255, 255, ${1 - s.z / w})`;
-          starCtx.lineWidth = 1.5;
+          starCtx.lineWidth = (isWarpMode ? 4 : 1.5);
           starCtx.moveTo(x, y);
           starCtx.lineTo(px, py);
           starCtx.stroke();
@@ -2096,8 +3259,9 @@
       camera.position.z = 90;
       window.solarCamera = camera;
 
-      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, preserveDrawingBuffer: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      const isMobile = window.innerWidth < 768;
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
       renderer.setSize(initWidth, initHeight);
       container.appendChild(renderer.domElement);
 
@@ -2134,15 +3298,16 @@
       const J2000 = new Date("2000-01-01T12:00:00Z").getTime();
 
       const planetData = [
-        { name: "Mercury", size: 0.3, dist: 4,  color: 0x888888, period: 87.97,   offset: 4.40 },
-        { name: "Venus",   size: 0.7, dist: 7,  color: 0xe3bb76, period: 224.70,  offset: 3.16 },
-        { name: "Earth",   size: 0.8, dist: 10, color: 0x2277ff, period: 365.25,  offset: 1.75, isEarth: true },
-        { name: "Mars",    size: 0.4, dist: 13, color: 0xc1440e, period: 686.98,  offset: 6.20 },
-        { name: "Jupiter", size: 2.2, dist: 20, color: 0xd39c7e, period: 4332.59, offset: 0.60 },
-        { name: "Saturn",  size: 1.8, dist: 27, color: 0xd8ca9d, period: 10759.22,offset: 0.87, hasRings: true },
-        { name: "Uranus",  size: 1.2, dist: 35, color: 0x4b70dd, period: 30685.4, offset: 5.46 },
-        { name: "Neptune", size: 1.2, dist: 40, color: 0x274687, period: 60189.0, offset: 5.31 },
-        { name: "Pluto",   size: 0.2, dist: 50, color: 0xddddaa, period: 90560.0, offset: 2.0 }
+        { name: "mercury", rotPeriod: 1407.6, size: 0.3, dist: 4,  color: 0x888888, period: 87.97,   offset: 4.40 },
+        { name: "venus", rotPeriod: -5832.5,   size: 0.7, dist: 7,  color: 0xe3bb76, period: 224.70,  offset: 3.16 },
+        { name: "earth", rotPeriod: 23.934,   size: 0.8, dist: 10, color: 0x2277ff, period: 365.25,  offset: 1.75, isEarth: true },
+        { name: "mars", rotPeriod: 24.623,    size: 0.4, dist: 13, color: 0xc1440e, period: 686.98,  offset: 6.20 },
+        { name: "jupiter", rotPeriod: 9.925, size: 2.2, dist: 20, color: 0xd39c7e, period: 4332.59, offset: 0.60, isJupiter: true },
+        { name: "saturn", rotPeriod: 10.656,  size: 1.8, dist: 27, color: 0xd8ca9d, period: 10759.22,offset: 0.87, hasRings: true },
+        { name: "halley", rotPeriod: 52.8,  size: 0.1, dist: 32, color: 0xffffff, period: 27500, offset: 3.14, isComet: true },
+        { name: "uranus", rotPeriod: -17.24,  size: 1.2, dist: 35, color: 0x4b70dd, period: 30685.4, offset: 5.46 },
+        { name: "neptune", rotPeriod: 16.11, size: 1.2, dist: 40, color: 0x274687, period: 60189.0, offset: 5.31 },
+        { name: "pluto", rotPeriod: 153.3,   size: 0.2, dist: 50, color: 0xddddaa, period: 90560.0, offset: 2.0 }
       ];
 
       const planetMeshes = [];
@@ -2213,7 +3378,40 @@
           window.issGroup = issGroup; 
         } else {
           const mat = new THREE.MeshStandardMaterial({ color: p.color, roughness: 0.7, metalness: 0.1 });
-          mesh = new THREE.Mesh(geo, mat);
+          if(p.isComet) {
+            mat.emissive = new THREE.Color(0x88ccff);
+            mat.emissiveIntensity = 0.5;
+            
+            // Add tail
+            const tailGeo = new THREE.ConeGeometry(0.05, 1.5, 8);
+            const tailMat = new THREE.MeshBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0.4 });
+            const tail = new THREE.Mesh(tailGeo, tailMat);
+            tail.rotation.z = -Math.PI / 2;
+            tail.position.x = 0.75;
+            mesh = new THREE.Mesh(geo, mat);
+            mesh.add(tail);
+          } else {
+            mesh = new THREE.Mesh(geo, mat);
+          }
+          
+          if(p.isJupiter) {
+            window.jupMoons = [];
+            const jupMoonData = [
+              { name: "Io", period: 1.769, offset: 0 },
+              { name: "Europa", period: 3.551, offset: 1.5 },
+              { name: "Ganymede", period: 7.155, offset: 3.14 },
+              { name: "Callisto", period: 16.69, offset: 4.5 }
+            ];
+            for(let i=0; i<4; i++) {
+                const moonPivot = new THREE.Group();
+                const moonMesh = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), new THREE.MeshBasicMaterial({color: 0xffffff}));
+                moonMesh.position.x = 2.5 + (i * 0.4);
+                moonPivot.add(moonMesh);
+                mesh.add(moonPivot);
+                window.jupMoons.push({pivot: moonPivot, period: jupMoonData[i].period, offset: jupMoonData[i].offset});
+            }
+          }
+          
           mesh.position.x = p.dist;
           pivot.add(mesh);
         }
@@ -2239,7 +3437,7 @@
 
       // EXPANSION: Create the Asteroid Belt
       const asteroidGeo = new THREE.BufferGeometry();
-      const astCount = 2500;
+      const astCount = isMobile ? 800 : 2500;
       const astPos = new Float32Array(astCount * 3);
       
       for(let i = 0; i < astCount; i++) {
@@ -2258,7 +3456,7 @@
 
       // EXPANSION: Create the Oort Cloud (Massive Outer Shell)
       const oortGeo = new THREE.BufferGeometry();
-      const oortCount = 4000;
+      const oortCount = isMobile ? 1500 : 4000;
       const oortPos = new Float32Array(oortCount * 3);
       
       for(let i = 0; i < oortCount; i++) {
@@ -2314,7 +3512,7 @@
       scene.add(window.cinematicTrailGroup);
 
       const cinematicTrails = [];
-      const cinematicSegments = 800;
+      const cinematicSegments = isMobile ? 300 : 800;
       const cinematicDaysToDraw = 8000;
       const cinematicGalacticSpeed = 0.018;
 
@@ -2367,7 +3565,7 @@
 
         const visualGalacticSpeed = 0.018;
         const daysToDraw = Math.min(totalDays, 36500);
-        const segments = 4000;
+        const segments = isMobile ? 1500 : 4000;
         const daysElapsedToday = (nowMs - J2000) / (1000 * 60 * 60 * 24);
 
         planetMeshes.forEach((p) => {
@@ -2477,8 +3675,9 @@
           cinematicDaysElapsed += (0.5 * window.cinematicSpeedMult);
           updateVoyagers(cinematicDaysElapsed, nowMs);
 
-          if (window.moonPivot) window.moonPivot.rotation.y = (cinematicDaysElapsed / 27.322) * 2 * Math.PI;
+          if (window.moonPivot) window.moonPivot.rotation.y = Math.PI + ((cinematicDaysElapsed - 5.2597) / 29.53059) * 2 * Math.PI;
           if (window.issOrbit) window.issOrbit.rotation.y = (cinematicDaysElapsed * 15.54) * 2 * Math.PI;
+          if (window.jupMoons) window.jupMoons.forEach(m => m.pivot.rotation.y = (cinematicDaysElapsed / m.period) * 2 * Math.PI + m.offset);
 
           planetMeshes.forEach((p) => {
             const orbits = cinematicDaysElapsed / p.data.period;
@@ -2522,21 +3721,21 @@
 
           if (window.moonPivot) window.moonPivot.rotation.y = (nowDays / 27.322) * 2 * Math.PI;
           if (window.issOrbit) window.issOrbit.rotation.y = (nowDays * 15.54) * 2 * Math.PI;
+          if (window.jupMoons) window.jupMoons.forEach(m => m.pivot.rotation.y = (nowDays / m.period) * 2 * Math.PI + m.offset);
 
-          const utc = new Date();
-          const utcHours = utc.getUTCHours() + (utc.getUTCMinutes() / 60) + (utc.getUTCSeconds() / 3600);
-          const timeFraction = utcHours / 24;
+                    const utc = new Date();
+          const utcHoursTotal = utc.getUTCHours() + (utc.getUTCMinutes() / 60) + (utc.getUTCSeconds() / 3600);
 
           planetMeshes.forEach((p) => {
             const orbits = nowDays / p.data.period;
             p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
 
-            if (p.data.isEarth) {
-              const TEXTURE_OFFSET = -Math.PI / 2;
-              p.mesh.rotation.y = (timeFraction * Math.PI * 2) + TEXTURE_OFFSET;
-            } else {
-              p.mesh.rotation.y = 0; // 100% Realtime static
-            }
+            // REALTIME SPIN: Calculate rotation based on UTC hours and planet period
+            // We use (nowDays * 24) to get total hours since J2000 for a consistent baseline
+            const totalHoursSinceJ2000 = nowDays * 24;
+            const rotationSegments = totalHoursSinceJ2000 / p.data.rotPeriod;
+            const TEXTURE_OFFSET = p.data.isEarth ? -Math.PI / 2 : 0;
+            p.mesh.rotation.y = (rotationSegments * Math.PI * 2) + TEXTURE_OFFSET;
           });
         } else {
           const birthVal = document.getElementById("birthDate").value;
@@ -2546,23 +3745,19 @@
 
           updateVoyagers(birthDays, targetMs);
 
-          if (window.moonPivot) window.moonPivot.rotation.y = (birthDays / 27.322) * 2 * Math.PI;
+          if (window.moonPivot) window.moonPivot.rotation.y = Math.PI + ((birthDays - 5.2597) / 29.53059) * 2 * Math.PI;
           if (window.issOrbit) window.issOrbit.rotation.y = (birthDays * 15.54) * 2 * Math.PI;
+          if (window.jupMoons) window.jupMoons.forEach(m => m.pivot.rotation.y = (birthDays / m.period) * 2 * Math.PI + m.offset);
 
-          const birthDateObj = new Date(targetMs);
-          const utcHours = birthDateObj.getUTCHours() + (birthDateObj.getUTCMinutes() / 60) + (birthDateObj.getUTCSeconds() / 3600);
-          const timeFraction = utcHours / 24;
+          const totalHoursSinceJ2000 = birthDays * 24;
 
           planetMeshes.forEach((p) => {
             const orbits = birthDays / p.data.period;
             p.pivot.rotation.y = (orbits * 2 * Math.PI) + p.data.offset;
             
-            if (p.data.isEarth) {
-              const TEXTURE_OFFSET = -Math.PI / 2;
-              p.mesh.rotation.y = (timeFraction * Math.PI * 2) + TEXTURE_OFFSET;
-            } else {
-              p.mesh.rotation.y = 0; // 100% Realtime static
-            }
+            const rotationSegments = totalHoursSinceJ2000 / p.data.rotPeriod;
+            const TEXTURE_OFFSET = p.data.isEarth ? -Math.PI / 2 : 0;
+            p.mesh.rotation.y = (rotationSegments * Math.PI * 2) + TEXTURE_OFFSET;
           });
         }
 
@@ -2593,13 +3788,16 @@
       const container = document.getElementById("galaxy-3d-container");
       if (!container) return;
 
+      const isMobile = window.innerWidth < 768;
+
       galaxyScene = new THREE.Scene();
 
       galaxyCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
       galaxyCamera.position.set(0, 45, 60);
       galaxyCamera.lookAt(0, 0, 0);
 
-      galaxyRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      galaxyRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });
+      galaxyRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
       galaxyRenderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(galaxyRenderer.domElement);
 
@@ -2608,7 +3806,7 @@
       galaxyScene.add(new THREE.Mesh(coreGeo, coreMat));
 
       const particleGeo = new THREE.BufferGeometry();
-      const particleCount = 6000;
+      const particleCount = isMobile ? 2500 : 6000;
       const posArray = new Float32Array(particleCount * 3);
       const colorArray = new Float32Array(particleCount * 3);
 
