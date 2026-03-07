@@ -3,48 +3,45 @@
 **Cosmic Odometer** is a highly interactive, scientifically-grounded calculator and 3D planetarium that shows exactly how far you’ve traveled through the universe since the exact moment of your birth.
 
 By calculating Earth’s rotation, its orbit around the Sun, the Solar System's drift, and our Galaxy's trajectory relative to the Cosmic Microwave Background (CMB), it generates a personalized, real-time “cosmic mileage” reading.
-  
-## ✨ Features
+
+## ✨ New & Expanded Features
 
 ### 🔭 3D Interactive Solar System (Powered by Three.js)
 * **Mathematically Accurate Orbits:** Planets are mapped using exact J2000 Epoch offsets and true orbital periods based on Kepler's mechanics.
+* **Jupiter's Galilean Moons:** Includes Io, Europa, Ganymede, and Callisto, all tracked in their actual real-time orbital positions.
 * **Three Viewing Modes:**
-  * **Cinematic:** Sit back and watch a smooth, fast-forwarded simulation of planetary motion that leaves behind a dynamic, real-time 3D corkscrew vortex as the Sun drags the planets through space.
-  * **Today (Vortex):** Maps the planets to their exact real-world positions right now, displaying the 100-year mathematical path the solar system has carved through the galaxy.
-  * **Birth Date:** Time-travel mode. Enter your birthday and watch the planets snap to the exact coordinates they were at when you were born.
-* **Deep Space Interstellar Probes:** Voyager 1 and Voyager 2 are actively rendered using their true Heliocentric escape trajectories, Heliographic coordinates (lat/lon), and terminal JPL velocities. Watch them physically pierce through the solar system boundaries into deep space.
-* **Dynamic Camera Tracking:** In "Today" mode, smoothly lock the 3D camera onto specific celestial bodies:
-  * **🌍 Earth:** Tracks a texture-mapped Earth rotating exactly 360° every 24 hours based on your device's live UTC time (with an accurately orbiting Moon).
-  * **🔴 Voyager 1 & 🔵 Voyager 2:** The camera pans across billions of miles of empty space to track humanity's furthest creations in real-time.
-* **Fully Responsive & Mobile Optimized:** On desktop, the 3D engine sits beautifully behind the UI. On mobile, a dedicated "View Solar System" toggle seamlessly hides the calculator and expands the 3D universe to full screen.
+  * **Cinematic:** Smooth, fast-forwarded simulation with dynamic 3D corkscrew vortex trails.
+  * **Today (Vortex):** Real-world positions right now, displaying the 100-year mathematical path of the solar system.
+  * **Birth Date:** Snap the entire solar system back to the exact coordinates of your birth.
+* **Interstellar Tracking:** Voyager 1, Voyager 2, and the Parker Solar Probe are rendered using true Heliocentric escape trajectories and JPL telemetry.
 
-### 🌌 3D Galactic Context Panel
-* **Procedural Milky Way:** A secondary, independent Three.js engine renders a 6,000-particle interactive galaxy that slowly rotates in real-time.
-* **"You Are Here" Beacon:** A pulsating neon-green marker mathematically locked into the Orion Arm of the spiral.
-* **Cosmic Orbit Tracker:** Compares your exact age in seconds to the 225-million-year galactic orbit of the Sun, calculating the precise percentage of a "Cosmic Year" you have completed since birth.
+### 🌌 Astrophysics & Human Engines
+* **Astrophysics Engine:** Real-time tracking of **Time Dilation** (Special Relativity), **Universal Expansion** (Virgo Cluster), **Galactic Collision** (Andromeda approach), and the **Cosmic Horizon** (stars lost per second).
+* **🧠 Micro-Relativity:** Calculates the General Relativity difference between your head and feet—tracking exactly how many nanoseconds older your brain is than your toes.
+* **🫀 The Human Engine:** A biological odometer tracking roughly how many **heartbeats**, **breaths**, and **cells** your body has generated during your journey.
+* **💥 Cosmic Events:** Live counters for **Supernovae** explosions and **Neutrino Showers** passing through your body.
 
-### 🧮 The Cosmic Calculator
-* **Personalized Telemetry:** Live tracking of distance traveled via Earth's Spin, Solar Orbit, Solar System Travel, and Galactic Travel.
-* **🎉 Party Predictor:** Select a massive cosmic milestone (like 1 Trillion Kilometers) and the engine calculates the exact future date you will cross it. Includes a one-click 'Share to X' (Twitter) button to send out invitations to your space party.
-* **Net Displacement Estimate:** Calculates your straight-line vector travel through the void, featuring an interactive UI breakdown of astrophysics constraints (CMB rest frame, telescopic margin of error, and General Relativity).
-* **Milestone Tracker:** Translates your total distance into tangible metrics (Round trips to the Moon, laps past Pluto, and progress toward a Light Year).
-* **Session Tracker:** Watch your mileage tick up live from the moment you open the app.
+### 🔭 The Lookback Telescope & Photon Travel
+* **Lookback Telescope:** Calculates how far the light from your birth has traveled. It tells you exactly which star systems (Alpha Centauri, Vega, Sirius, etc.) are currently "watching" the day you were born.
+* **⚡ If You Were A Photon:** A dedicated high-speed metric tracking where you would be if you traveled at the universal speed limit (*c*) since birth.
 
-### 👩‍🚀 Cosmic Connection (Multiplayer)
-* **Compare Flight Paths:** Enter a friend's birth date to calculate the exact distance Earth traveled between your two birthdays (the "Distance Gap" at birth).
-* **Shared Journey:** Calculates the exact mileage you and your friend have traveled *together* since you both existed.
+### 📊 Educational & Interactive Tools
+* **Detailed Infographic Modal:** A massive 15-card visual manual explaining every calculation on the site with 100% mathematical accuracy and scientific sources (NASA JPL, IAU, NIST, etc.).
+* **📍 Your Cosmic Address:** A stylized breakdown of your location from Earth to the Laniakea Supercluster.
+* **👩‍🚀 Cosmic Connection:** Calculate the physical void in space between your birthplace and a friend's.
+* **🎉 Party Predictor:** Predict the exact date you will cross massive milestones like 1 Trillion Miles.
 
-### 🛠️ Utilities & Accessibility
-* **Progressive Web App (PWA):** Fully installable on iOS and Android devices for a native app experience.
-* **Localization:** Playable in English, French, Spanish, and Japanese.
-* **Shareable Receipts:** Generates a downloadable, retro-styled PNG "Travel Log Receipt" of your current stats.
-* **Privacy First:** 100% client-side rendering. Your birth date, time, and latitude are processed locally in your browser and are never sent to a server.
+### 🛠️ Performance & Utilities
+* **Extreme Optimization:** Engineered for low-end devices using **DOM caching**, **GPU resolution scaling**, and adaptive mobile particle counts to ensure smooth 60fps performance.
+* **Update Notification:** A pulsing top-left indicator that alerts you the moment a new version is pushed to GitHub.
+* **100% Localization:** Fully translated into **English, French, Spanish, Japanese, and Portuguese**.
+* **Easter Eggs:** Hidden keyboard commands for visual effects like `blackhole` (spaghettification) and `ufo` (panel abduction).
 
 ## 💻 Technical Stack
 * **Frontend:** Vanilla HTML5, CSS3, JavaScript (ES6+).
-* **3D Engines:** Dual `Three.js` (r128) instances + OrbitControls.
-* **Math:** J2000 Epoch astronomical offsets, spherical-to-Cartesian trigonometry, heliocentric linear regression (probes), and UTC timestamp fractional rotation.
-* **Deployment:** Cloudflare Pages edge network (with Cache-Control/Service Workers for PWA).
+* **3D Engines:** Dual `Three.js` instances + OrbitControls.
+* **Performance:** RequestAnimationFrame throttling, DOM Query Caching, and conditional WebGL antialiasing.
+* **Deployment:** Cloudflare Pages with Service Worker (PWA) cache-management.
 
 ## 👨‍💻 Developer
 Created by **Captain Nemo 729 (Rohan Jadhav)**.
