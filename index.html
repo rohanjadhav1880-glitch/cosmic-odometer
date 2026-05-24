@@ -716,7 +716,7 @@
     <div class="time-box" style="position:relative;">
       <div class="time-label" id="duration-label" data-i18n="mission_duration">Mission Duration</div>
       <div class="time-display" id="time-display-text">Calculating...</div>
-      <button onclick="togglePlanetAge()" style="margin-top:10px; background:transparent; border:1px solid #00d4ff; color:#00d4ff; padding:3px 8px; border-radius:5px; font-size:0.65rem; cursor:pointer;">🪐 SWITCH TO PLANET YEARS</button>
+      <button onclick="togglePlanetAge()" style="margin-top:10px; background:transparent; border:1px solid #00d4ff; color:#00d4ff; padding:3px 8px; border-radius:5px; font-size:0.65rem; cursor:pointer;" data-i18n="btn_switch_planet">🪐 SWITCH TO PLANET YEARS</button>
       <div id="planet-age-display" style="display:none; margin-top:15px; font-size:0.85rem; color:#ffd700; grid-template-columns: 1fr 1fr; gap:10px;"></div>
     </div>
 
@@ -765,23 +765,23 @@
     <div class="displacement-box" style="background: rgba(157, 78, 221, 0.1); border-color: #9d4edd; margin-bottom: 30px;">
       <div class="d-title" style="color: #c77dff;" data-i18n="astro_title">Astrophysics Engine</div>
       <div style="text-align: left; font-size: 0.85rem; margin-top: 15px; color: #ddd; line-height: 1.6;">
-        <div style="margin-bottom: 8px;"><span data-i18n="astro_time">⏱️ Time Dilation:</span> Due to Special Relativity (moving at ~600 km/s), you are <span id="time-dilation" style="color:#ffd700; font-weight:bold; font-size:1rem;">0</span> seconds younger than a stationary observer.</div>
-        <div style="margin-bottom: 8px;"><span data-i18n="astro_micro">🧠 Micro-Relativity:</span> Due to Earth's gravity, your head is roughly <span id="micro-relativity" style="color:#ff0055; font-weight:bold; font-size:1rem;">0</span> nanoseconds older than your feet.</div>
-        <div style="margin-bottom: 8px;"><span data-i18n="astro_exp">🌌 Universal Expansion:</span> Since birth, the universe has expanded, pushing the Virgo Cluster <span id="hubble-expansion" style="color:#ffd700; font-weight:bold; font-size:1rem;">0 km</span> further away.</div>
-        <div style="margin-bottom: 8px;"><span data-i18n="astro_col">💥 Galactic Collision:</span> The Andromeda Galaxy is <span id="andromeda-approach" style="color:#ff4444; font-weight:bold; font-size:1rem;">0 km</span> closer to hitting the Milky Way than when you were born.</div>
-        <div style="margin-bottom: 8px;"><span data-i18n="astro_zod">✨ Zodiac Context:</span> Earth was facing <span id="zodiac-sign" style="color:#00d4ff; font-weight:bold; font-size:1rem;">---</span> when you were born.</div>
-        <div style="margin-bottom: 8px;"><span data-i18n="astro_hor">🏃 Cosmic Horizon:</span> Since birth, <span id="stars-lost" style="color:#ff4444; font-weight:bold; font-size:1rem;">0</span> stars have slipped over the horizon and are forever unreachable.</div>
-        <div style="margin-bottom: 8px;"><span data-i18n="astro_sup">💥 Supernovae:</span> Roughly <span id="supernova-count" style="color:#ff9600; font-weight:bold; font-size:1rem;">0</span> stars have exploded in the observable universe since you were born.</div>
-        <div><span data-i18n="astro_neu">👻 Neutrino Shower:</span> Approximately <span id="neutrino-count" style="color:#00ff41; font-weight:bold; font-size:1rem;">0</span> solar neutrinos have passed through your body.</div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_time">⏱️ Time Dilation:</span> <span data-i18n="astro_time_desc_1">Due to Special Relativity (moving at ~600 km/s), you are</span> <span id="time-dilation" style="color:#ffd700; font-weight:bold; font-size:1rem;">0</span> <span data-i18n="astro_time_desc_2">seconds younger than a stationary observer.</span></div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_micro">🧠 Micro-Relativity:</span> <span data-i18n="astro_micro_desc_1">Due to Earth's gravity, your head is roughly</span> <span id="micro-relativity" style="color:#ff0055; font-weight:bold; font-size:1rem;">0</span> <span data-i18n="astro_micro_desc_2">nanoseconds older than your feet.</span></div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_exp">🌌 Universal Expansion:</span> <span data-i18n="astro_exp_desc_1">Since birth, the universe has expanded, pushing the Virgo Cluster</span> <span id="hubble-expansion" style="color:#ffd700; font-weight:bold; font-size:1rem;">0 km</span> <span data-i18n="astro_exp_desc_2">further away.</span></div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_col">💥 Galactic Collision:</span> <span data-i18n="astro_col_desc_1">The Andromeda Galaxy is</span> <span id="andromeda-approach" style="color:#ff4444; font-weight:bold; font-size:1rem;">0 km</span> <span data-i18n="astro_col_desc_2">closer to hitting the Milky Way than when you were born.</span></div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_zod">✨ Zodiac Context:</span> <span data-i18n="astro_zod_desc_1">Earth was facing</span> <span id="zodiac-sign" style="color:#00d4ff; font-weight:bold; font-size:1rem;">---</span> <span data-i18n="astro_zod_desc_2">when you were born.</span></div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_hor">🏃 Cosmic Horizon:</span> <span data-i18n="astro_hor_desc_1">Since birth,</span> <span id="stars-lost" style="color:#ff4444; font-weight:bold; font-size:1rem;">0</span> <span data-i18n="astro_hor_desc_2">stars have slipped over the horizon and are forever unreachable.</span></div>
+        <div style="margin-bottom: 8px;"><span data-i18n="astro_sup">💥 Supernovae:</span> <span data-i18n="astro_sup_desc_1">Roughly</span> <span id="supernova-count" style="color:#ff9600; font-weight:bold; font-size:1rem;">0</span> <span data-i18n="astro_sup_desc_2">stars have exploded in the observable universe since you were born.</span></div>
+        <div><span data-i18n="astro_neu">👻 Neutrino Shower:</span> <span data-i18n="astro_neu_desc_1">Approximately</span> <span id="neutrino-count" style="color:#00ff41; font-weight:bold; font-size:1rem;">0</span> <span data-i18n="astro_neu_desc_2">solar neutrinos have passed through your body.</span></div>
       </div>
     </div>
 
     <div class="displacement-box" style="background: rgba(0, 255, 136, 0.1); border-color: #00ff88; margin-bottom: 30px;">
       <div class="d-title" style="color: #00ff88;" data-i18n="human_title">The Human Engine</div>
       <div style="text-align: left; font-size: 0.85rem; margin-top: 15px; color: #ddd; line-height: 1.6;">
-        <div style="margin-bottom: 8px;"><span data-i18n="human_heart">❤️ Heartbeats:</span> Your heart has beaten approximately <span id="bio-heart" style="color:#ff4444; font-weight:bold; font-size:1rem;">0</span> times.</div>
-        <div style="margin-bottom: 8px;"><span data-i18n="human_breath">🫁 Breaths:</span> You have taken roughly <span id="bio-breaths" style="color:#00d4ff; font-weight:bold; font-size:1rem;">0</span> breaths.</div>
-        <div><span data-i18n="human_cell">🩸 Cells Replaced:</span> Your body has generated <span id="bio-cells" style="color:#ffd700; font-weight:bold; font-size:1rem;">0</span> new cells to keep you alive during this cosmic journey.</div>
+        <div style="margin-bottom: 8px;"><span data-i18n="human_heart">❤️ Heartbeats:</span> <span data-i18n="human_heart_desc_1">Your heart has beaten approximately</span> <span id="bio-heart" style="color:#ff4444; font-weight:bold; font-size:1rem;">0</span> <span data-i18n="human_heart_desc_2">times.</span></div>
+        <div style="margin-bottom: 8px;"><span data-i18n="human_breath">🫁 Breaths:</span> <span data-i18n="human_breath_desc_1">You have taken roughly</span> <span id="bio-breaths" style="color:#00d4ff; font-weight:bold; font-size:1rem;">0</span> <span data-i18n="human_breath_desc_2">breaths.</span></div>
+        <div><span data-i18n="human_cell">🩸 Cells Replaced:</span> <span data-i18n="human_cell_desc_1">Your body has generated</span> <span id="bio-cells" style="color:#ffd700; font-weight:bold; font-size:1rem;">0</span> <span data-i18n="human_cell_desc_2">new cells to keep you alive during this cosmic journey.</span></div>
       </div>
     </div>
 
@@ -791,23 +791,23 @@
     <div class="multiplayer-box" style="border-color:#333; background:rgba(0,0,0,0.4); margin-bottom:30px;">
       <h3 style="color:#8892b0; margin-bottom:15px; font-size:1rem; text-transform:uppercase; letter-spacing:2px;" data-i18n="dist_obj_title">🛰️ Distant Objects</h3>
       <div class="metric" style="background: rgba(255, 150, 0, 0.05); border-left: 3px solid #ff9600; margin-bottom:10px;">
-        <div class="label" style="color:#ff9600">☀️ Parker Solar Probe <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">Traveling at: 176 km/s</div></div>
+        <div class="label" style="color:#ff9600"><span data-i18n="parker">☀️ Parker Solar Probe</span> <div style="font-size:0.7em; opacity:0.8; margin-top:3px;"><span data-i18n="traveling_at">Traveling at</span>: 176 km/s</div></div>
         <div class="value" id="dist-parker" style="color:#fff">0 km</div>
       </div>
       <div class="metric" style="background: rgba(200, 200, 255, 0.05); border-left: 3px solid #c8c8ff; margin-bottom:10px;">
-        <div class="label" style="color:#c8c8ff">🔭 JWST <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">L2 Orbit</div></div>
+        <div class="label" style="color:#c8c8ff"><span data-i18n="jwst">🔭 JWST</span> <div style="font-size:0.7em; opacity:0.8; margin-top:3px;" data-i18n="l2_orbit">L2 Orbit</div></div>
         <div class="value" id="dist-jwst" style="color:#fff">0 km</div>
       </div>
       <div class="metric" style="background: rgba(150, 255, 255, 0.05); border-left: 3px solid #96ffff; margin-bottom:10px;">
-        <div class="label" style="color:#96ffff">☄️ Halley's Comet <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">Orbiting Sun</div></div>
+        <div class="label" style="color:#96ffff"><span data-i18n="halley">☄️ Halley's Comet</span> <div style="font-size:0.7em; opacity:0.8; margin-top:3px;" data-i18n="orbiting_sun">Orbiting Sun</div></div>
         <div class="value" id="dist-halley" style="color:#fff">0 km</div>
       </div>
       <div class="metric" style="background: rgba(255, 68, 68, 0.05); border-left: 3px solid #ff4444; margin-bottom:10px;">
-        <div class="label" style="color:#ff4444">🔴 Voyager 1 (Live) <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">Traveling at: 17.0 km/s</div></div>
+        <div class="label" style="color:#ff4444"><span data-i18n="v1">🔴 Voyager 1 (Live)</span> <div style="font-size:0.7em; opacity:0.8; margin-top:3px;"><span data-i18n="traveling_at">Traveling at</span>: 17.0 km/s</div></div>
         <div class="value" id="dist-v1" style="color:#fff">0 km</div>
       </div>
       <div class="metric" style="background: rgba(68, 68, 255, 0.05); border-left: 3px solid #4444ff; margin-bottom:0;">
-        <div class="label" style="color:#4444ff">🔵 Voyager 2 (Live) <div style="font-size:0.7em; opacity:0.8; margin-top:3px;">Traveling at: 15.3 km/s</div></div>
+        <div class="label" style="color:#4444ff"><span data-i18n="v2">🔵 Voyager 2 (Live)</span> <div style="font-size:0.7em; opacity:0.8; margin-top:3px;"><span data-i18n="traveling_at">Traveling at</span>: 15.3 km/s</div></div>
         <div class="value" id="dist-v2" style="color:#fff">0 km</div>
       </div>
     </div>
@@ -908,8 +908,8 @@
     <h3 class="manual-title" data-i18n="manual_title">Flight Manual</h3>
     <div class="details-grid">
       <details>
-        <summary>1. What is "Distance Apart"?</summary>
-        <div class="info-text">Because the Galaxy is moving at 2.1 million km/h, the Earth was in a completely different part of the universe when your friend was born compared to when you were born.</div>
+        <summary data-i18n="faq_dist_q">1. What is "Distance Apart"?</summary>
+        <div class="info-text" data-i18n="faq_dist_a">Because the Galaxy is moving at 2.1 million km/h, the Earth was in a completely different part of the universe when your friend was born compared to when you were born.</div>
       </details>
       <details><summary data-i18n="faq_1_q">2. What is "Rotated"?</summary><div class="info-text" data-i18n="faq_1_a">Distance moved due to Earth's spin. At the equator: ~1,600 km/h (1,000 mph). At poles: 0.</div></details>
       <details><summary data-i18n="faq_2_q">3. What is "Orbited Sun"?</summary><div class="info-text" data-i18n="faq_2_a">Earth races around the Sun at ~107,000 km/h (66,000 mph). This is your yearly lap.</div></details>
@@ -920,7 +920,7 @@
     <div class="footer-section">
       <div class="privacy-text" data-i18n="privacy">🔒 Privacy Promise: Your birth date and location are calculated 100% locally and never saved. We use standard Google Analytics to count anonymous page views.</div>
       <a href="https://www.buymeacoffee.com/nemo7299" target="_blank" rel="noopener noreferrer" class="coffee-btn">
-        <span>🚀</span> Keep the odometer spinning 🧋
+        <span data-i18n="buy_coffee">🚀 Keep the odometer spinning 🧋</span>
       </a>
       <a href="https://github.com/rohanjadhav1880-glitch/cosmic-odometer" class="author-link">Created by @nemo7299</a>
     </div>
@@ -1320,8 +1320,42 @@
           ms_cross: "You will cross this milestone on:",
           update_available: "UPDATE AVAILABLE",
           mercury: "Mercury", venus: "Venus", earth: "Earth", mars: "Mars", jupiter: "Jupiter", saturn: "Saturn", uranus: "Uranus", neptune: "Neptune", pluto: "Pluto", moon: "Moon",
-          halley: "Halley's Comet", parker: "Parker Solar Probe", iss: "ISS", v1: "Voyager 1", v2: "Voyager 2", jwst: "JWST",
-          capricorn: "Capricorn", aquarius: "Aquarius", pisces: "Pisces", aries: "Aries", taurus: "Taurus", gemini: "Gemini", cancer: "Cancer", leo: "Leo", virgo: "Virgo", libra: "Libra", scorpius: "Scorpius", ophiuchus: "Ophiuchus", sagittarius: "Sagittarius"
+          halley: "☄️ Halley's Comet", parker: "☀️ Parker Solar Probe", iss: "ISS", v1: "🔴 Voyager 1 (Live)", v2: "🔵 Voyager 2 (Live)", jwst: "🔭 JWST",
+          capricorn: "Capricorn", aquarius: "Aquarius", pisces: "Pisces", aries: "Aries", taurus: "Taurus", gemini: "Gemini", cancer: "Cancer", leo: "Leo", virgo: "Virgo", libra: "Libra", scorpius: "Scorpius", ophiuchus: "Ophiuchus", sagittarius: "Sagittarius",
+          badge_moon: "🌕 Moon Lander", badge_au: "☀️ 1 AU Reached", badge_pluto: "🧊 Kuiper Belt Explorer", badge_interstellar: "✨ Interstellar Rookie", badge_liftoff: "🚀 Liftoff",
+          err_friend_date: "Please enter at least one friend's birth date!", err_3d_loading: "The 3D engine is still loading! Please wait a second and try again.", err_download_blocked: "Could not download the image (browser blocked the download).",
+          share_text_1: "I have traveled {dist} through the universe since birth. 🚀", share_text_2: "My friend and I have traveled {dist} together through the cosmos. 👯‍♀️", share_text_3: "\nCheck your cosmic mileage here:",
+          share_milestone: "I will officially travel {target} {unit} through the universe on {date}. You're all invited to my space party. 🚀 Calculate yours on Cosmic Odometer:",
+          warp_active: "WARP SPEED ACTIVE", receipt_origin: "PASSENGER ORIGIN:", receipt_target: "TARGET:", receipt_eta: "ETA:", receipt_passed: "Already Passed!",
+          unit_billion: "Billion", unit_trillion: "Trillion",
+          faq_dist_q: "1. What is \"Distance Apart\"?",
+          faq_dist_a: "Because the Galaxy is moving at 2.1 million km/h, the Earth was in a completely different part of the universe when your friend was born compared to when you were born.",
+          astro_time_desc_1: "Due to Special Relativity (moving at ~600 km/s), you are",
+          astro_time_desc_2: "seconds younger than a stationary observer.",
+          astro_micro_desc_1: "Due to Earth's gravity, your head is roughly",
+          astro_micro_desc_2: "nanoseconds older than your feet.",
+          astro_exp_desc_1: "Since birth, the universe has expanded, pushing the Virgo Cluster",
+          astro_exp_desc_2: "further away.",
+          astro_col_desc_1: "The Andromeda Galaxy is",
+          astro_col_desc_2: "closer to hitting the Milky Way than when you were born.",
+          astro_zod_desc_1: "Earth was facing",
+          astro_zod_desc_2: "when you were born.",
+          astro_hor_desc_1: "Since birth,",
+          astro_hor_desc_2: "stars have slipped over the horizon and are forever unreachable.",
+          astro_sup_desc_1: "Roughly",
+          astro_sup_desc_2: "stars have exploded in the observable universe since you were born.",
+          astro_neu_desc_1: "Approximately",
+          astro_neu_desc_2: "solar neutrinos have passed through your body.",
+          human_heart_desc_1: "Your heart has beaten approximately",
+          human_heart_desc_2: "times.",
+          human_breath_desc_1: "You have taken roughly",
+          human_breath_desc_2: "breaths.",
+          human_cell_desc_1: "Your body has generated",
+          human_cell_desc_2: "new cells to keep you alive during this cosmic journey.",
+          l2_orbit: "L2 Orbit",
+          orbiting_sun: "Orbiting Sun",
+          buy_coffee: "🚀 Keep the odometer spinning 🧋",
+          btn_switch_planet: "🪐 SWITCH TO PLANET YEARS"
         },
         fr: {
           title: "Odomètre cosmique",
@@ -1491,8 +1525,43 @@
           ms_cross: "Vous franchirez cette étape le :",
           update_available: "MISE À JOUR DISPONIBLE",
           mercury: "Mercure", venus: "Vénus", earth: "Terre", mars: "Mars", jupiter: "Jupiter", saturn: "Saturne", uranus: "Uranus", neptune: "Neptune", pluto: "Pluton", moon: "Lune",
-          halley: "Comète de Halley", parker: "Sonde Parker", iss: "ISS", v1: "Voyager 1", v2: "Voyager 2", jwst: "JWST",
-          capricorn: "Capricorne", aquarius: "Verseau", pisces: "Poissons", aries: "Bélier", taurus: "Taureau", gemini: "Gémeaux", cancer: "Cancer", leo: "Lion", virgo: "Vierge", libra: "Balance", scorpius: "Scorpion", ophiuchus: "Ophiuchus", sagittarius: "Sagittaire"
+          halley: "☄️ Comète de Halley", parker: "☀️ Sonde Parker", iss: "ISS", v1: "🔴 Voyager 1", v2: "🔵 Voyager 2", jwst: "JWST",
+          capricorn: "Capricorne", aquarius: "Verseau", pisces: "Poissons", aries: "Bélier", taurus: "Taureau", gemini: "Gémeaux", cancer: "Cancer", leo: "Lion", virgo: "Vierge", libra: "Balance", scorpius: "Scorpion", ophiuchus: "Ophiuchus", sagittarius: "Sagittaire",
+          badge_moon: "🌕 Alunissage", badge_au: "☀️ 1 UA atteinte", badge_pluto: "🧊 Explorateur de la ceinture de Kuiper", badge_interstellar: "✨ Recrue interstellaire", badge_liftoff: "🚀 Décollage",
+          err_friend_date: "Veuillez entrer au moins une date de naissance d'un ami !", err_3d_loading: "Le moteur 3D est toujours en cours de chargement ! Veuillez patienter une seconde et réessayer.", err_download_blocked: "Impossible de télécharger l'image (le navigateur a bloqué le téléchargement).",
+          share_text_1: "J'ai parcouru {dist} à travers l'univers depuis ma naissance. 🚀", share_text_2: "Mon ami et moi avons parcouru {dist} ensemble à travers le cosmos. 👯‍♀️", share_text_3: "\nVérifiez votre kilométrage cosmique ici :",
+          share_milestone: "Je voyagerai officiellement {target} {unit} à travers l'univers le {date}. Vous êtes tous invités à ma fête spatiale. 🚀 Calculez le vôtre sur l'Odomètre Cosmique :",
+          warp_active: "VITESSE WARP ACTIVE", receipt_origin: "ORIGINE DU PASSAGER :", receipt_target: "CIBLE :", receipt_eta: "HAE :", receipt_passed: "Déjà passé !",
+          unit_billion: "Milliard", unit_trillion: "Billion",
+          faq_dist_q: "1. Qu'est-ce que la « distance de séparation » ?",
+          faq_dist_a: "Comme la galaxie se déplace à 2,1 millions de km/h, la Terre se trouvait dans une partie de l'univers complètement différente à la naissance de votre ami par rapport à la vôtre.",
+          astro_time_desc_1: "En raison de la relativité restreinte (déplacement à ~600 km/s), vous avez",
+          astro_time_desc_2: "secondes de moins qu'un observateur stationnaire.",
+          astro_micro_desc_1: "En raison de la gravité terrestre, votre tête est environ",
+          astro_micro_desc_2: "nanosecondes plus vieille que vos pieds.",
+          astro_exp_desc_1: "Depuis votre naissance, l'univers s'est étendu, repoussant l'amas de la Vierge de",
+          astro_exp_desc_2: "plus loin.",
+          astro_col_desc_1: "La galaxie d'Andromède est",
+          astro_col_desc_2: "plus proche de heurter la Voie lactée qu'à votre naissance.",
+          astro_zod_desc_1: "La Terre faisait face à",
+          astro_zod_desc_2: "à votre naissance.",
+          astro_hor_desc_1: "Depuis votre naissance,",
+          astro_hor_desc_2: "étoiles ont glissé au-delà de l'horizon et sont à jamais inaccessibles.",
+          astro_sup_desc_1: "Environ",
+          astro_sup_desc_2: "étoiles ont explosé dans l'univers observable depuis votre naissance.",
+          astro_neu_desc_1: "Environ",
+          astro_neu_desc_2: "neutrinos solaires ont traversé votre corps.",
+          human_heart_desc_1: "Votre cœur a battu environ",
+          human_heart_desc_2: "fois.",
+          human_breath_desc_1: "Vous avez pris environ",
+          human_breath_desc_2: "respirations.",
+          human_cell_desc_1: "Votre corps a généré",
+          human_cell_desc_2: "nouvelles cellules pour vous garder en vie pendant ce voyage cosmique.",
+          l2_orbit: "Orbite L2",
+          orbiting_sun: "En orbite autour du Soleil",
+          buy_coffee: "🚀 Faire tourner l'odomètre 🧋",
+          btn_switch_planet: "🪐 PASSER AUX ANNÉES PLANÉTAIRES",
+          planet_ages_title: "Âges sur d'autres mondes"
         },
         es: {
           title: "Odómetro Cósmico",
@@ -1662,8 +1731,43 @@
           ms_cross: "Cruzarás este hito el:",
           update_available: "ACTUALIZACIÓN DISPONIBLE",
           mercury: "Mercurio", venus: "Venus", earth: "Tierra", mars: "Marte", jupiter: "Júpiter", saturn: "Saturno", uranus: "Urano", neptune: "Neptuno", pluto: "Plutón", moon: "Luna",
-          halley: "Cometa Halley", parker: "Sonda Parker", iss: "ISS", v1: "Voyager 1", v2: "Voyager 2", jwst: "JWST",
-          capricorn: "Capricornio", aquarius: "Acuario", pisces: "Piscis", aries: "Aries", taurus: "Tauro", gemini: "Géminis", cancer: "Cáncer", leo: "Leo", virgo: "Virgo", libra: "Libra", scorpius: "Escorpio", ophiuchus: "Ofiuco", sagittarius: "Sagitario"
+          halley: "☄️ Cometa Halley", parker: "☀️ Sonda Parker", iss: "ISS", v1: "🔴 Voyager 1", v2: "🔵 Voyager 2", jwst: "🔭 JWST",
+          capricorn: "Capricornio", aquarius: "Acuario", pisces: "Piscis", aries: "Aries", taurus: "Tauro", gemini: "Géminis", cancer: "Cáncer", leo: "Leo", virgo: "Virgo", libra: "Libra", scorpius: "Escorpio", ophiuchus: "Ofiuco", sagittarius: "Sagitario",
+          badge_moon: "🌕 Aterrizaje Lunar", badge_au: "☀️ 1 UA alcanzada", badge_pluto: "🧊 Explorador del cinturón de Kuiper", badge_interstellar: "✨ Novato interestelar", badge_liftoff: "🚀 Despegue",
+          err_friend_date: "¡Por favor, ingresa al menos la fecha de nacimiento de um amigo!", err_3d_loading: "¡El motor 3D aún se está cargando! Por favor, espera un segundo e inténtalo de nuevo.", err_download_blocked: "No se pudo descargar la imagen (el navegador bloqueó la descarga).",
+          share_text_1: "He viajado {dist} a través del universo desde mi nacimiento. 🚀", share_text_2: "Mi amigo y yo hemos viajado {dist} juntos por el cosmos. 👯‍♀️", share_text_3: "\nConsulta tu kilometraje cósmico aquí:",
+          share_milestone: "Viajaré oficialmente {target} {unit} a través del universo el {date}. Están todos invitados a mi fiesta espacial. 🚀 Calcula el tuyo en el Odómetro Cósmico:",
+          warp_active: "VELOCIDAD WARP ACTIVA", receipt_origin: "ORIGEN DEL PASAJERO:", receipt_target: "OBJETIVO:", receipt_eta: "HAE:", receipt_passed: "¡Ya pasado!",
+          unit_billion: "Mil Millones", unit_trillion: "Billón",
+          faq_dist_q: "1. ¿Qué es la «distancia de separación»?",
+          faq_dist_a: "Debido a que la galaxia se mueve a 2,1 millones de km/h, la Tierra estaba en una parte del universo completamente diferente cuando nació tu amigo en comparación a cuando naciste tú.",
+          astro_time_desc_1: "Debido a la relatividad especial (viajando a ~600 km/s), eres",
+          astro_time_desc_2: "segundos más joven que un observador estacionario.",
+          astro_micro_desc_1: "Debido a la gravedad de la Tierra, tu cabeza es aproximadamente",
+          astro_micro_desc_2: "nanosegundos más vieja que tus pies.",
+          astro_exp_desc_1: "Desde tu nacimiento, el universo se ha expandido, alejando al Cúmulo de Virgo",
+          astro_exp_desc_2: "más.",
+          astro_col_desc_1: "La galaxia de Andrómeda está",
+          astro_col_desc_2: "más cerca de chocar con la Vía Láctea que cuando naciste.",
+          astro_zod_desc_1: "La Tierra estaba orientada hacia",
+          astro_zod_desc_2: "cuando naciste.",
+          astro_hor_desc_1: "Desde tu nacimiento,",
+          astro_hor_desc_2: "estrellas se han deslizado más allá del horizonte y son inalcanzables para siempre.",
+          astro_sup_desc_1: "Aproximadamente",
+          astro_sup_desc_2: "estrellas han explotado en el universo observable desde que naciste.",
+          astro_neu_desc_1: "Aproximadamente",
+          astro_neu_desc_2: "neutrinos solares han pasado a través de tu cuerpo.",
+          human_heart_desc_1: "Tu corazón ha latido aproximadamente",
+          human_heart_desc_2: "veces.",
+          human_breath_desc_1: "Has realizado aproximadamente",
+          human_breath_desc_2: "respiraciones.",
+          human_cell_desc_1: "Tu cuerpo ha generado",
+          human_cell_desc_2: "nuevas células para mantenerte con vida durante este viaje cósmico.",
+          l2_orbit: "Órbita L2",
+          orbiting_sun: "Orbitando al Sol",
+          buy_coffee: "🚀 Mantén el odómetro girando 🧋",
+          btn_switch_planet: "🪐 PASAR A AÑOS PLANETARIOS",
+          planet_ages_title: "Edades en otros mundos"
         },
         jp: {
           title: "宇宙走行距離計",
@@ -1833,8 +1937,43 @@
           ms_cross: "あなたはこのマイルストーンを次に通過します：",
           update_available: "アップデートが利用可能です",
           mercury: "水星", venus: "金星", earth: "地球", mars: "火星", jupiter: "木星", saturn: "土星", uranus: "天王星", neptune: "海王星", pluto: "冥王星", moon: "月",
-          halley: "ハレー彗星", parker: "パーカー・ソーラー・プローブ", iss: "ISS", v1: "ボイジャー1号", v2: "ボイジャー2号", jwst: "ジェイムズ・ウェッブ宇宙望遠鏡",
-          capricorn: "山羊座", aquarius: "みずがめ座", pisces: "うお座", aries: "おひつじ座", taurus: "おうし座", gemini: "ふたご座", cancer: "かに座", leo: "しし座", virgo: "おとめ座", libra: "てんびん座", scorpius: "さそり座", ophiuchus: "へびつかい座", sagittarius: "いて座"
+          halley: "☄️ ハレー彗星", parker: "☀️ パーカー・ソーラー・プローブ", iss: "ISS", v1: "🔴 ボイジャー1号", v2: "🔵 ボイジャー2号", jwst: "🔭 ジェイムズ・ウェッブ宇宙望遠鏡",
+          capricorn: "山羊座", aquarius: "みずがめ座", pisces: "うお座", aries: "おひつじ座", taurus: "おうし座", gemini: "ふたご座", cancer: "かに座", leo: "しし座", virgo: "おとめ座", libra: "てんびん座", scorpius: "さそり座", ophiuchus: "へびつかい座", sagittarius: "いて座",
+          badge_moon: "🌕 ムーンランダー", badge_au: "☀️ 1天文単位到達", badge_pluto: "🧊 カイパーベルト探検家", badge_interstellar: "✨ インターステラー・ルーキー", badge_liftoff: "🚀 リフトオフ",
+          err_friend_date: "友達の生年月日を少なくとも1つ入力してください！", err_3d_loading: "3Dエンジンはまだ読み込み中です！しばらく待ってからもう一度お試しください。", err_download_blocked: "画像をダウンロードできませんでした（ブラウザがダウンロードをブロックしました）。",
+          share_text_1: "誕生以来、宇宙を{dist}旅しました。 🚀", share_text_2: "友達と一緒に宇宙を{dist}旅しました。 👯‍♀️", share_text_3: "\nここであなたの宇宙の走行距離をチェックしてください：",
+          share_milestone: "{date}に正式に宇宙を{target}{unit}旅することになります。皆を私のスペースパーティーに招待します。 🚀 コズミックオドメーターであなたの旅を計算しましょう：",
+          warp_active: "ワープスピード・アクティブ", receipt_origin: "乗客の出身地:", receipt_target: "ターゲット:", receipt_eta: "到着予定:", receipt_passed: "すでに通過しました！",
+          unit_billion: "10億", unit_trillion: "1兆",
+          faq_dist_q: "1. 「出生時の距離」とは何ですか？",
+          faq_dist_a: "銀河は時速210万kmで移動しているため、あなたの友人が生まれたとき、地球はあなたが生まれたときとは全く違う宇宙の場所にありました。",
+          astro_time_desc_1: "特殊相対性理論（約600km/sで移動）により、あなたは静止した観測者よりも",
+          astro_time_desc_2: "秒若くなっています。",
+          astro_micro_desc_1: "地球の重力により、あなたの頭は足よりも約",
+          astro_micro_desc_2: "ナノ秒年老いています。",
+          astro_exp_desc_1: "誕生以来、宇宙は膨張し、おとめ座銀河団をさらに",
+          astro_exp_desc_2: "遠ざけました。",
+          astro_col_desc_1: "アンドロメダ銀河は、あなたが生まれたときよりも天の川銀河に",
+          astro_col_desc_2: "近づいています。",
+          astro_zod_desc_1: "あなたが生まれたとき、地球は",
+          astro_zod_desc_2: "に面していました。",
+          astro_hor_desc_1: "誕生以来、",
+          astro_hor_desc_2: "個の星が地平線の向こう側に滑り込み、永遠に到達不可能になりました。",
+          astro_sup_desc_1: "あなたが生まれてから、観測可能な宇宙で約",
+          astro_sup_desc_2: "個の星が爆発しました。",
+          astro_neu_desc_1: "約",
+          astro_neu_desc_2: "個の太陽ニュートリノがあなたの体を通り抜けました。",
+          human_heart_desc_1: "あなたの心臓は約",
+          human_heart_desc_2: "回鼓動しました。",
+          human_breath_desc_1: "あなたはおよそ",
+          human_breath_desc_2: "回呼吸しました。",
+          human_cell_desc_1: "あなたの体は、この宇宙の旅の間にあなたを生かし続けるために",
+          human_cell_desc_2: "個の新しい細胞を生成しました。",
+          l2_orbit: "L2軌道",
+          orbiting_sun: "公転中",
+          buy_coffee: "🚀 オドメーターを回し続ける 🧋",
+          btn_switch_planet: "🪐 惑星年に切り替える",
+          planet_ages_title: "他の世界での年齢"
         },
         pt: {
           title: "Odômetro Cósmico",
@@ -2004,8 +2143,43 @@
           ms_cross: "Você cruzará este marco em:",
           update_available: "ATUALIZAÇÃO DISPONÍVEL",
           mercury: "Mercúrio", venus: "Vênus", earth: "Terra", mars: "Marte", jupiter: "Júpiter", saturn: "Saturno", uranus: "Urano", neptune: "Netuno", pluto: "Plutão", moon: "Lua",
-          halley: "Cometa Halley", parker: "Sonda Parker Solar", iss: "ISS", v1: "Voyager 1", v2: "Voyager 2", jwst: "JWST",
-          capricorn: "Capricórnio", aquarius: "Aquário", pisces: "Peixes", aries: "Áries", taurus: "Touro", gemini: "Gêmeos", cancer: "Câncer", leo: "Leão", virgo: "Virgem", libra: "Libra", scorpius: "Escorpião", ophiuchus: "Ofiúco", sagittarius: "Sagitário"
+          halley: "☄️ Cometa Halley", parker: "☀️ Sonda Parker Solar", iss: "ISS", v1: "🔴 Voyager 1", v2: "🔵 Voyager 2", jwst: "🔭 JWST",
+          capricorn: "Capricórnio", aquarius: "Aquário", pisces: "Peixes", aries: "Áries", taurus: "Touro", gemini: "Gêmeos", cancer: "Câncer", leo: "Leão", virgo: "Virgem", libra: "Libra", scorpius: "Escorpião", ophiuchus: "Ofiúco", sagittarius: "Sagitário",
+          badge_moon: "🌕 Pouso na Lua", badge_au: "☀️ 1 UA Atingida", badge_pluto: "🧊 Explorador do Cinturão de Kuiper", badge_interstellar: "✨ Recruta Interestelar", badge_liftoff: "🚀 Decolagem",
+          err_friend_date: "Por favor, insira pelo menos uma data de nascimento de um amigo!", err_3d_loading: "O mecanismo 3D ainda está carregando! Por favor, aguarde um segundo e tente novamente.", err_download_blocked: "Não foi possível baixar a imagem (o navegador bloqueou o download).",
+          share_text_1: "Eu viajei {dist} pelo universo desde o nascimento. 🚀", share_text_2: "Meu amigo e eu viajamos juntos pelo cosmos. 👯‍♀️", share_text_3: "\nVerifique sua milhagem cósmica aqui:",
+          share_milestone: "Eu viajarei oficialmente {target} {unit} pelo universo em {date}. Estão todos convidados para a minha festa espacial. 🚀 Calcule a sua no Odômetro Cósmico:",
+          warp_active: "VELOCIDADE DE DOBRA ATIVA", receipt_origin: "ORIGEM DO PASSAGEIRO:", receipt_target: "ALVO:", receipt_eta: "HAE:", receipt_passed: "Já Passou!",
+          unit_billion: "Bilhões", unit_trillion: "Trilhões",
+          faq_dist_q: "1. O que é a «distância de separação»?",
+          faq_dist_a: "Como a galáxia se move a 2,1 milhões de km/h, a Terra estava numa parte do universo completamente diferente quando o seu amigo nasceu em comparação com quando você nasceu.",
+          astro_time_desc_1: "Devido à relatividade especial (viajando a ~600 km/s), você é",
+          astro_time_desc_2: "segundos mais jovem que um observador estacionário.",
+          astro_micro_desc_1: "Devido à gravidade da Terra, sua cabeça é aproximadamente",
+          astro_micro_desc_2: "nanossegundos mais velha que seus pés.",
+          astro_exp_desc_1: "Desde o seu nascimento, o universo se expandiu, afastando o Aglomerado de Virgem",
+          astro_exp_desc_2: "mais.",
+          astro_col_desc_1: "A Galáxia de Andrômeda está",
+          astro_col_desc_2: "mais próxima de atingir a Via Láctea do que quando você nasceu.",
+          astro_zod_desc_1: "A Terra estava voltada para",
+          astro_zod_desc_2: "quando você nasceu.",
+          astro_hor_desc_1: "Desde o seu nascimento,",
+          astro_hor_desc_2: "estrelas deslizaram para além do horizonte e são inacessíveis para sempre.",
+          astro_sup_desc_1: "Aproximadamente",
+          astro_sup_desc_2: "estrelas explodiram no universo observável desde que você nasceu.",
+          astro_neu_desc_1: "Aproximadamente",
+          astro_neu_desc_2: "neutrinos solares passaram pelo seu corpo.",
+          human_heart_desc_1: "Seu coração bateu aproximadamente",
+          human_heart_desc_2: "vezes.",
+          human_breath_desc_1: "Você deu aproximadamente",
+          human_breath_desc_2: "respirações.",
+          human_cell_desc_1: "Seu corpo gerou",
+          human_cell_desc_2: "novas células para mantê-lo vivo durante esta jornada cósmica.",
+          l2_orbit: "Órbita L2",
+          orbiting_sun: "Orbitando o Sol",
+          buy_coffee: "🚀 Manter o odômetro girando 🧋",
+          btn_switch_planet: "🪐 MUDAR PARA ANOS PLANETÁRIOS",
+          planet_ages_title: "Idades em outros mundos"
         }
       };
 
@@ -2016,6 +2190,12 @@
 
       function applyLanguage() {
         const pack = translations[currentLang] || translations.en;
+        
+        const durationLabel = $("duration-label");
+        if (durationLabel) {
+           durationLabel.setAttribute("data-i18n", showPlanetAge ? "planet_ages_title" : "mission_duration");
+        }
+
         document.querySelectorAll("[data-i18n]").forEach((el) => {
           const key = el.getAttribute("data-i18n");
           if (pack[key]) el.innerText = pack[key];
@@ -2219,9 +2399,9 @@
         const friendDist = $("res-shared").innerText;
         const isComparing = $("connection-results").classList.contains("active");
 
-        let text = `I have traveled ${totalDist} through the universe since birth. 🚀`;
-        if (isComparing) text = `My friend and I have traveled ${friendDist} together through the cosmos. 👯‍♀️`;
-        text += `\nCheck your cosmic mileage here:`;
+        let text = t("share_text_1").replace("{dist}", totalDist);
+        if (isComparing) text = t("share_text_2").replace("{dist}", friendDist);
+        text += t("share_text_3");
 
         return { title: "Cosmic Odometer", text, url: fullUrl };
       }
@@ -2279,19 +2459,19 @@
         showPlanetAge = !showPlanetAge;
         $("planet-age-display").style.display = showPlanetAge ? "grid" : "none";
         $("time-display-text").style.display = showPlanetAge ? "none" : "flex";
-        $("duration-label").innerText = showPlanetAge ? "Ages on Other Worlds" : t("mission_duration");
+        applyLanguage();
       };
 
       function updatePlanetAges(secondsAlive) {
         if (!showPlanetAge) return;
         const years = secondsAlive / (365.25 * 24 * 3600);
         const planets = [
-          { name: "Mercury", rotPeriod: 1407.6, factor: 0.241 },
-          { name: "Venus", rotPeriod: -5832.5, factor: 0.615 },
-          { name: "Mars", rotPeriod: 24.623, factor: 1.881 },
-          { name: "Jupiter", rotPeriod: 9.925, factor: 11.86 },
-          { name: "Saturn", rotPeriod: 10.656, factor: 29.45 },
-          { name: "Neptune", rotPeriod: 16.11, factor: 164.8 }
+          { name: t("mercury"), rotPeriod: 1407.6, factor: 0.241 },
+          { name: t("venus"), rotPeriod: -5832.5, factor: 0.615 },
+          { name: t("mars"), rotPeriod: 24.623, factor: 1.881 },
+          { name: t("jupiter"), rotPeriod: 9.925, factor: 11.86 },
+          { name: t("saturn"), rotPeriod: 10.656, factor: 29.45 },
+          { name: t("neptune"), rotPeriod: 16.11, factor: 164.8 }
         ];
         $("planet-age-display").innerHTML = planets.map(p => `
           <div style="text-align:left; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:3px;">
@@ -2451,11 +2631,11 @@
 
           // Achievements
           let badges = [];
-          if (dTotal > DIST.MOON_ROUND_TRIP_KM / 2) badges.push("🌕 Moon Lander");
-          if (dTotal > 149597870) badges.push("☀️ 1 AU Reached");
-          if (dTotal > DIST.PLUTO_KM) badges.push("🧊 Kuiper Belt Explorer");
-          if (dTotal > DIST.LIGHT_YEAR_KM / 1000) badges.push("✨ Interstellar Rookie");
-          if (badges.length === 0) badges.push("🚀 Liftoff");
+          if (dTotal > DIST.MOON_ROUND_TRIP_KM / 2) badges.push(t("badge_moon"));
+          if (dTotal > 149597870) badges.push(t("badge_au"));
+          if (dTotal > DIST.PLUTO_KM) badges.push(t("badge_pluto"));
+          if (dTotal > DIST.LIGHT_YEAR_KM / 1000) badges.push(t("badge_interstellar"));
+          if (badges.length === 0) badges.push(t("badge_liftoff"));
           
           if($("achievements-container")) $("achievements-container").innerHTML = badges.map(b => `<div style="background:rgba(255,215,0,0.1); border:1px solid #ffd700; color:#ffd700; padding:5px 10px; border-radius:15px; font-size:0.75rem; font-weight:bold;">${b}</div>`).join('');
           
@@ -2516,7 +2696,7 @@
         });
         
         if (dates.length < 2) {
-          alert("Please enter at least one friend's birth date!");
+          alert(t("err_friend_date"));
           return;
         }
 
@@ -2565,7 +2745,7 @@
         const secondsAlive = (now - birthDate) / 1000;
         const currentKm = secondsAlive * avgSpeedKmS;
 
-        const unitLabel = useMiles ? "Miles" : "Kilometers";
+        const unitLabel = useMiles ? t("unit_mi") : t("unit_km");
 
         if (currentKm >= targetKm) {
           $("milestone-result").innerHTML = `${t("ms_passed")} <br><span style='font-size:0.8rem; color:#888; font-weight:normal; margin-top:5px; display:inline-block;'>${t("ms_bigger")}</span>`;
@@ -2582,10 +2762,13 @@
           `${t("ms_cross")}<br><span style='color:#00d4ff; font-size:1.4rem; display:block; margin-top:10px;'>${formattedDate} 🪐</span>`;
 
         let targetFormatted = "";
-        if (targetVal >= 1000000000000) targetFormatted = (targetVal / 1000000000000) + " Trillion";
-        else targetFormatted = (targetVal / 1000000000) + " Billion";
+        if (targetVal >= 1000000000000) targetFormatted = (targetVal / 1000000000000);
+        else targetFormatted = (targetVal / 1000000000);
 
-        const tweetText = `I will officially travel ${targetFormatted} ${unitLabel} through the universe on ${formattedDate}. You're all invited to my space party. 🚀 Calculate yours on Cosmic Odometer:`;
+        const tweetText = t("share_milestone")
+          .replace("{target}", targetFormatted)
+          .replace("{unit}", targetVal >= 1e12 ? t("unit_trillion") : t("unit_billion"))
+          .replace("{date}", formattedDate);
         const siteUrl = "https://cosmicodometer.space/";
         const xIntentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(siteUrl)}`;
 
@@ -2739,7 +2922,7 @@
       // Receipt generator
       function generateReceipt() {
         if (!window.solarRenderer || !window.planetMeshes || window.planetMeshes.length === 0) {
-          alert("The 3D engine is still loading! Please wait a second and try again.");
+          alert(t("err_3d_loading"));
           return;
         }
 
@@ -2758,10 +2941,11 @@
         const birthDays = (targetMs - J2000_MS) / (1000 * 60 * 60 * 24);
 
         const targetValInput = parseFloat($("milestone-target").value);
-        let targetText = (targetValInput >= 1e12)
-          ? (targetValInput / 1e12) + " Trillion"
-          : (targetValInput / 1e9) + " Billion";
-        targetText += useMiles ? " Miles" : " Kilometers";
+        let targetFormatted = (targetValInput >= 1e12)
+          ? (targetValInput / 1e12) + " " + t("unit_trillion")
+          : (targetValInput / 1e9) + " " + t("unit_billion");
+        const unitLabel = useMiles ? t("unit_mi") : t("unit_km");
+        let targetText = `${targetFormatted} ${unitLabel}`;
 
         const avgSpeedKmS = currentRotationSpeedKmS + SPEED.ORBIT_KM_S + SPEED.SOLAR_KM_S + SPEED.GALAXY_KM_S;
         const targetKmMath = useMiles ? targetValInput / KM_TO_MILES : targetValInput;
@@ -2769,7 +2953,7 @@
 
         let projectedEta = "";
         if (currentKmMath >= targetKmMath) {
-          projectedEta = "Already Passed!";
+          projectedEta = t("receipt_passed");
         } else {
           const remaining = (targetKmMath - currentKmMath) / avgSpeedKmS;
           const futureDate = new Date(Date.now() + (remaining * 1000));
@@ -2966,7 +3150,7 @@
           ctx.font = '20px "Courier New", monospace';
           ctx.textAlign = "left";
           ctx.fillStyle = "#8892b0";
-          ctx.fillText("TARGET:", margin, y);
+          ctx.fillText(t("receipt_target"), margin, y);
           ctx.textAlign = "right";
           ctx.fillStyle = "#ffffff";
           ctx.fillText(targetText, width - margin, y);
@@ -2974,7 +3158,7 @@
           y += 40;
           ctx.textAlign = "left";
           ctx.fillStyle = "#8892b0";
-          ctx.fillText("ETA:", margin, y);
+          ctx.fillText(t("receipt_eta"), margin, y);
           ctx.textAlign = "right";
           ctx.fillStyle = "#00ff41";
           ctx.fillText(projectedEta, width - margin, y);
@@ -3026,7 +3210,7 @@
           warpBuffer = "";
           if (isWarpMode) {
              const h1 = document.querySelector("h1");
-             h1.innerText = "WARP SPEED ACTIVE";
+             h1.innerText = t("warp_active");
              setTimeout(() => h1.innerText = t("title"), 3000);
           }
         }
