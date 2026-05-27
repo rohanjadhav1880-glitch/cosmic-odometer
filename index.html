@@ -5696,9 +5696,9 @@
 
       universeCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1.0, 100000000000000);
       universeCamera.position.set(0, 50, 150); 
-      universeRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      window.universeRenderer = universeRenderer;
-      universeRenderer.setPixelRatio(window.devicePixelRatio); universeRenderer.setSize(window.innerWidth, window.innerHeight);
+      universeRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });      window.universeRenderer = universeRenderer;
+      // Change line 5700 to:
+universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2)); universeRenderer.setSize(window.innerWidth, window.innerHeight);
       container.appendChild(universeRenderer.domElement);
       universeControls = new THREE.OrbitControls(universeCamera, universeRenderer.domElement);
       universeControls.enableDamping = true;
@@ -6191,7 +6191,7 @@
       selectableDeepSpace.push(drGlow);
       // BACKGROUND & IGM
       const horizonRange = 1000000000 * LY_TO_I;
-      const rogueStarCount = isMobile ? 10000 : 30000, igmCoords = [], igmColors = [];
+      const rogueStarCount = isMobile ? 2000 : 30000, igmCoords = [], igmColors = [];
       for (let i = 0; i < rogueStarCount; i++) {
         const r = Math.pow(Math.random(), 0.6) * horizonRange, theta = Math.random() * Math.PI * 2, phi = Math.acos(2 * Math.random() - 1);
         igmCoords.push(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi) * 0.7, r * Math.sin(phi) * Math.sin(theta));
@@ -6200,8 +6200,7 @@
       const igmGeo = new THREE.BufferGeometry(); igmGeo.setAttribute('position', new THREE.Float32BufferAttribute(igmCoords, 3)); igmGeo.setAttribute('color', new THREE.Float32BufferAttribute(igmColors, 3));
       universeScene.add(new THREE.Points(igmGeo, new THREE.PointsMaterial({ size: 50000, vertexColors: true, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending, depthWrite: false })));
 
-      const bgGalaxyCount = isMobile ? 500000 : 2000000, bgGalaxyCoords = new Float32Array(bgGalaxyCount * 3), bgGalaxyColors = new Float32Array(bgGalaxyCount * 3);
-      for (let i = 0; i < bgGalaxyCount; i++) {
+      const bgGalaxyCount = isMobile ? 50000 : 2000000, bgGalaxyCoords = new Float32Array(bgGalaxyCount * 3), bgGalaxyColors = new Float32Array(bgGalaxyCount * 3);      for (let i = 0; i < bgGalaxyCount; i++) {
         const i3 = i * 3, r = Math.pow(Math.random(), 0.5) * horizonRange, theta = Math.random() * Math.PI * 2, phi = Math.acos(2 * Math.random() - 1);
         bgGalaxyCoords[i3] = r * Math.sin(phi) * Math.cos(theta); bgGalaxyCoords[i3 + 1] = r * Math.cos(phi) * 0.8; bgGalaxyCoords[i3 + 2] = r * Math.sin(phi) * Math.sin(theta);
         const rand = Math.random();
