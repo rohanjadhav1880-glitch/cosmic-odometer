@@ -3978,7 +3978,7 @@
         
         const earthRadiusKm = 6371;
         const newRadius = earthRadiusKm + altKm;
-        const speedAtEquator = (newRadius * 2 * Math.PI) / 86400; // km/s
+        const speedAtEquator = (newRadius * 2 * Math.PI) / 86164.1;
         currentRotationSpeedKmS = speedAtEquator * Math.cos(radians);
 
         let speed = currentRotationSpeedKmS;
@@ -4185,7 +4185,7 @@
           if($("supernova-count")) $("supernova-count").innerText = supernovae.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
 
           // Neutrinos: ~100 trillion per second per cm^2. Avg human cross section is ~10,000 cm^2. (Yields ~1 Quintillion / sec)
-          const neutrinosTrillion = secondsAlive * 10000;
+          const neutrinosTrillion = secondsAlive * 100;
           if($("neutrino-count")) $("neutrino-count").innerText = neutrinosTrillion.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) + " Trillion";
 
           // The Human Engine
@@ -4216,7 +4216,7 @@
                     { name: "Castor", dist: 51.6 },
                     { name: "Aldebaran", dist: 65.3 },
                     { name: "Regulus", dist: 79.3 },
-                    { name: "Polaris", dist: 323 }
+                    { name: "Polaris", dist: 433 }
                  ];
                  let passedStar = lookbackStars[0];
                  for(let i=0; i<lookbackStars.length; i++) {
@@ -4279,15 +4279,15 @@
         const plutoE = ((daysSinceJ2000 + 3764) / 90560) * 2 * Math.PI;
         const plutoKm = 39.48 * (1 - 0.2488 * Math.cos(plutoE)) * AU_TO_KM;
         
-        const v1Km = (75.3 + (0.00982 * daysSinceJ2000)) * AU_TO_KM;
-        const v2Km = (60.1 + (0.00865 * daysSinceJ2000)) * AU_TO_KM;
+        const v1Km = (68.91 + (0.00982 * daysSinceJ2000)) * AU_TO_KM;
+        const v2Km = (52.59 + (0.00865 * daysSinceJ2000)) * AU_TO_KM;
         
         // Approximations for Parker, JWST, Halley
         const jwstKm = 1500000; // Roughly constant from Earth
-        const parkerKm = 10000000 + Math.abs(Math.sin(daysSinceJ2000 / 88 * Math.PI)) * 140000000; // Oscillates
+        const parkerKm = 6900000 + Math.abs(Math.sin(daysSinceJ2000 / 88 * Math.PI)) * 102100000; // Oscillates
         
         const halleyPeriodDays = 75.3 * 365.25;
-        const halleyE = ((daysSinceJ2000 + 5000) / halleyPeriodDays) * 2 * Math.PI; // Last perihelion ~1986
+        const halleyE = ((daysSinceJ2000 + 5075) / halleyPeriodDays) * 2 * Math.PI; // Last perihelion ~1986
         const halleyKm = 17.8 * (1 - 0.967 * Math.cos(halleyE)) * AU_TO_KM;
 
         if ($("dist-pluto")) $("dist-pluto").innerText = formatDistance(plutoKm);
@@ -5247,8 +5247,8 @@
 
       // Voyagers
       const voyagerData = [
-        { id: "v1", name: "Voyager 1", rJ2000: 75.3, vAuPerDay: 0.00982, lat: 35,  lon: 216, color: 0xff4444, launchMs: new Date("1977-09-05T00:00:00Z").getTime() },
-        { id: "v2", name: "Voyager 2", rJ2000: 60.1, vAuPerDay: 0.00865, lat: -32, lon: 288, color: 0x4444ff, launchMs: new Date("1977-08-20T00:00:00Z").getTime() }
+        { id: "v1", name: "Voyager 1", rJ2000: 68.91, vAuPerDay: 0.00982, lat: 35,  lon: 216, color: 0xff4444, launchMs: new Date("1977-09-05T00:00:00Z").getTime() },
+        { id: "v2", name: "Voyager 2", rJ2000: 52.59, vAuPerDay: 0.00865, lat: -32, lon: 288, color: 0x4444ff, launchMs: new Date("1977-08-20T00:00:00Z").getTime() }
       ];
 
       window.voyagerMeshes = [];
@@ -6127,7 +6127,7 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
       createMiniGalaxy(8000, 14000, {r: 0.9, g: 1.0, b: 0.9}, "Large Magellanic Cloud", 163000, 5.39, -69.75, 0.5);
       createMiniGalaxy(5000, 7000, {r: 1.0, g: 1.0, b: 0.8}, "Small Magellanic Cloud", 200000, 0.87, -72.8, 0.3);
       createMiniGalaxy(40000, 50000, {r: 0.8, g: 0.9, b: 1.0}, "Centaurus A", 12000000, 13.42, -43.02, 1.5, 0.3, 0.3);
-      createMiniGalaxy(30000, 40000, {r: 1.0, g: 1.0, b: 1.0}, "Sombrero Galaxy (M104)", 29000000, 12.67, -11.62, 1.2, 1.5, 0);
+      createMiniGalaxy(30000, 40000, {r: 1.0, g: 1.0, b: 1.0}, "Sombrero Galaxy (M104)", 31000000, 12.67, -11.62, 1.2, 1.5, 0);
 
       // LEVEL 4: VIRGO SUPERCLUSTER
       const superclusterGroup = new THREE.Group();
@@ -6159,9 +6159,9 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
       createGalaxyCluster("Virgo Cluster (M87 Center)", 54000000, 12.5, 12.0, 2000, {r: 1.0, g: 0.9, b: 0.7}, 7000000);
       createGalaxyCluster("Fornax Cluster", 62000000, 3.6, -35.5, 60, {r: 0.9, g: 0.8, b: 1.0}, 2000000);
       createGalaxyCluster("Eridanus Cluster", 75000000, 3.5, -22.0, 70, {r: 0.8, g: 0.9, b: 1.0}, 3000000);
-      createGalaxyCluster("Centaurus Cluster", 150000000, 12.8, -41.3, 300, {r: 1.0, g: 0.8, b: 0.8}, 5000000);
+      createGalaxyCluster("Centaurus Cluster", 170000000, 12.8, -41.3, 300, {r: 1.0, g: 0.8, b: 0.8}, 5000000);
       createGalaxyCluster("Coma Cluster", 321000000, 12.99, 27.98, 1000, {r: 0.7, g: 1.0, b: 0.7}, 10000000);
-      createGalaxyCluster("Great Attractor", 200000000, 10.5, -45.0, 5000, {r: 1.0, g: 0.5, b: 0.0}, 20000000);
+      createGalaxyCluster("Great Attractor", 250000000, 10.5, -45.0, 5000, {r: 1.0, g: 0.5, b: 0.0}, 20000000);
 
       // LEVEL 5: LANIAKEA
       const laniakeaGroup = new THREE.Group();
