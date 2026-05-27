@@ -11,7 +11,7 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cosmic Odometer - Space Travel Calculator</title>
+  <title>Cosmic Odometer - Universal View</title>
   <link rel="canonical" href="https://cosmicodometer.space" />
 
   <link rel="manifest" href="manifest.json" />
@@ -395,10 +395,153 @@
       top: 10vh;
       left: 0vw;
       width: 450px;
-      height: 65vh;
+      height: 65vh; /* Restored from 55vh */
       z-index: 0;
       pointer-events: auto;
     }
+
+    #travel-gateway {
+      position: fixed;
+      top: 78vh;
+      left: 20px;
+      width: 410px;
+      z-index: 10;
+    }
+    #btn-open-travel {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid #ffd700;
+      color: #ffd700;
+      padding: 12px;
+      border-radius: 5px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    #btn-open-travel:hover {
+      background: #ffd700;
+      color: #000;
+    }
+
+    /* Calculator View Styles */
+    #travel-calc-view {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #050505;
+      z-index: 2000;
+      overflow-y: auto;
+      padding: 80px 40px; /* Increased top/left padding */
+      box-sizing: border-box;
+      flex-direction: column;
+      align-items: flex-start; /* Changed from center to flex-start */
+      background-image: radial-gradient(circle at 20% 50%, #111 0%, #050505 100%); /* Adjusted gradient focus */
+    }
+    .back-btn-ui {
+      position: fixed;
+      top: 20px;
+      left: 40px; /* Aligned with the card */
+      color: #ffd700;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9rem;
+      border: 1px solid #ffd700;
+      padding: 5px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
+      z-index: 2001;
+      transition: all 0.2s;
+    }
+    .back-btn-ui:hover { background: #ffd700; color: #000; }
+    
+    .travel-card {
+      width: 200px;
+      min-height: 550px; /* Increased vertical length */
+      background: rgba(255, 215, 0, 0.05); 
+      border: 1px solid #ffd700;
+      padding: 40px 15px;
+      border-radius: 15px;
+      position: relative;
+      margin-top: 20px;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .travel-card h2 { 
+      color: #ffd700; 
+      margin-top: 0; 
+      text-transform: uppercase; 
+      letter-spacing: 2px; 
+      font-size: 0.9rem; 
+      text-align: left;
+      margin-bottom: 30px;
+    }
+    .travel-card label { display: block; margin-bottom: 8px; font-size: 0.65rem; color: #ffd700; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; }
+    
+    .travel-card select, .travel-card input { 
+      width: 100%; 
+      background: rgba(0,0,0,0.6); 
+      border: 1px solid rgba(255, 215, 0, 0.3); 
+      color: #fff; 
+      padding: 10px 8px; 
+      border-radius: 6px; 
+      font-size: 0.85rem; 
+      box-sizing: border-box; 
+      margin-bottom: 25px;
+      outline: none;
+    }
+    .travel-card select:focus, .travel-card input:focus { border-color: #ffd700; }
+    
+    .speed-row { display: flex; flex-direction: column; gap: 5px; } /* Stacked for 200px width */
+    
+    #full-calc-btn { 
+      width: 100%; 
+      background: #ffd700; 
+      color: #000; 
+      border: none; 
+      padding: 12px; 
+      border-radius: 6px; 
+      font-weight: bold; 
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.85rem; 
+      cursor: pointer; 
+      transition: all 0.2s; 
+      margin-top: auto;
+    }
+    #full-calc-btn:hover { background: #ffea00; box-shadow: 0 0 15px rgba(255,215,0,0.4); }
+    #full-calc-btn:active { transform: scale(0.98); }
+    
+    #full-travel-results { 
+      margin-top: 30px; 
+      padding-top: 20px; 
+      border-top: 1px solid rgba(255,215,0,0.2); 
+      display: none; 
+    }
+    
+    .travel-res-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 12px 8px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .full-res-label { color: #8892b0; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 5px; display: block; }
+    .full-res-val { color: #fff; font-size: 1.1rem; font-weight: bold; text-shadow: 0 0 10px rgba(255,215,0,0.3); }
 
     /* Mode buttons for the 3D view */
     #solar-controls {
@@ -523,6 +666,16 @@
         margin-top: 10px;
         margin-bottom: 80px;
       }
+      #travel-gateway {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 10px auto;
+        z-index: 5;
+      }
+      #btn-open-travel { width: 100%; }
 
       body.show-3d-on-mobile .container,
       body.show-3d-on-mobile .right-panel,
@@ -639,12 +792,149 @@
     }
     .ig-card h4 { margin: 0 0 10px 0; color: #00d4ff; font-size: 1.1rem; }
     .ig-card p { font-size: 0.85rem; color: #ccc; line-height: 1.5; margin: 0; }
+
+    #star-label {
+      position: absolute;
+      display: none;
+      background: rgba(0, 0, 0, 0.85);
+      color: #00d4ff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      pointer-events: none;
+      border: 1px solid #00d4ff;
+      font-size: 0.8rem;
+      font-weight: bold;
+      z-index: 10000;
+      white-space: nowrap;
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    }
+    #beta-tag {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 68, 68, 0.2);
+      color: #ff4444;
+      border: 1px solid #ff4444;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      z-index: 10001;
+      pointer-events: none;
+      backdrop-filter: blur(4px);
+    }
+    #distance-odometer {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      background: rgba(0, 212, 255, 0.1);
+      color: #00d4ff;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-family: 'Orbitron', sans-serif;
+      text-align: right;
+      z-index: 10001;
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+    }
+    .odo-label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      display: block;
+      margin-bottom: 2px;
+      opacity: 0.8;
+    }
+    .odo-value {
+      font-size: 1.2rem;
+      font-weight: bold;
+      display: block;
+    }
+    .odo-unit {
+      font-size: 0.7rem;
+      margin-left: 4px;
+    }
+    #cosmic-infograph {
+      position: fixed;
+      bottom: 100px;
+      right: 15px;
+      width: 280px;
+      background: rgba(0, 20, 30, 0.85);
+      color: #fff;
+      border: 1px solid rgba(0, 212, 255, 0.4);
+      border-radius: 12px;
+      padding: 15px;
+      font-family: 'Inter', sans-serif;
+      z-index: 10001;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    #infograph-search {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      outline: none;
+    }
+    #infograph-results {
+      max-height: 120px;
+      overflow-y: auto;
+      background: rgba(0,0,0,0.3);
+      border-radius: 6px;
+      display: none;
+    }
+    .info-result-item {
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .info-result-item:hover {
+      background: rgba(0, 212, 255, 0.2);
+    }
+    #infograph-data {
+      font-size: 0.75rem;
+      line-height: 1.6;
+    }
+    .info-header {
+      font-family: 'Orbitron', sans-serif;
+      color: #00d4ff;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 4px 0;
+    }
+    .info-key { color: #8892b0; }
+    .info-val { color: #ccd6f6; font-weight: bold; }
+    #infograph-close {
+      cursor: pointer;
+      font-size: 1.2rem;
+      opacity: 0.5;
+    }
+    #infograph-close:hover { opacity: 1; }
   </style>
 </head>
 
 <body>
   <button id="update-btn" onclick="updateSite()"></button>
   <canvas id="starfield"></canvas>
+  <div id="star-label"></div>
 
   <button id="mobile-toggle-btn" onclick="toggleMobileView()" data-i18n="mobile_view_solar">🌌 VIEW SOLAR SYSTEM</button>
 
@@ -663,9 +953,68 @@
     </div>
   </div>
 
+  <div id="travel-calc-view">
+    <div id="beta-tag">Beta Version</div>
+    <div id="distance-odometer">
+      <span class="odo-label">Distance from Earth</span>
+      <span class="odo-value" id="odo-val">0</span>
+    </div>
+    <div id="universe-3d-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+    <button class="back-btn-ui" onclick="window.switchView('dashboard')">← BACK</button>
+    
+    <div class="travel-card">
+      <h2 data-i18n="travel_calc_title">Universal View</h2>
+      
+      <label data-i18n="select_dest">Destination</label>
+      <select id="full-travel-dest">
+        <option value="384400" data-i18n="dest_moon">Moon</option>
+        <option value="54600000" data-i18n="dest_mars_min">Mars (Min)</option>
+        <option value="401000000" data-i18n="dest_mars_max">Mars (Max)</option>
+        <option value="AU" data-i18n="dest_sun">Sun (1 AU)</option>
+        <option value="628700000" data-i18n="dest_jupiter">Jupiter</option>
+        <option value="24000000000" data-i18n="dest_voyager">Voyager 1</option>
+        <option value="41340000000000" data-i18n="dest_alpha">Alpha Centauri</option>
+        <option value="56385000000000" data-i18n="dest_barnard">Barnard's Star</option>
+        <option value="74360000000000" data-i18n="dest_wolf">Wolf 359</option>
+        <option value="81363000000000" data-i18n="dest_sirius">Sirius</option>
+        <option value="158000000000000" data-i18n="dest_altair">Altair</option>
+        <option value="236500000000000" data-i18n="dest_vega">Vega</option>
+        <option value="302740000000000"  data-i18n="dest_canopus">Canopus</option>
+        <option value="4096000000000000" data-i18n="dest_polaris">Polaris</option>
+        <option value="5200000000000000" data-i18n="dest_antares">Antares</option>
+        <option value="6074000000000000" data-i18n="dest_betelgeuse">Betelgeuse</option>
+        <option value="8136000000000000" data-i18n="dest_rigel">Rigel</option>
+        <option value="23651826000000000000" data-i18n="dest_andromeda">Andromeda Galaxy</option>
+      </select>
+
+      <label data-i18n="enter_speed">Travel Speed</label>
+      <div class="speed-row">
+        <input type="number" id="full-travel-speed" value="100000">
+        <select id="full-travel-unit">
+          <option value="kmh">km/h</option>
+          <option value="kms">km/s</option>
+          <option value="c">% of Light</option>
+        </select>
+      </div>
+
+      <button id="full-calc-btn" onclick="window.runFullCalculation()" data-i18n="calc_btn">CALCULATE MISSION</button>
+
+      <div id="full-travel-results">
+        <div class="travel-res-box">
+          <span class="full-res-label" data-i18n="duration_label">Duration:</span>
+          <span class="full-res-val" id="full-res-duration">---</span>
+        </div>
+        <div class="travel-res-box">
+          <span class="full-res-label" data-i18n="arrival_label">Arrival:</span>
+          <span class="full-res-val" id="full-res-arrival">---</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <h1 data-i18n="title">Cosmic Odometer</h1>
   <h2 data-i18n="subtitle" style="font-size:1rem; color:#8892b0; margin-top:-10px; font-weight:normal;">
-    Space Travel Calculator & Age in Seconds
+    Space travel calculator & Age in Seconds
   </h2>
 
   <div class="container">
@@ -930,6 +1279,12 @@
     </div>
   </div>
 
+  <div id="travel-gateway">
+    <button id="btn-open-travel" onclick="window.switchView('travel')">
+      <span>🚀</span> <span data-i18n="travel_calc_title">Universal View</span>
+    </button>
+  </div>
+
   <div class="right-panel" id="milky-way-panel">
     <h3 data-i18n="gal_context">🌌 GALACTIC CONTEXT</h3>
 
@@ -1095,6 +1450,51 @@
       window.calculateConnection = calculateConnection;
       window.calculateFutureMilestone = calculateFutureMilestone;
 
+      window.calculateTravelTime = function() {
+        const destDistKm = parseFloat($("travel-dest").value);
+        const speedVal = parseFloat($("travel-speed").value);
+        const speedUnit = $("travel-unit").value;
+        const resultsArea = $("travel-results");
+        
+        if (isNaN(speedVal) || speedVal <= 0) {
+          resultsArea.style.display = "none";
+          return;
+        }
+
+        let speedKmS = 0;
+        if (speedUnit === "kmh") speedKmS = speedVal / 3600;
+        else if (speedUnit === "kms") speedKmS = speedVal;
+        else if (speedUnit === "c") speedKmS = (speedVal / 100) * SPEED_OF_LIGHT_KM_S;
+
+        const totalSeconds = destDistKm / speedKmS;
+        
+        // Format Duration
+        let durationText = "";
+        const years = Math.floor(totalSeconds / (365.25 * 24 * 3600));
+        const remainingAfterYears = totalSeconds % (365.25 * 24 * 3600);
+        const days = Math.floor(remainingAfterYears / (24 * 3600));
+        const remainingAfterDays = remainingAfterYears % (24 * 3600);
+        const hours = Math.floor(remainingAfterDays / 3600);
+        const mins = Math.floor((remainingAfterDays % 3600) / 60);
+        const secs = Math.floor(remainingAfterDays % 60);
+
+        if (years > 0) durationText += `${years}${t("unit_y")} `;
+        if (days > 0 || years > 0) durationText += `${days}${t("unit_d")} `;
+        durationText += `${hours}h ${mins}m ${secs}s`;
+
+        // Calculate Arrival Date
+        const arrivalDate = new Date(Date.now() + (totalSeconds * 1000));
+        const arrivalText = arrivalDate.toLocaleDateString(undefined, { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric' 
+        });
+
+        $("travel-duration").innerText = durationText;
+        $("travel-arrival").innerText = arrivalText;
+        resultsArea.style.display = "block";
+      };
+
       // Constants
       const DIST = {
         MOON_ROUND_TRIP_KM: 768800,
@@ -1151,7 +1551,7 @@
       const translations = {
         en: {
           title: "Cosmic Odometer",
-          subtitle: "Space Travel Calculator & Age in Seconds",
+          subtitle: "Space travel calculator & Age in Seconds",
           copied: "Link Copied!",
           // Controls
           install_app: "📲 INSTALL APP",
@@ -1359,7 +1759,38 @@
           l2_orbit: "L2 Orbit",
           orbiting_sun: "Orbiting Sun",
           buy_coffee: "🚀 Keep the odometer spinning 🧋",
-          btn_switch_planet: "🪐 SWITCH TO PLANET YEARS"
+          btn_switch_planet: "🪐 SWITCH TO PLANET YEARS",
+          travel_calc_title: "Universal View",
+          select_dest: "Select Destination",
+          enter_speed: "Enter Speed",
+          calc_btn: "CALCULATE MISSION",
+          arrival_label: "Arrival:",
+          duration_label: "Duration:",
+          dest_moon: "Moon",
+          dest_mars_min: "Mars (Min)",
+          dest_mars_max: "Mars (Max)",
+          dest_sun: "Sun (1 AU)",
+          dest_jupiter: "Jupiter",
+          dest_voyager: "Voyager 1",
+          dest_alpha: "Alpha Centauri",
+          dest_center: "Galactic Center",
+          dest_andromeda: "Andromeda Galaxy"
+,
+          dest_barnard: "Barnard's Star"
+,
+          dest_wolf: "Wolf 359"
+,
+          dest_sirius: "Sirius",
+          dest_vega: "Vega",
+          dest_altair: "Altair",
+          dest_bubble: "100 LY Boundary"
+,
+          dest_betelgeuse: "Betelgeuse",
+          dest_rigel: "Rigel",
+          dest_antares: "Antares",
+          dest_polaris: "Polaris",
+          dest_canopus: "Canopus",
+          dest_bubble_1000: "1,000 LY Boundary"
         },
         fr: {
           title: "Odomètre cosmique",
@@ -1565,7 +1996,38 @@
           orbiting_sun: "En orbite autour du Soleil",
           buy_coffee: "🚀 Faire tourner l'odomètre 🧋",
           btn_switch_planet: "🪐 PASSER AUX ANNÉES PLANÉTAIRES",
-          planet_ages_title: "Âges sur d'autres mondes"
+          planet_ages_title: "Âges sur d'autres mondes",
+          travel_calc_title: "Calculateur de Voyage Spatial",
+          select_dest: "Choisir Destination",
+          enter_speed: "Vitesse",
+          calc_btn: "CALCULER MISSION",
+          arrival_label: "Arrivée :",
+          duration_label: "Durée :",
+          dest_moon: "Lune",
+          dest_mars_min: "Mars (Min)",
+          dest_mars_max: "Mars (Max)",
+          dest_sun: "Soleil (1 UA)",
+          dest_jupiter: "Jupiter",
+          dest_voyager: "Voyager 1",
+          dest_alpha: "Alpha Centauri",
+          dest_center: "Centre Galactique",
+          dest_andromeda: "Galaxie d'Andromède"
+,
+          dest_barnard: "Étoile de Barnard"
+,
+          dest_wolf: "Wolf 359"
+,
+          dest_sirius: "Sirius",
+          dest_vega: "Vega",
+          dest_altair: "Altair",
+          dest_bubble: "100 LY Boundary"
+,
+          dest_betelgeuse: "Betelgeuse",
+          dest_rigel: "Rigel",
+          dest_antares: "Antares",
+          dest_polaris: "Polaris",
+          dest_canopus: "Canopus",
+          dest_bubble_1000: "1,000 LY Boundary"
         },
         es: {
           title: "Odómetro Cósmico",
@@ -1772,6 +2234,38 @@
           buy_coffee: "🚀 Mantén el odómetro girando 🧋",
           btn_switch_planet: "🪐 PASAR A AÑOS PLANETARIOS",
           planet_ages_title: "Edades en otros mundos"
+,
+          travel_calc_title: "Calculadora de Viaje Espacial",
+          select_dest: "Seleccionar Destino",
+          enter_speed: "Velocidad",
+          calc_btn: "CALCULAR MISIÓN",
+          arrival_label: "Llegada:",
+          duration_label: "Duración:",
+          dest_moon: "Luna",
+          dest_mars_min: "Mars (Mín)",
+          dest_mars_max: "Mars (Máx)",
+          dest_sun: "Sol (1 UA)",
+          dest_jupiter: "Júpiter",
+          dest_voyager: "Voyager 1",
+          dest_alpha: "Alfa Centauri",
+          dest_center: "Centro Galáctico",
+          dest_andromeda: "Galaxia de Andrómeda"
+,
+          dest_barnard: "Estrella de Barnard"
+,
+          dest_wolf: "Wolf 359"
+,
+          dest_sirius: "Sirius",
+          dest_vega: "Vega",
+          dest_altair: "Altair",
+          dest_bubble: "100 LY Boundary"
+,
+          dest_betelgeuse: "Betelgeuse",
+          dest_rigel: "Rigel",
+          dest_antares: "Antares",
+          dest_polaris: "Polaris",
+          dest_canopus: "Canopus",
+          dest_bubble_1000: "1,000 LY Boundary"
         },
         jp: {
           title: "宇宙走行距離計",
@@ -1978,6 +2472,38 @@
           buy_coffee: "🚀 オドメーターを回し続ける 🧋",
           btn_switch_planet: "🪐 惑星年に切り替える",
           planet_ages_title: "他の世界での年齢"
+,
+          travel_calc_title: "宇宙旅行計算機",
+          select_dest: "目的地を選択",
+          enter_speed: "速度",
+          calc_btn: "計算する",
+          arrival_label: "到着予定:",
+          duration_label: "所要時間:",
+          dest_moon: "月",
+          dest_mars_min: "火星（最短）",
+          dest_mars_max: "火星（最遠）",
+          dest_sun: "太陽 (1 AU)",
+          dest_jupiter: "木星",
+          dest_voyager: "ボイジャー1号",
+          dest_alpha: "ケンタウルス座アルファ星",
+          dest_center: "銀河系中心",
+          dest_andromeda: "アンドロメダ銀河"
+,
+          dest_barnard: "バーナード星"
+,
+          dest_wolf: "ウォルフ359"
+,
+          dest_sirius: "Sirius",
+          dest_vega: "Vega",
+          dest_altair: "Altair",
+          dest_bubble: "100 LY Boundary"
+,
+          dest_betelgeuse: "Betelgeuse",
+          dest_rigel: "Rigel",
+          dest_antares: "Antares",
+          dest_polaris: "Polaris",
+          dest_canopus: "Canopus",
+          dest_bubble_1000: "1,000 LY Boundary"
         },
         pt: {
           title: "Odômetro Cósmico",
@@ -2184,6 +2710,38 @@
           buy_coffee: "🚀 Manter o odômetro girando 🧋",
           btn_switch_planet: "🪐 MUDAR PARA ANOS PLANETÁRIOS",
           planet_ages_title: "Idades em outros mundos"
+,
+          travel_calc_title: "Calculadora de Viagem Espacial",
+          select_dest: "Selecionar Destino",
+          enter_speed: "Velocidade",
+          calc_btn: "CALCULAR MISSÃO",
+          arrival_label: "Chegada:",
+          duration_label: "Duração:",
+          dest_moon: "Lua",
+          dest_mars_min: "Marte (Mín)",
+          dest_mars_max: "Marte (Máx)",
+          dest_sun: "Sol (1 UA)",
+          dest_jupiter: "Júpiter",
+          dest_voyager: "Voyager 1",
+          dest_alpha: "Alpha Centauri",
+          dest_center: "Centro Galáctico",
+          dest_andromeda: "Galáxia de Andrômeda"
+,
+          dest_barnard: "Estrela de Barnard"
+,
+          dest_wolf: "Wolf 359"
+,
+          dest_sirius: "Sirius",
+          dest_vega: "Vega",
+          dest_altair: "Altair",
+          dest_bubble: "100 LY Boundary"
+,
+          dest_betelgeuse: "Betelgeuse",
+          dest_rigel: "Rigel",
+          dest_antares: "Antares",
+          dest_polaris: "Polaris",
+          dest_canopus: "Canopus",
+          dest_bubble_1000: "1,000 LY Boundary"
         },
         de: {
           title: "Kosmisches Odometer",
@@ -2390,6 +2948,38 @@
           buy_coffee: "🚀 Halte das Odometer am Laufen 🧋",
           btn_switch_planet: "🪐 ZU PLANETENJAHREN WECHSELN",
           planet_ages_title: "Alter auf anderen Welten"
+,
+          travel_calc_title: "Weltraumreise-Rechner",
+          select_dest: "Ziel wählen",
+          enter_speed: "Geschwindigkeit",
+          calc_btn: "MISSION BERECHNEN",
+          arrival_label: "Ankunft:",
+          duration_label: "Dauer:",
+          dest_moon: "Mond",
+          dest_mars_min: "Mars (Min)",
+          dest_mars_max: "Mars (Max)",
+          dest_sun: "Sonne (1 AE)",
+          dest_jupiter: "Jupiter",
+          dest_voyager: "Voyager 1",
+          dest_alpha: "Alpha Centauri",
+          dest_center: "Galaktisches Zentrum",
+          dest_andromeda: "Andromeda-Galaxie"
+,
+          dest_barnard: "Barnards Stern"
+,
+          dest_wolf: "Wolf 359"
+,
+          dest_sirius: "Sirius",
+          dest_vega: "Vega",
+          dest_altair: "Altair",
+          dest_bubble: "100 LY Boundary"
+,
+          dest_betelgeuse: "Betelgeuse",
+          dest_rigel: "Rigel",
+          dest_antares: "Antares",
+          dest_polaris: "Polaris",
+          dest_canopus: "Canopus",
+          dest_bubble_1000: "1,000 LY Boundary"
         },
         it: {
           title: "Odometro Cosmico",
@@ -2596,6 +3186,38 @@
           buy_coffee: "🚀 Mantieni l'odometro in funzione 🧋",
           btn_switch_planet: "🪐 PASSA AGLI ANNI PLANETARI",
           planet_ages_title: "Età su altri mondi"
+,
+          travel_calc_title: "Calcolatore di Viaggio Spaziale",
+          select_dest: "Scegli Destinazione",
+          enter_speed: "Velocità",
+          calc_btn: "CALCOLA MISSIONE",
+          arrival_label: "Arrivo:",
+          duration_label: "Durata:",
+          dest_moon: "Luna",
+          dest_mars_min: "Marte (Min)",
+          dest_mars_max: "Marte (Max)",
+          dest_sun: "Sole (1 UA)",
+          dest_jupiter: "Giove",
+          dest_voyager: "Voyager 1",
+          dest_alpha: "Alpha Centauri",
+          dest_center: "Centro Galattico",
+          dest_andromeda: "Galassia di Andromeda"
+,
+          dest_barnard: "Stella di Barnard"
+,
+          dest_wolf: "Wolf 359"
+,
+          dest_sirius: "Sirius",
+          dest_vega: "Vega",
+          dest_altair: "Altair",
+          dest_bubble: "100 LY Boundary"
+,
+          dest_betelgeuse: "Betelgeuse",
+          dest_rigel: "Rigel",
+          dest_antares: "Antares",
+          dest_polaris: "Polaris",
+          dest_canopus: "Canopus",
+          dest_bubble_1000: "1,000 LY Boundary"
         },
         zh: {
           title: "宇宙里程表",
@@ -2802,6 +3424,38 @@
           buy_coffee: "🚀 让里程表继续转动 🧋",
           btn_switch_planet: "🪐 切换到行星岁数",
           planet_ages_title: "其他星球上的岁数"
+,
+          travel_calc_title: "宇宙旅行计算器",
+          select_dest: "选择目的地",
+          enter_speed: "速度",
+          calc_btn: "计算任务",
+          arrival_label: "到达:",
+          duration_label: "时长:",
+          dest_moon: "月球",
+          dest_mars_min: "火星 (最近)",
+          dest_mars_max: "火星 (最远)",
+          dest_sun: "太阳 (1 AU)",
+          dest_jupiter: "木星",
+          dest_voyager: "旅行者1号",
+          dest_alpha: "半人马座α星",
+          dest_center: "银河系中心",
+          dest_andromeda: "仙女座星系"
+,
+          dest_barnard: "巴纳德星"
+,
+          dest_wolf: "沃尔夫 359"
+,
+          dest_sirius: "天狼星",
+          dest_vega: "织女星",
+          dest_altair: "牛郎星",
+          dest_bubble: "100 光年边界"
+,
+          dest_betelgeuse: "参宿四",
+          dest_rigel: "参宿七",
+          dest_antares: "心宿二",
+          dest_polaris: "北极星",
+          dest_canopus: "老人星",
+          dest_bubble_1000: "1,000 光年边界"
         },
         hi: {
           title: "कॉस्मिक ओडोमीटर (Cosmic Odometer)",
@@ -3007,14 +3661,149 @@
           orbiting_sun: "सूर्य की परिक्रमा",
           buy_coffee: "🚀 ओडोमीटर को चालू रखें 🧋",
           btn_switch_planet: "🪐 ग्रहों के वर्षों पर स्विच करें",
-          planet_ages_title: "अन्य ग्रहों पर आयु"
+          planet_ages_title: "अन्य ग्रहों पर आयु",
+          travel_calc_title: "अंतरिक्ष यात्रा कैलकुलेटर",
+          select_dest: "गंतव्य चुनें",
+          enter_speed: "गति",
+          calc_btn: "मिशन की गणना करें",
+          arrival_label: "आगमन:",
+          duration_label: "अवधि:",
+          dest_moon: "चंद्रमा",
+          dest_mars_min: "मंगल (न्यूनतम)",
+          dest_mars_max: "मंगल (अधिकतम)",
+          dest_sun: "सूर्य (1 AU)",
+          dest_jupiter: "बृहस्पति",
+          dest_voyager: "वॉयेजर 1",
+          dest_alpha: "अल्फा सेंटौरी",
+          dest_center: "आकाशगंगा केंद्र",
+          dest_andromeda: "एंड्रोमेडा आकाशगंगा"
         }
+      };
+
+      window.switchView = function(view) {
+        const dashboard = document.querySelector(".container");
+        const travelView = $("travel-calc-view");
+        const gateway = $("travel-gateway");
+        const solar = $("solar-system-container");
+        const title = document.querySelector("h1");
+        const subtitle = document.querySelector("h2");
+        const rightPanel = $("milky-way-panel");
+        const mobileToggle = $("mobile-toggle-btn");
+        const starfield = $("starfield");
+
+        if (view === 'travel') {
+          if (dashboard) dashboard.style.display = "none";
+          if (title) title.style.display = "none";
+          if (subtitle) subtitle.style.display = "none";
+          if (rightPanel) rightPanel.style.display = "none";
+          if (mobileToggle) mobileToggle.style.display = "none";
+          gateway.style.display = "none";
+          solar.style.display = "none";
+          travelView.style.display = "flex"; if(window.animateUniverse) window.animateUniverse();
+          window.scrollTo(0,0);
+        } else {
+          if (dashboard) dashboard.style.display = "";
+          if (title) title.style.display = "";
+          if (subtitle) subtitle.style.display = "";
+          if (rightPanel) rightPanel.style.display = "";
+          if (mobileToggle) mobileToggle.style.display = "";
+          gateway.style.display = "";
+          solar.style.display = "";
+          travelView.style.display = "none";
+        }
+      };
+
+      window.runFullCalculation = function() {
+        const destVal = $("full-travel-dest").value;
+        const speedVal = parseFloat($("full-travel-speed").value);
+        const speedUnit = $("full-travel-unit").value;
+        
+        let destDistKm = 0;
+        if (destVal === "AU") destDistKm = 149597870.7;
+        else if (destVal === "OBS") destDistKm = 4.4e23; // ~46.5 billion light years
+        else destDistKm = parseFloat(destVal);
+
+        if (isNaN(speedVal) || speedVal <= 0) return;
+
+        let speedKmS = 0;
+        if (speedUnit === "kmh") speedKmS = speedVal / 3600;
+        else if (speedUnit === "kms") speedKmS = speedVal;
+        else if (speedUnit === "c") speedKmS = (speedVal / 100) * SPEED_OF_LIGHT_KM_S;
+
+        const totalSeconds = destDistKm / speedKmS;
+        
+        // Format Duration
+        let durationText = "";
+        const years = Math.floor(totalSeconds / (365.25 * 24 * 3600));
+        
+        if (years > 1000000) {
+            // Use billions/millions for massive numbers
+            if (years >= 1000000000) durationText = (years / 1000000000).toFixed(2) + "B " + t("unit_y");
+            else durationText = (years / 1000000).toFixed(2) + "M " + t("unit_y");
+        } else {
+            const remainingAfterYears = totalSeconds % (365.25 * 24 * 3600);
+            const days = Math.floor((totalSeconds % (365.25 * 24 * 3600)) / (24 * 3600));
+            const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+            const mins = Math.floor((totalSeconds % 3600) / 60);
+            const secs = Math.floor(totalSeconds % 60);
+
+            if (years > 0) durationText += `${years}${t("unit_y")} `;
+            if (days > 0 || years > 0) durationText += `${days}${t("unit_d")} `;
+            durationText += `${hours}h ${mins}m ${secs}s`;
+        }
+
+        // Arrival
+        let arrivalText = "";
+        // Javascript Date limit is ~273,790 years from 1970
+        if (years > 270000) {
+            arrivalText = "Deep Cosmic Future"; 
+        } else {
+            const arrivalDate = new Date(Date.now() + (totalSeconds * 1000));
+            arrivalText = arrivalDate.toLocaleDateString(undefined, { 
+              year: 'numeric', month: 'long', day: 'numeric' 
+            });
+        }
+
+        $("full-res-duration").innerText = durationText;
+        $("full-res-arrival").innerText = arrivalText;
+        $("full-travel-results").style.display = "block";
       };
 
       function t(key) {
         const pack = translations[currentLang] || translations.en;
         return pack[key] ?? key;
       }
+
+      // Performance Monitor for Adaptive Scaling
+      window.PerfMonitor = {
+        lastTime: performance.now(),
+        frames: 0,
+        fps: 60,
+        isSlowDevice: false,
+        checkInterval: 2000, 
+
+        recordFrame() {
+          this.frames++;
+          const now = performance.now();
+          if (now >= this.lastTime + this.checkInterval) {
+            this.fps = (this.frames * 1000) / (now - this.lastTime);
+            this.lastTime = now;
+            this.frames = 0;
+            if (this.fps < 35 && !this.isSlowDevice) {
+              this.isSlowDevice = true;
+              return true;
+            }
+          }
+          return false;
+        },
+
+        applyScaling() {
+          console.warn("Low performance detected (FPS: " + Math.round(this.fps) + "). Scaling down for stability.");
+          if (window.solarRenderer) window.solarRenderer.setPixelRatio(1);
+          if (window.galaxyRenderer) window.galaxyRenderer.setPixelRatio(1);
+          if (window.universeRenderer) window.universeRenderer.setPixelRatio(1);
+        }
+      };
 
       function applyLanguage() {
         const pack = translations[currentLang] || translations.en;
@@ -4162,6 +4951,15 @@
 
       let lastStarTick = 0;
       function animateStars(time) {
+        // Hide background stars only in specific 3D mobile views to prevent visual clutter
+        const isMobile3D = isMobile && document.body.classList.contains("show-3d-on-mobile");
+        
+        if (isMobile3D) {
+          starCtx.clearRect(-w / 2, -h / 2, w, h);
+          requestAnimationFrame(animateStars);
+          return;
+        }
+
         if (!isAnimating) return;
         
         if (isMobile && time - lastStarTick < 33) {
@@ -4224,6 +5022,7 @@
 
       const isMobile = window.innerWidth < 768;
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile, preserveDrawingBuffer: true });
+      window.solarRenderer = renderer;
       renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
       renderer.setSize(initWidth, initHeight);
       container.appendChild(renderer.domElement);
@@ -4615,6 +5414,16 @@
       let cinematicDaysElapsed = (Date.now() - J2000) / (1000 * 60 * 60 * 24);
 
       function animate3D() {
+        const container = document.getElementById("solar-system-container");
+        if (!container || window.getComputedStyle(container).display === "none") {
+          requestAnimationFrame(animate3D);
+          return;
+        }
+
+        if (window.PerfMonitor && window.PerfMonitor.recordFrame()) {
+          window.PerfMonitor.applyScaling();
+        }
+
         requestAnimationFrame(animate3D);
         sun.rotation.y += 0.005;
         if (window.asteroidBelt) window.asteroidBelt.rotation.y += 0.0005;
@@ -4760,6 +5569,7 @@
       galaxyCamera.lookAt(0, 0, 0);
 
       galaxyRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });
+      window.galaxyRenderer = galaxyRenderer;
       galaxyRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
       galaxyRenderer.setSize(container.clientWidth, container.clientHeight);
       container.appendChild(galaxyRenderer.domElement);
@@ -4834,6 +5644,16 @@
       window.galaxyControls.enableZoom = false;
 
       function animateGalaxy() {
+        const container = document.getElementById("galaxy-map");
+        if (!container || window.getComputedStyle(container).display === "none") {
+          requestAnimationFrame(animateGalaxy);
+          return;
+        }
+
+        if (window.PerfMonitor && window.PerfMonitor.recordFrame()) {
+          window.PerfMonitor.applyScaling();
+        }
+
         requestAnimationFrame(animateGalaxy);
 
         galaxyParticles.rotation.y += 0.001;
@@ -4860,7 +5680,615 @@
     setTimeout(() => {
       init3DSolarSystem();
       init3DGalaxy();
+      init3DUniverse();
     }, 500);
-  </script>
+
+    function init3DUniverse() {
+      const container = document.getElementById("universe-3d-container");
+      if (!container) return;
+      const isMobile = window.innerWidth < 768;
+      universeScene = new THREE.Scene();
+      const UNIT_KM = 500000000000, I_SCALE = 100, LY_TO_I = (9460730472580 / UNIT_KM) * I_SCALE;
+      const EARTH_SIZE = (12742 / UNIT_KM) * I_SCALE * 1000, SUN_SIZE = (1392700 / UNIT_KM) * I_SCALE * 1000, AU_DIST = (149597871 / UNIT_KM) * I_SCALE;
+
+      universeScene.add(new THREE.AmbientLight(0xffffff, 0.4));
+      const sunLight = new THREE.PointLight(0xffffff, 3, 5000); universeScene.add(sunLight);
+
+      universeCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1.0, 100000000000000);
+      universeCamera.position.set(0, 50, 150); 
+      universeRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      window.universeRenderer = universeRenderer;
+      universeRenderer.setPixelRatio(window.devicePixelRatio); universeRenderer.setSize(window.innerWidth, window.innerHeight);
+      container.appendChild(universeRenderer.domElement);
+      universeControls = new THREE.OrbitControls(universeCamera, universeRenderer.domElement);
+      universeControls.enableDamping = true;
+
+      const createCelestialBody = (radius, color, isStar = false) => {
+        const group = new THREE.Group(), effectiveRadius = Math.max(radius, 0.05);
+        const core = new THREE.Mesh(new THREE.SphereGeometry(effectiveRadius, 24, 24), isStar ? new THREE.MeshBasicMaterial({ color: color }) : new THREE.MeshStandardMaterial({ color: color, roughness: 0.8 }));
+        group.add(core);
+        if (isStar) {
+          const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.TextureLoader().load('https://threejs.org/examples/textures/sprites/glow.png'), color: color, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, depthWrite: false }));
+          glow.scale.set(effectiveRadius * 30, effectiveRadius * 30, 1); group.add(glow);
+        }
+        return group;
+      };
+
+      const get3DPos = (ra, dec, distLy) => {
+        const dist = distLy * LY_TO_I, phi = (90 - dec) * Math.PI / 180, theta = (ra * 15) * Math.PI / 180;
+        return new THREE.Vector3(dist * Math.sin(phi) * Math.cos(theta), dist * Math.cos(phi), dist * Math.sin(phi) * Math.sin(theta));
+      };
+
+      const markerMat = new THREE.SpriteMaterial({ map: new THREE.TextureLoader().load('https://threejs.org/examples/textures/sprites/glow.png'), transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending, depthWrite: false });
+      const selectableStars = [], selectableGalaxies = [], selectableClusters = [], selectableWeb = [], selectableDeepSpace = [];
+      const starLabel = document.getElementById('star-label');
+      const raycaster = new THREE.Raycaster(), mouse = new THREE.Vector2();
+
+      // Proximity Label System
+      const labelContainer = document.createElement('div');
+      labelContainer.id = "universe-labels-container";
+      labelContainer.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 10;";
+      container.appendChild(labelContainer);
+
+      const labelPool = [];
+      const activeLabels = [];
+      const _tempV = new THREE.Vector3();
+
+      function getLabel() {
+        if (labelPool.length > 0) {
+          const el = labelPool.pop();
+          el.style.display = 'block';
+          return el;
+        }
+        const el = document.createElement('div');
+        el.className = "proximity-label";
+        el.style.cssText = "position: absolute; background: rgba(0, 0, 0, 0.75); color: #00d4ff; padding: 4px 8px; border-radius: 4px; border: 1px solid #00d4ff; font-size: 0.7rem; font-weight: bold; white-space: nowrap; pointer-events: none; transform: translate(-50%, -100%); margin-top: -10px; box-shadow: 0 0 10px rgba(0, 212, 255, 0.3); z-index: 100;";
+        labelContainer.appendChild(el);
+        return el;
+      }
+
+      window.updateProximityLabels = function() {
+        while (activeLabels.length > 0) {
+          const el = activeLabels.pop();
+          el.style.display = 'none';
+          labelPool.push(el);
+        }
+
+        if (!universeCamera) return;
+        const camPos = universeCamera.position;
+        const candidates = [];
+
+        const checkList = (list, thresholdLY) => {
+          const threshold = thresholdLY * LY_TO_I;
+          for (let i = 0; i < list.length; i++) {
+            const obj = list[i];
+            obj.getWorldPosition(_tempV);
+            const d = _tempV.distanceTo(camPos);
+            if (d < threshold) {
+              candidates.push({ pos: _tempV.clone(), name: obj.userData.name || (obj.parent && obj.parent.userData ? obj.parent.userData.name : "Unknown"), icon: obj.userData.icon || "✨", d: d });
+            }
+          }
+        };
+
+        checkList(selectableStars, 15);
+        checkList(selectableGalaxies, 3000000);
+        checkList(selectableClusters, 80000000);
+        checkList(selectableDeepSpace, 800000000);
+
+        candidates.sort((a, b) => a.d - b.d);
+        const winners = candidates.slice(0, 8);
+
+        winners.forEach(w => {
+          _tempV.copy(w.pos);
+          _tempV.project(universeCamera);
+          if (_tempV.z > 1) return; 
+
+          const x = (_tempV.x * 0.5 + 0.5) * window.innerWidth;
+          const y = (-_tempV.y * 0.5 + 0.5) * window.innerHeight;
+
+          const el = getLabel();
+          el.innerHTML = `${w.icon} ${w.name}`;
+          el.style.left = x + 'px';
+          el.style.top = y + 'px';
+          activeLabels.push(el);
+        });
+      };
+
+      // LEVEL 1: FULL 570 STARS
+      const starData = [
+        { name: "Proxima Centauri", ra: 14.49, dec: -62.68, dist: 4.246, color: 0xf44336, size: 0.15 },
+        { name: "Alpha Centauri A", ra: 14.66, dec: -60.83, dist: 4.37, color: 0xffeb3b, size: 1.1 },
+        { name: "Alpha Centauri B", ra: 14.66, dec: -60.84, dist: 4.37, color: 0xffa500, size: 0.9 },
+        { name: "Barnard's Star", ra: 17.96, dec: 4.69, dist: 5.96, color: 0xff4500, size: 0.2 },
+        { name: "Wolf 359", ra: 10.94, dec: 7.01, dist: 7.78, color: 0xff0000, size: 0.16 },
+        { name: "Lalande 21185", ra: 11.05, dec: 35.97, dist: 8.29, color: 0xff3300, size: 0.4 },
+        { name: "Sirius", ra: 6.75, dec: -16.71, dist: 8.6, color: 0x00d4ff, size: 1.7 },
+        { name: "Luyten 726-8", ra: 1.65, dec: -17.95, dist: 8.73, color: 0xff0000, size: 0.1 },
+        { name: "Ross 154", ra: 18.83, dec: -23.83, dist: 9.68, color: 0xff0000, size: 0.2 },
+        { name: "Ross 248", ra: 23.69, dec: 44.17, dist: 10.32, color: 0xff0000, size: 0.16 },
+        { name: "Epsilon Eridani", ra: 3.55, dec: -9.46, dist: 10.5, color: 0xffd700, size: 0.74 },
+        { name: "Lacaille 9352", ra: 23.09, dec: -35.85, dist: 10.74, color: 0xff4400, size: 0.46 },
+        { name: "Ross 128", ra: 11.79, dec: 0.8, dist: 10.92, color: 0xff0000, size: 0.21 },
+        { name: "EZ Aquarii", ra: 22.64, dec: -15.3, dist: 11.26, color: 0xff0000, size: 0.1 },
+        { name: "Procyon", ra: 7.65, dec: 5.22, dist: 11.4, color: 0xffffcc, size: 2.1 },
+        { name: "61 Cygni", ra: 21.11, dec: 38.75, dist: 11.4, color: 0xffa500, size: 0.67 },
+        { name: "Struve 2398", ra: 18.75, dec: 59.5, dist: 11.5, color: 0xff0000, size: 0.35 },
+        { name: "Groombridge 34", ra: 0.3, dec: 44.0, dist: 11.7, color: 0xff0000, size: 0.38 },
+        { name: "Epsilon Indi", ra: 22.06, dec: -56.78, dist: 11.8, color: 0xffa500, size: 0.73 },
+        { name: "Tau Ceti", ra: 1.74, dec: -15.9, dist: 11.9, color: 0xffff00, size: 0.79 },
+        { name: "Luyten's Star", ra: 7.45, dec: 5.2, dist: 12.36, color: 0xff0000, size: 0.35 },
+        { name: "Kapteyn's Star", ra: 5.19, dec: -45.0, dist: 12.76, color: 0xff3300, size: 0.29 },
+        { name: "Altair", ra: 19.84, dec: 8.87, dist: 16.7, color: 0xddeeff, size: 1.8 },
+        { name: "Vega", ra: 18.61, dec: 38.78, dist: 25.0, color: 0xaaaaff, size: 2.1 },
+        { name: "Fomalhaut", ra: 22.96, dec: -29.62, dist: 25.1, color: 0xeeffff, size: 1.8 },
+        { name: "Pollux", ra: 7.76, dec: 28.02, dist: 33.7, color: 0xffcc99, size: 8.8 },
+        { name: "Arcturus", ra: 14.26, dec: 19.18, dist: 36.7, color: 0xffcc88, size: 25.0 },
+        { name: "Capella", ra: 5.28, dec: 45.99, dist: 42.9, color: 0xffffcc, size: 12.0 },
+        { name: "Castor", ra: 7.57, dec: 31.89, dist: 51.5, color: 0xaaaaff, size: 2.7 },
+        { name: "Aldebaran", ra: 4.59, dec: 16.51, dist: 65.3, color: 0xffaa66, size: 44.0 },
+        { name: "Regulus", ra: 10.14, dec: 11.97, dist: 79.3, color: 0xbbddff, size: 3.8 },
+        { name: "Canopus", ra: 6.40, dec: -52.70, dist: 310.0, color: 0xffffff, size: 71.0 },
+        { name: "Polaris", ra: 2.52, dec: 89.26, dist: 323.0, color: 0xffffcc, size: 37.5 },
+        { name: "Antares", ra: 16.49, dec: -26.43, dist: 550.0, color: 0xff6600, size: 680.0 },
+        { name: "Betelgeuse", ra: 5.92, dec: 7.41, dist: 642.5, color: 0xff4400, size: 800.0 },
+        { name: "Siwarha", ra: 5.92, dec: 7.42, dist: 643.0, color: 0xbbddff, size: 15.0 },
+        { name: "Rigel", ra: 5.24, dec: -8.20, dist: 863.0, color: 0x88ccff, size: 78.0 },
+        { name: "Deneb", ra: 20.69, dec: 45.28, dist: 2615.0, color: 0xccddee, size: 200.0 },
+        { name: "Pistol Star", ra: 17.77, dec: -28.8, dist: 25000.0, color: 0x4488ff, size: 300.0 },
+        { name: "Sadr", ra: 20.37, dec: 40.26, dist: 1800.0, color: 0xffcc99, size: 150.0 },
+        { name: "Enif", ra: 21.74, dec: 9.87, dist: 690.0, color: 0xffaa66, size: 150.0 },
+        { name: "Aludra", ra: 7.40, dec: -29.30, dist: 2000.0, color: 0xbbddff, size: 50.0 },
+        { name: "Wezen", ra: 7.14, dec: -26.39, dist: 1800.0, color: 0xffffcc, size: 200.0 },
+        { name: "Naos", ra: 8.06, dec: -40.00, dist: 1080.0, color: 0xbbddff, size: 30.0 },
+        { name: "Alrumh", ra: 4.22, dec: -59.04, dist: 162.0, color: 0xbbddff, size: 3.1 },
+        { name: "Genghe", ra: 14.74, dec: 19.10, dist: 153.0, color: 0xffcc99, size: 20.0 },
+        { name: "Holoea", ra: 11.60, dec: -7.03, dist: 172.0, color: 0xffff00, size: 1.1 },
+        { name: "Kalasungsan", ra: 17.30, dec: -46.72, dist: 620.0, color: 0xffffcc, size: 14.0 },
+        { name: "Lang", ra: 22.31, dec: -60.26, dist: 199.0, color: 0xffcc99, size: 10.0 },
+        { name: "Exster", ra: 22.31, dec: -60.27, dist: 199.1, color: 0xbbddff, size: 2.0 },
+        { name: "Achernar", ra: 1.63, dec: -57.24, dist: 139.0, color: 0xbbddff, size: 6.7 },
+        { name: "Hadar", ra: 14.06, dec: -60.37, dist: 390.0, color: 0x99ccff, size: 9.0 },
+        { name: "Acrux", ra: 12.44, dec: -63.10, dist: 320.0, color: 0x99ccff, size: 8.0 },
+        { name: "Mimosa", ra: 12.79, dec: -59.69, dist: 280.0, color: 0x99ccff, size: 8.4 },
+        { name: "Spica", ra: 13.42, dec: -11.16, dist: 250.0, color: 0x99ccff, size: 10.0 },
+        { name: "Adhara", ra: 6.98, dec: -28.97, dist: 430.0, color: 0xbbddff, size: 14.0 },
+        { name: "Shaula", ra: 17.56, dec: -37.11, dist: 570.0, color: 0xbbddff, size: 10.0 },
+        { name: "Bellatrix", ra: 5.42, dec: 6.35, dist: 250.0, color: 0xaaaaff, size: 8.4 },
+        { name: "Alnath", ra: 5.44, dec: 28.6, dist: 134.0, color: 0xbbddff, size: 4.2 },
+        { name: "Miaplacidus", ra: 9.22, dec: -69.72, dist: 113.0, color: 0xbbddff, size: 6.8 },
+        { name: "Alnilam", ra: 5.60, dec: -1.20, dist: 1340.0, color: 0xbbccff, size: 42.0 },
+        { name: "Alnitak", ra: 5.68, dec: -1.94, dist: 1260.0, color: 0xbbccff, size: 20.0 },
+        { name: "Saiph", ra: 5.79, dec: -9.67, dist: 650.0, color: 0x99bbff, size: 22.0 },
+        { name: "Mintaka", ra: 5.53, dec: -0.30, dist: 1200.0, color: 0xbbccff, size: 16.0 },
+        { name: "Alphard", ra: 9.46, dec: -8.66, dist: 177.0, color: 0xffaa66, size: 50.0 },
+        { name: "Hamal", ra: 2.12, dec: 23.46, dist: 65.8, color: 0xffcc99, size: 15.0 },
+        { name: "Diphda", ra: 0.73, dec: -17.99, dist: 96.3, color: 0xffcc99, size: 17.0 },
+        { name: "Nunki", ra: 18.92, dec: -26.30, dist: 228.0, color: 0xbbddff, size: 4.5 },
+        { name: "Mirfak", ra: 3.40, dec: 49.86, dist: 510.0, color: 0xfff4aa, size: 60.0 },
+        { name: "Dubhe", ra: 11.06, dec: 61.75, dist: 123.0, color: 0xffcc66, size: 30.0 },
+        { name: "Merak", ra: 11.03, dec: 56.38, dist: 79.7, color: 0xbbddff, size: 3.0 },
+        { name: "Phecda", ra: 11.89, dec: 53.69, dist: 83.2, color: 0xbbddff, size: 3.0 },
+        { name: "Megrez", ra: 12.26, dec: 57.03, dist: 58.4, color: 0xbbddff, size: 2.0 },
+        { name: "Alioth", ra: 12.90, dec: 55.96, dist: 82.6, color: 0xbbddff, size: 4.0 },
+        { name: "Mizar", ra: 13.40, dec: 54.93, dist: 82.9, color: 0xbbddff, size: 4.0 },
+        { name: "Alcor", ra: 13.42, dec: 54.99, dist: 81.7, color: 0xbbddff, size: 2.0 },
+        { name: "Alkaid", ra: 13.79, dec: 49.31, dist: 101.0, color: 0xbbddff, size: 3.4 },
+        { name: "Eltanin", ra: 17.94, dec: 51.49, dist: 148.0, color: 0xffaa66, size: 48.0 },
+        { name: "Peacock", ra: 20.43, dec: -56.73, dist: 183.0, color: 0xbbddff, size: 6.0 },
+        { name: "Kaus Australis", ra: 18.40, dec: -34.38, dist: 143.0, color: 0xbbddff, size: 7.0 },
+        { name: "Avior", ra: 8.38, dec: -59.51, dist: 600.0, color: 0xffaa66, size: 150.0 },
+        { name: "Alsephina", ra: 8.74, dec: -54.71, dist: 80.0, color: 0xbbddff, size: 3.0 },
+        { name: "Sargas", ra: 17.62, dec: -43.01, dist: 270.0, color: 0xffcc99, size: 26.0 },
+        { name: "Menkent", ra: 14.11, dec: -36.37, dist: 58.8, color: 0xffcc99, size: 10.0 },
+        { name: "Atria", ra: 16.81, dec: -69.03, dist: 390.0, color: 0xffaa66, size: 130.0 },
+        { name: "Sabik", ra: 17.17, dec: -15.72, dist: 88.0, color: 0xbbddff, size: 3.0 },
+        { name: "Rasalhague", ra: 17.58, dec: 12.56, dist: 48.6, color: 0xbbddff, size: 3.0 },
+        { name: "Kocab", ra: 14.85, dec: 74.16, dist: 131.0, color: 0xffcc99, size: 42.0 },
+        { name: "Alphecca", ra: 15.58, dec: 26.71, dist: 75.0, color: 0xbbddff, size: 3.0 },
+        { name: "Unukalhai", ra: 15.74, dec: 6.43, dist: 74.0, color: 0xffcc99, size: 12.0 },
+        { name: "Zubenelgenubi", ra: 14.85, dec: -16.04, dist: 75.8, color: 0xbbddff, size: 3.0 },
+        { name: "Alshain", ra: 19.92, dec: 6.41, dist: 44.7, color: 0xffffcc, size: 3.0 },
+        { name: "Tarazed", ra: 19.77, dec: 10.61, dist: 390.0, color: 0xffaa66, size: 95.0 },
+        { name: "Gienah", ra: 20.77, dec: 33.97, dist: 72.0, color: 0xbbddff, size: 3.0 },
+        { name: "Thuban", ra: 14.07, dec: 64.37, dist: 303.0, color: 0xbbddff, size: 3.0 },
+        { name: "Shedir", ra: 0.67, dec: 56.54, dist: 228.0, color: 0xffaa66, size: 42.0 },
+        { name: "Caph", ra: 0.15, dec: 59.15, dist: 54.5, color: 0xbbddff, size: 3.5 },
+        { name: "Ruchbah", ra: 1.43, dec: 60.24, dist: 99.4, color: 0xbbddff, size: 3.5 },
+        { name: "Mirach", ra: 1.16, dec: 35.62, dist: 197.0, color: 0xffaa66, size: 90.0 },
+        { name: "Almach", ra: 2.06, dec: 42.33, dist: 350.0, color: 0xffaa66, size: 80.0 },
+        { name: "Algol", ra: 3.13, dec: 40.96, dist: 90.0, color: 0xbbddff, size: 3.0 },
+        { name: "Alcyone", ra: 3.79, dec: 24.11, dist: 440.0, color: 0xbbddff, size: 10.0 },
+        { name: "Merope", ra: 3.77, dec: 23.95, dist: 440.0, color: 0xbbddff, size: 5.0 },
+        { name: "Maia", ra: 3.76, dec: 24.37, dist: 440.0, color: 0xbbddff, size: 6.0 },
+        { name: "Taygeta", ra: 3.75, dec: 24.48, dist: 440.0, color: 0xbbddff, size: 4.0 },
+        { name: "Electra", ra: 3.75, dec: 24.11, dist: 440.0, color: 0xbbddff, size: 6.0 },
+        { name: "Atlas", ra: 3.82, dec: 24.05, dist: 440.0, color: 0xbbddff, size: 5.0 },
+        { name: "Pleione", ra: 3.82, dec: 24.14, dist: 440.0, color: 0xbbddff, size: 3.0 },
+        { name: "Menkar", ra: 3.04, dec: 4.09, dist: 250.0, color: 0xffaa66, size: 84.0 },
+        { name: "Arneb", ra: 5.55, dec: -17.82, dist: 2200.0, color: 0xffffff, size: 75.0 },
+        { name: "Nihal", ra: 5.61, dec: -20.83, dist: 160.0, color: 0xffffcc, size: 15.0 },
+        { name: "Phact", ra: 5.66, dec: -34.07, dist: 270.0, color: 0xbbddff, size: 4.0 },
+        { name: "Alsuhail", ra: 9.13, dec: -43.43, dist: 570.0, color: 0xffaa66, size: 200.0 },
+        { name: "Aspidiske", ra: 9.28, dec: -59.27, dist: 690.0, color: 0xbbddff, size: 10.0 },
+        { name: "Regor", ra: 8.16, dec: -47.34, dist: 1200.0, color: 0xbbddff, size: 20.0 },
+        { name: "Adhafera", ra: 10.28, dec: 23.42, dist: 260.0, color: 0xffffff, size: 10.0 },
+        { name: "Alkes", ra: 10.99, dec: -18.29, dist: 174.0, color: 0xffcc99, size: 12.0 },
+        { name: "Gienah Corvi", ra: 12.26, dec: -17.54, dist: 165.0, color: 0xbbddff, size: 4.0 },
+        { name: "Algorab", ra: 12.50, dec: -16.51, dist: 87.0, color: 0xbbddff, size: 3.0 },
+        { name: "Kraz", ra: 12.57, dec: -23.40, dist: 140.0, color: 0xffaa66, size: 16.0 },
+        { name: "Minkar", ra: 12.17, dec: -14.78, dist: 300.0, color: 0xffcc99, size: 10.0 },
+        { name: "Acrab", ra: 16.09, dec: -19.8, dist: 400.0, color: 0xbbddff, size: 5.0 },
+        { name: "Dschubba", ra: 16.0, dec: -22.62, dist: 400.0, color: 0xbbddff, size: 6.0 },
+        { name: "Guniibuu", ra: 16.3, dec: -26.1, dist: 550.0, color: 0xffaa66, size: 100.0 },
+        { name: "Larawag", ra: 16.8, dec: -42.0, dist: 600.0, color: 0xbbddff, size: 20.0 },
+        { name: "Xamidimura", ra: 16.9, dec: -38.0, dist: 500.0, color: 0xbbddff, size: 15.0 },
+        { name: "Pipirima", ra: 17.0, dec: -40.0, dist: 550.0, color: 0xbbddff, size: 10.0 },
+        { name: "Imai", ra: 12.1, dec: -48.0, dist: 130.0, color: 0xbbddff, size: 3.0 },
+        { name: "Ginan", ra: 12.2, dec: -50.0, dist: 150.0, color: 0xffcc99, size: 12.0 },
+        { name: "Zaurak", ra: 3.9, dec: -13.0, dist: 220.0, color: 0xffaa66, size: 60.0 },
+        { name: "Beid", ra: 4.1, dec: -7.0, dist: 83.0, color: 0xffffff, size: 2.0 },
+        { name: "Keid", ra: 4.2, dec: -7.5, dist: 16.0, color: 0xffffcc, size: 0.8 },
+        { name: "Angetenar", ra: 3.0, dec: -10.0, dist: 140.0, color: 0xffcc99, size: 15.0 },
+        { name: "Azha", ra: 2.9, dec: -9.0, dist: 130.0, color: 0xffcc99, size: 12.0 },
+        { name: "Acamar", ra: 2.97, dec: -40.3, dist: 160.0, color: 0xbbddff, size: 3.0 },
+        { name: "Rana", ra: 3.5, dec: -9.7, dist: 29.0, color: 0xffffcc, size: 2.0 },
+        { name: "Cursa", ra: 5.1, dec: -5.0, dist: 90.0, color: 0xbbddff, size: 3.0 },
+        { name: "Zibal", ra: 3.2, dec: -20.0, dist: 120.0, color: 0xbbddff, size: 3.0 },
+        { name: "Beemim", ra: 4.0, dec: -15.0, dist: 100.0, color: 0xffcc99, size: 10.0 },
+        { name: "Sceptrum", ra: 4.3, dec: -12.0, dist: 150.0, color: 0xffaa66, size: 40.0 },
+        { name: "Theemin", ra: 4.5, dec: -20.0, dist: 160.0, color: 0xbbddff, size: 3.0 },
+        { name: "Tegmine", ra: 8.2, dec: 17.0, dist: 80.0, color: 0xffffff, size: 2.0 },
+        { name: "Asellus Borealis", ra: 8.7, dec: 21.0, dist: 160.0, color: 0xbbddff, size: 3.0 },
+        { name: "Asellus Australis", ra: 8.7, dec: 18.0, dist: 130.0, color: 0xffcc99, size: 12.0 },
+        { name: "Acubens", ra: 8.9, dec: 11.0, dist: 170.0, color: 0xffffff, size: 2.0 },
+        { name: "Tarf", ra: 8.3, dec: 9.0, dist: 290.0, color: 0xffaa66, size: 50.0 },
+        { name: "Sertan", ra: 8.5, dec: 15.0, dist: 300.0, color: 0xffaa66, size: 40.0 },
+        { name: "Nushagak", ra: 10.5, dec: 1.0, dist: 400.0, color: 0xffffcc, size: 1.2 },
+        { name: "Fulu", ra: 1.0, dec: 60.0, dist: 400.0, color: 0xbbddff, size: 10.0 },
+        { name: "Schedar", ra: 0.7, dec: 56.5, dist: 228.0, color: 0xffaa66, size: 42.0 },
+        { name: "Achird", ra: 0.8, dec: 57.8, dist: 19.4, color: 0xffffcc, size: 1.0 },
+        { name: "Marfak", ra: 0.5, dec: 58.0, dist: 160.0, color: 0xbbddff, size: 3.0 },
+        { name: "Castula", ra: 0.4, dec: 62.0, dist: 200.0, color: 0xffaa66, size: 20.0 },
+        { name: "Tislit", ra: 1.5, dec: 65.0, dist: 300.0, color: 0xffcc99, size: 12.0 },
+        { name: "Vytis", ra: 14.5, dec: -45.0, dist: 500.0, color: 0xffffcc, size: 1.2 },
+        { name: "Lerna", ra: 9.5, dec: -15.0, dist: 350.0, color: 0xbbddff, size: 4.0 },
+        { name: "Buna", ra: 15.5, dec: 33.0, dist: 600.0, color: 0xffffcc, size: 1.5 },
+        { name: "Nikawiy", ra: 10.5, dec: 20.0, dist: 450.0, color: 0xffffcc, size: 1.3 },
+        { name: "Awasis", ra: 10.5, dec: 20.1, dist: 450.0, color: 0xffffcc, size: 1.3 },
+        { name: "Noquisi", ra: 18.5, dec: 40.0, dist: 700.0, color: 0xbbddff, size: 5.0 },
+        { name: "Amadioha", ra: 19.5, dec: 10.0, dist: 800.0, color: 0xffffcc, size: 2.0 },
+        { name: "Ani", ra: 19.5, dec: 10.1, dist: 800.0, color: 0xbbddff, size: 1.0 },
+        { name: "Nervia", ra: 15.0, dec: -20.0, dist: 900.0, color: 0xffffcc, size: 2.0 },
+        { name: "Ebla", ra: 15.0, dec: -20.1, dist: 900.0, color: 0xffffcc, size: 1.5 },
+        { name: "Tadjine", ra: 12.0, dec: 30.0, dist: 1000.0, color: 0xffffcc, size: 2.0 },
+        { name: "Uklun", ra: 12.0, dec: 30.1, dist: 1000.0, color: 0xbbddff, size: 1.0 },
+        { name: "Kaveh", ra: 17.0, dec: 40.0, dist: 1100.0, color: 0xffffcc, size: 2.0 },
+        { name: "Kavian", ra: 17.0, dec: 40.1, dist: 1100.0, color: 0xffffcc, size: 1.5 },
+        { name: "Gogoso", ra: 14.0, dec: -40.0, dist: 1200.0, color: 0xffffcc, size: 2.0 },
+        { name: "Nandhi", ra: 14.0, dec: -40.1, dist: 1200.0, color: 0xbbddff, size: 1.0 },
+        { name: "Dofida", ra: 13.0, dec: 20.0, dist: 1300.0, color: 0xffffcc, size: 2.0 },
+        { name: "Bunda", ra: 21.7, dec: -9.0, dist: 160.0, color: 0xbbddff, size: 3.0 },
+        { name: "Ancha", ra: 22.1, dec: -7.5, dist: 190.0, color: 0xffcc99, size: 14.0 },
+        { name: "Situla", ra: 22.4, dec: -8.0, dist: 160.0, color: 0xbbddff, size: 3.0 },
+        { name: "Skat", ra: 22.9, dec: -15.0, dist: 160.0, color: 0xbbddff, size: 3.5 },
+        { name: "Hydor", ra: 22.8, dec: -21.0, dist: 220.0, color: 0xffffff, size: 3.0 },
+        { name: "Lambda Aquarii", ra: 23.1, dec: -7.5, dist: 390.0, color: 0xffaa66, size: 100.0 },
+        { name: "Albali", ra: 20.9, dec: -9.5, dist: 210.0, color: 0xbbddff, size: 3.0 },
+        { name: "Sadalsuud", ra: 21.5, dec: -5.5, dist: 540.0, color: 0xffaa66, size: 50.0 },
+        { name: "Sadalmelik", ra: 22.1, dec: -0.3, dist: 760.0, color: 0xffaa66, size: 60.0 },
+        { name: "Sadachbia", ra: 22.4, dec: -1.4, dist: 158.0, color: 0xbbddff, size: 3.0 },
+        { name: "Homam", ra: 22.7, dec: 10.8, dist: 170.0, color: 0xbbddff, size: 3.0 },
+        { name: "Matar", ra: 22.7, dec: 30.2, dist: 230.0, color: 0xffaa66, size: 20.0 },
+        { name: "Biham", ra: 22.2, dec: 6.0, dist: 500.0, color: 0xbbddff, size: 10.0 },
+        { name: "Alkarab", ra: 23.5, dec: 30.0, dist: 600.0, color: 0xffaa66, size: 30.0 },
+        { name: "Scheat", ra: 23.1, dec: 28.1, dist: 200.0, color: 0xffaa66, size: 95.0 },
+        { name: "Markab", ra: 23.1, dec: 15.2, dist: 140.0, color: 0xbbddff, size: 4.7 },
+        { name: "Algenib", ra: 0.2, dec: 15.2, dist: 330.0, color: 0xbbddff, size: 4.8 },
+        { name: "Sadalbari", ra: 22.9, dec: 24.5, dist: 106.0, color: 0xffcc99, size: 10.0 },
+        { name: "Salm", ra: 23.0, dec: 25.0, dist: 120.0, color: 0xffffff, size: 2.0 },
+        { name: "Alpheratz", ra: 0.1, dec: 29.1, dist: 97.0, color: 0xbbddff, size: 2.7 },
+        { name: "Adhil", ra: 1.4, dec: 45.3, dist: 200.0, color: 0xffffff, size: 3.0 },
+        { name: "Nembus", ra: 1.9, dec: 35.0, dist: 170.0, color: 0xffaa66, size: 20.0 },
+        { name: "Titawin", ra: 1.6, dec: 41.0, dist: 44.0, color: 0xffffcc, size: 1.3 },
+        { name: "Veritate", ra: 23.6, dec: 44.0, dist: 44.0, color: 0xffffcc, size: 1.2 },
+        { name: "Revati", ra: 1.2, dec: 7.0, dist: 160.0, color: 0xbbddff, size: 3.0 },
+        { name: "Alpherg", ra: 1.5, dec: 15.0, dist: 290.0, color: 0xffaa66, size: 50.0 },
+        { name: "Torcular", ra: 1.8, dec: 20.0, dist: 300.0, color: 0xffaa66, size: 40.0 },
+        { name: "Alrisha", ra: 2.0, dec: 2.8, dist: 130.0, color: 0xffffff, size: 2.0 },
+        { name: "Fumalsamakah", ra: 23.0, dec: 3.5, dist: 250.0, color: 0xbbddff, size: 3.0 },
+        { name: "Erakis", ra: 21.7, dec: 58.0, dist: 6000.0, color: 0xff3300, size: 1000.0 },
+        { name: "Kurhah", ra: 21.1, dec: 57.0, dist: 230.0, color: 0xffffff, size: 2.0 },
+        { name: "Alfirk", ra: 21.3, dec: 70.0, dist: 590.0, color: 0xbbddff, size: 10.0 },
+        { name: "Alderamin", ra: 21.3, dec: 62.6, dist: 49.0, color: 0xbbddff, size: 2.5 },
+        { name: "Errai", ra: 23.6, dec: 77.6, dist: 45.0, color: 0xffcc99, size: 1.2 },
+        { name: "Grumium", ra: 17.5, dec: 56.0, dist: 95.0, color: 0xffffff, size: 2.0 },
+        { name: "Kuma", ra: 17.5, dec: 52.0, dist: 99.0, color: 0xffffff, size: 2.0 },
+        { name: "Rastaban", ra: 17.5, dec: 52.3, dist: 360.0, color: 0xffaa66, size: 40.0 },
+        { name: "Aldhibah", ra: 15.4, dec: 58.0, dist: 88.0, color: 0xbbddff, size: 3.0 },
+        { name: "Edasich", ra: 15.4, dec: 53.0, dist: 100.0, color: 0xffaa66, size: 12.0 },
+        { name: "Dziban", ra: 17.1, dec: 65.0, dist: 75.0, color: 0xffffff, size: 2.0 },
+        { name: "Alsafi", ra: 19.8, dec: 70.0, dist: 47.0, color: 0xffffcc, size: 1.0 },
+        { name: "Taiyi", ra: 18.4, dec: 72.0, dist: 300.0, color: 0xffffff, size: 2.0 },
+        { name: "Tianyi", ra: 18.5, dec: 72.1, dist: 300.0, color: 0xffffff, size: 2.0 },
+        { name: "Gianfar", ra: 11.5, dec: 69.0, dist: 330.0, color: 0xffaa66, size: 40.0 },
+        { name: "Altais", ra: 19.2, dec: 67.0, dist: 220.0, color: 0xffaa66, size: 30.0 },
+        { name: "Fafnir", ra: 18.4, dec: 65.0, dist: 100.0, color: 0xffffcc, size: 1.2 },
+        { name: "Hypatia", ra: 15.3, dec: 40.0, dist: 100.0, color: 0xffffcc, size: 1.1 },
+        { name: "Giedi", ra: 20.3, dec: -12.5, dist: 690.0, color: 0xffaa66, size: 150.0 },
+        { name: "Dabih", ra: 20.3, dec: -14.7, dist: 330.0, color: 0xffffff, size: 3.0 },
+        { name: "Nashira", ra: 21.6, dec: -16.0, dist: 157.0, color: 0xffffff, size: 2.0 },
+        { name: "Deneb Algedi", ra: 21.8, dec: -16.1, dist: 39.0, color: 0xffffff, size: 2.0 },
+        { name: "Alshat", ra: 20.3, dec: -10.0, dist: 600.0, color: 0xbbddff, size: 10.0 },
+        { name: "Okul", ra: 21.0, dec: -15.0, dist: 250.0, color: 0xffffff, size: 2.0 },
+        { name: "Baten Kaitos", ra: 1.9, dec: -10.3, dist: 260.0, color: 0xffaa66, size: 30.0 },
+        { name: "Mira", ra: 2.3, dec: -3.0, dist: 300.0, color: 0xff3300, size: 400.0 },
+        { name: "Kaffaljidhma", ra: 2.7, dec: 3.2, dist: 90.0, color: 0xffffff, size: 2.0 },
+        { name: "Dheneb", ra: 0.3, dec: -20.0, dist: 350.0, color: 0xffaa66, size: 40.0 },
+        { name: "Axotl", ra: 2.3, dec: 0.0, dist: 400.0, color: 0xffffcc, size: 1.1 },
+        { name: "Felixvarela", ra: 10.5, dec: 10.0, dist: 500.0, color: 0xffffcc, size: 1.2 },
+        { name: "Sika", ra: 11.5, dec: 10.0, dist: 600.0, color: 0xffffcc, size: 1.3 },
+        { name: "Wattle", ra: 12.5, dec: 10.0, dist: 700.0, color: 0xffffcc, size: 1.4 },
+        { name: "Gulliver", ra: 13.5, dec: 10.0, dist: 800.0, color: 0xffffcc, size: 1.5 },
+        { name: "Borb", ra: 14.5, dec: 10.0, dist: 900.0, color: 0xffffcc, size: 1.6 },
+        { name: "Aitvaras", ra: 15.5, dec: 10.0, dist: 1000.0, color: 0xffffcc, size: 1.7 },
+        { name: "Kalausi", ra: 16.5, dec: 10.0, dist: 1100.0, color: 0xffffcc, size: 1.8 },
+        { name: "Itonda", ra: 17.5, dec: 10.0, dist: 1200.0, color: 0xffffcc, size: 1.9 },
+        { name: "Sitala", ra: 18.5, dec: 10.0, dist: 1300.0, color: 0xffffcc, size: 2.0 },
+        { name: "Fuyue", ra: 18.0, dec: -30.0, dist: 1400.0, color: 0xffaa66, size: 100.0 },
+        { name: "Paikauhale", ra: 16.4, dec: -28.0, dist: 500.0, color: 0xffffff, size: 10.0 },
+        { name: "Kamuy", ra: 16.5, dec: -30.0, dist: 500.0, color: 0xffffff, size: 10.0 },
+        { name: "Zubeneschamali", ra: 15.3, dec: -9.4, dist: 160.0, color: 0xbbddff, size: 4.9 },
+        { name: "Zubenelhakrabi", ra: 15.6, dec: -25.3, dist: 160.0, color: 0xffcc99, size: 12.0 },
+        { name: "Brachium", ra: 15.1, dec: -20.0, dist: 290.0, color: 0xffaa66, size: 50.0 },
+        { name: "Libertas", ra: 18.8, dec: 6.0, dist: 1000.0, color: 0xffffcc, size: 2.0 },
+        { name: "Nyamien", ra: 15.5, dec: -20.0, dist: 900.0, color: 0xffffcc, size: 2.0 },
+        { name: "Mouhoun", ra: 12.0, dec: 30.0, dist: 1000.0, color: 0xffffcc, size: 2.0 },
+        { name: "Solaris", ra: 19.0, dec: 10.0, dist: 500.0, color: 0xffffcc, size: 1.2 }
+      ];
+
+      starData.forEach(s => {
+        const pos = get3DPos(s.ra, s.dec, s.dist), vSize = Math.max(SUN_SIZE * s.size / 2, 0.5);
+        const star = createCelestialBody(vSize, s.color, true);
+        star.position.copy(pos); star.userData = { name: s.name, dist: s.dist, icon: "✨" };
+        universeScene.add(star); selectableStars.push(star);
+        const marker = new THREE.Sprite(markerMat.clone());
+        marker.material.color.set(s.color); marker.scale.set(pos.length() * 0.08, pos.length() * 0.08, 1); marker.position.copy(pos);
+        universeScene.add(marker);
+      });
+
+      // LEVEL 2: MILKY WAY
+      const milkyWayGroup = new THREE.Group(); universeScene.add(milkyWayGroup);
+      const armCount = 4, starsPerArm = 50000, galaxyRadius = 50000 * LY_TO_I, armStarCoords = [], armStarColors = [];
+      for (let i = 0; i < armCount; i++) {
+        const armAngle = (i / armCount) * Math.PI * 2;
+        for (let j = 0; j < starsPerArm; j++) {
+          const progress = j / starsPerArm, distance = progress * galaxyRadius, angle = armAngle + (distance / galaxyRadius) * Math.PI * 4;
+          armStarCoords.push(Math.cos(angle) * distance + (Math.random()-0.5)*distance*0.5, (Math.random()-0.5)*distance*0.1, Math.sin(angle) * distance + (Math.random()-0.5)*distance*0.5);
+          armStarColors.push(0.5 + Math.random()*0.2, 0.7 + Math.random()*0.3, 1.0);
+        }
+      }
+      const armStarGeo = new THREE.BufferGeometry(); armStarGeo.setAttribute('position', new THREE.Float32BufferAttribute(armStarCoords, 3)); armStarGeo.setAttribute('color', new THREE.Float32BufferAttribute(armStarColors, 3));
+      milkyWayGroup.add(new THREE.Points(armStarGeo, new THREE.PointsMaterial({ size: 2500, vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending })));
+      const bulgeCount = 80000, bulgeCoords = [], bulgeColors = [];
+      for (let i = 0; i < bulgeCount; i++) {
+        const r = Math.random() * 15000 * LY_TO_I, theta = Math.random() * Math.PI * 2, phi = Math.random() * Math.PI;
+        bulgeCoords.push(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi) * 0.6, r * Math.sin(phi) * Math.sin(theta)); bulgeColors.push(1.0, 0.9, 0.7);
+      }
+      const bulgeGeo = new THREE.BufferGeometry(); bulgeGeo.setAttribute('position', new THREE.Float32BufferAttribute(bulgeCoords, 3)); bulgeGeo.setAttribute('color', new THREE.Float32BufferAttribute(bulgeColors, 3));
+      milkyWayGroup.add(new THREE.Points(bulgeGeo, new THREE.PointsMaterial({ size: 4000, vertexColors: true, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending })));
+      
+      const mwGlow = new THREE.Sprite(markerMat.clone()); mwGlow.material.color.set(0xffaa44); mwGlow.scale.set(100000 * LY_TO_I, 100000 * LY_TO_I, 1);
+      milkyWayGroup.add(mwGlow); 
+      milkyWayGroup.position.set(-26000 * LY_TO_I, 0, 0); // Sun is 26k LY from center
+      
+      // Sagittarius A* (Center of Milky Way) - Label only
+      const sagA = new THREE.Object3D();
+      milkyWayGroup.add(sagA); 
+      sagA.userData = { name: "Sagittarius A*", dist: 26000, icon: "🕳️" };
+      selectableStars.push(sagA); // Use stars list for small high-priority labels
+
+      // LEVEL 3: LOCAL GROUP
+      const localGroup = new THREE.Group(); universeScene.add(localGroup);
+      function createMiniGalaxy(stars, radius, color, name, distLY, ra, dec, scaleFactor = 1, tiltX = 0, tiltZ = 0) {
+        const group = new THREE.Group(), rUnits = radius * LY_TO_I;
+        const armCount = 2, starsPerArm = Math.floor(stars * 0.7 / armCount);
+        const armStarCoords = [], armStarColors = [];
+        for (let i = 0; i < armCount; i++) {
+          const armAngle = (i / armCount) * Math.PI * 2;
+          for (let j = 0; j < starsPerArm; j++) {
+            const progress = j / starsPerArm, dist = progress * rUnits, angle = armAngle + (progress * Math.PI * 4);
+            armStarCoords.push(Math.cos(angle) * dist + (Math.random()-0.5)*dist*0.3, (Math.random()-0.5)*dist*0.05, Math.sin(angle) * dist + (Math.random()-0.5)*dist*0.3);
+            armStarColors.push(color.r, color.g, color.b);
+          }
+        }
+        const armGeo = new THREE.BufferGeometry(); armGeo.setAttribute('position', new THREE.Float32BufferAttribute(armStarCoords, 3)); armGeo.setAttribute('color', new THREE.Float32BufferAttribute(armStarColors, 3));
+        group.add(new THREE.Points(armGeo, new THREE.PointsMaterial({ size: 3000, vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending })));
+        const bulgeCount = Math.floor(stars * 0.3), bulgeCoords = [], bulgeColors = [];
+        for (let i = 0; i < bulgeCount; i++) {
+          const r = Math.pow(Math.random(), 0.5) * rUnits * 0.3, theta = Math.random() * Math.PI * 2, phi = Math.random() * Math.PI;
+          bulgeCoords.push(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi) * 0.6, r * Math.sin(phi) * Math.sin(theta)); bulgeColors.push(1.0, 0.9, 0.8);
+        }
+        const bulgeGeo = new THREE.BufferGeometry(); bulgeGeo.setAttribute('position', new THREE.Float32BufferAttribute(bulgeCoords, 3)); bulgeGeo.setAttribute('color', new THREE.Float32BufferAttribute(bulgeColors, 3));
+        group.add(new THREE.Points(bulgeGeo, new THREE.PointsMaterial({ size: 5000, vertexColors: true, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending })));
+        const glow = new THREE.Sprite(markerMat.clone()); glow.material.color.setRGB(color.r, color.g, color.b); glow.scale.set(rUnits * 1.5, rUnits * 1.5, 1);
+        group.add(glow); group.rotation.x = tiltX; group.rotation.z = tiltZ; group.position.copy(get3DPos(ra, dec, distLY));
+        group.userData = { name: name, dist: distLY, icon: "🌌" }; localGroup.add(group); selectableGalaxies.push(glow); glow.userData = { name: name, dist: distLY, icon: "🌌" };
+      }
+      createMiniGalaxy(80000, 110000, {r: 0.7, g: 0.8, b: 1.0}, "Andromeda Galaxy (M31)", 2537000, 0.71, 41.27, 2, 1.34, 0.5);
+      createMiniGalaxy(20000, 30000, {r: 1.0, g: 0.7, b: 0.8}, "Triangulum Galaxy (M33)", 2730000, 1.56, 30.66, 1, 0.5, 0.2);
+      createMiniGalaxy(8000, 14000, {r: 0.9, g: 1.0, b: 0.9}, "Large Magellanic Cloud", 163000, 5.39, -69.75, 0.5);
+      createMiniGalaxy(5000, 7000, {r: 1.0, g: 1.0, b: 0.8}, "Small Magellanic Cloud", 200000, 0.87, -72.8, 0.3);
+      createMiniGalaxy(40000, 50000, {r: 0.8, g: 0.9, b: 1.0}, "Centaurus A", 12000000, 13.42, -43.02, 1.5, 0.3, 0.3);
+      createMiniGalaxy(30000, 40000, {r: 1.0, g: 1.0, b: 1.0}, "Sombrero Galaxy (M104)", 29000000, 12.67, -11.62, 1.2, 1.5, 0);
+
+      // LEVEL 4: VIRGO SUPERCLUSTER
+      const superclusterGroup = new THREE.Group();
+      universeScene.add(superclusterGroup);
+      function createGalaxyCluster(name, distLY, ra, dec, galaxyCount, color, radiusLY) {
+        const rUnits = radiusLY * LY_TO_I * 10, coords = [], colors = [];
+        const pos = get3DPos(ra, dec, distLY);
+        for (let i = 0; i < galaxyCount; i++) {
+          const r = Math.random() * rUnits, theta = Math.random() * Math.PI * 2, phi = Math.acos(2 * Math.random() - 1);
+          coords.push(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(theta));
+          colors.push(color.r, color.g, color.b);
+        }
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(coords, 3));
+        geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        const pts = new THREE.Points(geo, new THREE.PointsMaterial({ size: 100000, vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false }));
+        const group = new THREE.Group();
+        group.add(pts);
+        const glow = new THREE.Sprite(markerMat.clone());
+        glow.material.color.setRGB(color.r, color.g, color.b);
+        glow.scale.set(rUnits * 2, rUnits * 2, 1);
+        group.add(glow);
+        group.position.copy(pos);
+        group.userData = { name, dist: distLY, count: galaxyCount, icon: "🏢" };
+        glow.userData = group.userData;
+        superclusterGroup.add(group);
+        selectableClusters.push(glow);
+      }
+      createGalaxyCluster("Virgo Cluster (M87 Center)", 54000000, 12.5, 12.0, 2000, {r: 1.0, g: 0.9, b: 0.7}, 7000000);
+      createGalaxyCluster("Fornax Cluster", 62000000, 3.6, -35.5, 60, {r: 0.9, g: 0.8, b: 1.0}, 2000000);
+      createGalaxyCluster("Eridanus Cluster", 75000000, 3.5, -22.0, 70, {r: 0.8, g: 0.9, b: 1.0}, 3000000);
+      createGalaxyCluster("Centaurus Cluster", 150000000, 12.8, -41.3, 300, {r: 1.0, g: 0.8, b: 0.8}, 5000000);
+      createGalaxyCluster("Coma Cluster", 321000000, 12.99, 27.98, 1000, {r: 0.7, g: 1.0, b: 0.7}, 10000000);
+      createGalaxyCluster("Great Attractor", 200000000, 10.5, -45.0, 5000, {r: 1.0, g: 0.5, b: 0.0}, 20000000);
+
+      // LEVEL 5: LANIAKEA
+      const laniakeaGroup = new THREE.Group();
+      universeScene.add(laniakeaGroup);
+      window.universeLaniakeaGroup = laniakeaGroup;
+
+      const gaPos = get3DPos(10.5, -45.0, 250000000);
+      const gaGlow = new THREE.Sprite(markerMat.clone());
+      gaGlow.material.color.set(0xff44ff);
+      gaGlow.scale.set(150000000, 150000000, 1);
+      gaGlow.position.copy(gaPos);
+      gaGlow.userData = { name: "The Great Attractor", dist: 250000000, icon: "🕸️" };
+      laniakeaGroup.add(gaGlow);
+      selectableDeepSpace.push(gaGlow);
+
+      // LEVEL 6: SHAPLEY SUPERCLUSTER & DIPOLE REPELLER
+      const level6Group = new THREE.Group();
+      universeScene.add(level6Group);
+      const shapleyPos = get3DPos(13.4, -31.3, 650000000);
+      const shapleyGlow = new THREE.Sprite(markerMat.clone());
+      shapleyGlow.material.color.set(0xff8800);
+      shapleyGlow.scale.set(300000000, 300000000, 1);
+      shapleyGlow.position.copy(shapleyPos);
+      shapleyGlow.userData = { name: "Shapley Supercluster", dist: 650000000, icon: "🔭" };
+      level6Group.add(shapleyGlow);
+      selectableDeepSpace.push(shapleyGlow);
+
+      const drPos = get3DPos(17.2, 10.0, 500000000).multiplyScalar(-1);
+      const drGlow = new THREE.Sprite(markerMat.clone());
+      drGlow.material.color.set(0x4444ff);
+      drGlow.scale.set(400000000, 400000000, 1);
+      drGlow.position.copy(drPos);
+      drGlow.userData = { name: "Dipole Repeller", dist: 500000000, icon: "🔭" };
+      level6Group.add(drGlow);
+      selectableDeepSpace.push(drGlow);
+      // BACKGROUND & IGM
+      const horizonRange = 1000000000 * LY_TO_I;
+      const rogueStarCount = isMobile ? 10000 : 30000, igmCoords = [], igmColors = [];
+      for (let i = 0; i < rogueStarCount; i++) {
+        const r = Math.pow(Math.random(), 0.6) * horizonRange, theta = Math.random() * Math.PI * 2, phi = Math.acos(2 * Math.random() - 1);
+        igmCoords.push(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi) * 0.7, r * Math.sin(phi) * Math.sin(theta));
+        const c = Math.random() > 0.5 ? {r: 0.4, g: 0.4, b: 0.5} : {r: 0.5, g: 0.3, b: 0.3}; igmColors.push(c.r, c.g, c.b);
+      }
+      const igmGeo = new THREE.BufferGeometry(); igmGeo.setAttribute('position', new THREE.Float32BufferAttribute(igmCoords, 3)); igmGeo.setAttribute('color', new THREE.Float32BufferAttribute(igmColors, 3));
+      universeScene.add(new THREE.Points(igmGeo, new THREE.PointsMaterial({ size: 50000, vertexColors: true, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending, depthWrite: false })));
+
+      const bgGalaxyCount = isMobile ? 500000 : 2000000, bgGalaxyCoords = new Float32Array(bgGalaxyCount * 3), bgGalaxyColors = new Float32Array(bgGalaxyCount * 3);
+      for (let i = 0; i < bgGalaxyCount; i++) {
+        const i3 = i * 3, r = Math.pow(Math.random(), 0.5) * horizonRange, theta = Math.random() * Math.PI * 2, phi = Math.acos(2 * Math.random() - 1);
+        bgGalaxyCoords[i3] = r * Math.sin(phi) * Math.cos(theta); bgGalaxyCoords[i3 + 1] = r * Math.cos(phi) * 0.8; bgGalaxyCoords[i3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+        const rand = Math.random();
+        if (rand < 0.6) { bgGalaxyColors[i3] = 1.0; bgGalaxyColors[i3+1] = 0.95; bgGalaxyColors[i3+2] = 0.9; }
+        else if (rand < 0.8) { bgGalaxyColors[i3] = 0.8; bgGalaxyColors[i3+1] = 0.85; bgGalaxyColors[i3+2] = 1.0; }
+        else { bgGalaxyColors[i3] = 1.0; bgGalaxyColors[i3+1] = 0.8; bgGalaxyColors[i3+2] = 0.8; }
+      }
+      const bgGeo = new THREE.BufferGeometry(); bgGeo.setAttribute('position', new THREE.BufferAttribute(bgGalaxyCoords, 3)); bgGeo.setAttribute('color', new THREE.BufferAttribute(bgGalaxyColors, 3));
+      universeScene.add(new THREE.Points(bgGeo, new THREE.PointsMaterial({ size: 25000, vertexColors: true, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false })));
+
+      const earth = createCelestialBody(EARTH_SIZE / 2, 0x2277ff); universeScene.add(earth);
+      const sun = createCelestialBody(SUN_SIZE / 2, 0xffcc00, true); sun.position.set(AU_DIST, 0, 0); universeScene.add(sun);
+      const starCloudCount = isMobile ? 300 : 800, boundary = 1000 * LY_TO_I, cloudPos = new Float32Array(starCloudCount * 3), cloudCol = new Float32Array(starCloudCount * 3);
+      for (let i = 0; i < starCloudCount; i++) {
+        const i3 = i * 3, theta = Math.random() * Math.PI * 2, phi = Math.acos(2 * Math.random() - 1), r = Math.pow(Math.random(), 0.7) * boundary;
+        cloudPos[i3] = r * Math.sin(phi) * Math.cos(theta); cloudPos[i3 + 1] = r * Math.cos(phi) * 0.3; cloudPos[i3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+        const color = new THREE.Color().setHSL(Math.random() * 0.1 + 0.5, 0.3, 0.4 + Math.random() * 0.4);
+        cloudCol[i3] = color.r; cloudCol[i3 + 1] = color.g; cloudCol[i3 + 2] = color.b;
+      }
+      const cloudGeo = new THREE.BufferGeometry(); cloudGeo.setAttribute('position', new THREE.BufferAttribute(cloudPos, 3)); cloudGeo.setAttribute('color', new THREE.BufferAttribute(cloudCol, 3));
+      universeScene.add(new THREE.Points(cloudGeo, new THREE.PointsMaterial({ size: 3, vertexColors: true, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false })));
+
+      // RAYCASTER THRESHOLDS
+      raycaster.params.Points.threshold = 50000 * LY_TO_I;
+      raycaster.params.Sprite.threshold = 1.0;
+
+      // INTERACTION
+      const onMouseMove = (event) => {
+        const view = document.getElementById("travel-calc-view");
+        if (!view || view.style.display !== "flex" || !universeRenderer) return;
+        
+        const rect = universeRenderer.domElement.getBoundingClientRect(); 
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1; 
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1; 
+        
+        raycaster.setFromCamera(mouse, universeCamera);
+        const distLY = universeCamera.position.length() / LY_TO_I;
+        
+        let found = false;
+        if (distLY < 500000) {
+          if (raycaster.intersectObjects(selectableStars, true).length > 0) found = true;
+        }
+        if (!found && distLY < 10000000) {
+          if (raycaster.intersectObjects(selectableGalaxies, true).length > 0) found = true;
+        }
+        if (!found && (raycaster.intersectObjects(selectableClusters, true).length > 0 || raycaster.intersectObjects(selectableDeepSpace, true).length > 0)) found = true;
+        
+        document.body.style.cursor = found ? 'help' : 'default';
+      };
+      window.addEventListener('mousemove', onMouseMove);
+
+      window.animateUniverse = function() {
+        const view = document.getElementById("travel-calc-view");
+        if (!view || view.style.display !== "flex") return; 
+        
+        if (window.PerfMonitor && window.PerfMonitor.recordFrame()) {
+          window.PerfMonitor.applyScaling();
+        }
+
+        requestAnimationFrame(window.animateUniverse);
+        universeControls.update(); 
+        
+        // Update Odometer
+        const odo = document.getElementById("odo-val");
+        if (odo && universeCamera) {
+          const distLY = universeCamera.position.length() / LY_TO_I;
+          if (distLY < 0.00001) {
+            odo.innerHTML = `0.00 <span class="odo-unit">LY</span>`;
+          } else if (distLY >= 1e9) {
+            odo.innerHTML = `${(distLY / 1e9).toFixed(3)} <span class="odo-unit">Billion LY</span>`;
+          } else if (distLY >= 1e6) {
+            odo.innerHTML = `${(distLY / 1e6).toFixed(2)} <span class="odo-unit">Million LY</span>`;
+          } else {
+            odo.innerHTML = `${distLY.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} <span class="odo-unit">LY</span>`;
+          }
+        }
+        
+        if (window.updateProximityLabels) window.updateProximityLabels();
+        universeRenderer.render(universeScene, universeCamera);
+      };
+      animateUniverse();
+
+      window.addEventListener("resize", () => {
+        if (!universeCamera || !universeRenderer) return;
+        universeCamera.aspect = window.innerWidth / window.innerHeight;
+        universeCamera.updateProjectionMatrix(); universeRenderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }  </script>
 </body>
 </html>
