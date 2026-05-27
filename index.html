@@ -3699,7 +3699,11 @@
           if (mobileToggle) mobileToggle.style.display = "none";
           gateway.style.display = "none";
           solar.style.display = "none";
-          travelView.style.display = "flex"; if(window.animateUniverse) window.animateUniverse();
+          travelView.style.display = "flex";
+          if (window.animateUniverse && !window.universeAnimating) {
+            window.universeAnimating = true;
+            window.animateUniverse();
+          }
           window.scrollTo(0,0);
         } else {
           if (dashboard) dashboard.style.display = "";
@@ -3921,6 +3925,7 @@
 
         if (is3DViewVisibleOnMobile) {
           document.body.classList.add("show-3d-on-mobile");
+          requestAnimationFrame(animate3D);
           btn.innerHTML = t("mobile_view_calc");
           setTimeout(() => window.dispatchEvent(new Event("resize")), 50);
         } else {
@@ -5416,7 +5421,6 @@
       function animate3D() {
         const container = document.getElementById("solar-system-container");
         if (!container || window.getComputedStyle(container).display === "none") {
-          requestAnimationFrame(animate3D);
           return;
         }
 
@@ -5424,7 +5428,6 @@
           window.PerfMonitor.applyScaling();
         }
 
-        requestAnimationFrame(animate3D);
         sun.rotation.y += 0.005;
         if (window.asteroidBelt) window.asteroidBelt.rotation.y += 0.0005;
         if (window.oortCloud) window.oortCloud.rotation.y += 0.0001; 
@@ -5534,9 +5537,12 @@
         }
 
         renderer.render(scene, camera);
+        requestAnimationFrame(animate3D);
       }
 
-      animate3D();
+      if (window.innerWidth >= 768) {
+        animate3D();
+      }
 
       window.addEventListener("resize", () => {
         let currentWidth = container.clientWidth || window.innerWidth;
@@ -5684,6 +5690,8 @@
     }, 500);
 
     function init3DUniverse() {
+      if (window.universeInitialized) return;
+      window.universeInitialized = true;
       const container = document.getElementById("universe-3d-container");
       if (!container) return;
       const isMobile = window.innerWidth < 768;
@@ -6254,7 +6262,10 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
 
       window.animateUniverse = function() {
         const view = document.getElementById("travel-calc-view");
-        if (!view || view.style.display !== "flex") return; 
+        if (!view || view.style.display !== "flex") {
+          window.universeAnimating = false;
+          return;
+      } 
         
         if (window.PerfMonitor && window.PerfMonitor.recordFrame()) {
           window.PerfMonitor.applyScaling();
