@@ -3925,7 +3925,7 @@
 
         if (is3DViewVisibleOnMobile) {
           document.body.classList.add("show-3d-on-mobile");
-          requestAnimationFrame(animate3D);
+          if (window.animate3D) requestAnimationFrame(window.animate3D);
           btn.innerHTML = t("mobile_view_calc");
           setTimeout(() => window.dispatchEvent(new Event("resize")), 50);
         } else {
@@ -5418,9 +5418,12 @@
 
       let cinematicDaysElapsed = (Date.now() - J2000) / (1000 * 60 * 60 * 24);
 
+      let solarAnimating = false;
       function animate3D() {
+        solarAnimating = true;
         const container = document.getElementById("solar-system-container");
         if (!container || window.getComputedStyle(container).display === "none") {
+          solarAnimating = false;
           return;
         }
 
@@ -5539,6 +5542,7 @@
         renderer.render(scene, camera);
         requestAnimationFrame(animate3D);
       }
+      window.animate3D = animate3D;
 
       if (window.innerWidth >= 768) {
         animate3D();
