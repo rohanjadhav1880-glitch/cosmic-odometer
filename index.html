@@ -395,7 +395,7 @@
       top: 10vh;
       left: 0vw;
       width: 450px;
-      height: 65vh; /* Restored from 55vh */
+      height: 65vh; 
       z-index: 0;
       pointer-events: auto;
     }
@@ -442,16 +442,16 @@
       background: #050505;
       z-index: 2000;
       overflow-y: auto;
-      padding: 80px 40px; /* Increased top/left padding */
+      padding: 80px 40px; 
       box-sizing: border-box;
       flex-direction: column;
-      align-items: flex-start; /* Changed from center to flex-start */
-      background-image: radial-gradient(circle at 20% 50%, #111 0%, #050505 100%); /* Adjusted gradient focus */
+      align-items: flex-start; 
+      background-image: radial-gradient(circle at 20% 50%, #111 0%, #050505 100%); 
     }
     .back-btn-ui {
       position: fixed;
       top: 20px;
-      left: 40px; /* Aligned with the card */
+      left: 40px; 
       color: #ffd700;
       text-decoration: none;
       font-weight: bold;
@@ -469,7 +469,7 @@
     
     .travel-card {
       width: 200px;
-      min-height: 550px; /* Increased vertical length */
+      min-height: 550px; 
       background: rgba(255, 215, 0, 0.05); 
       border: 1px solid #ffd700;
       padding: 40px 15px;
@@ -505,7 +505,7 @@
     }
     .travel-card select:focus, .travel-card input:focus { border-color: #ffd700; }
     
-    .speed-row { display: flex; flex-direction: column; gap: 5px; } /* Stacked for 200px width */
+    .speed-row { display: flex; flex-direction: column; gap: 5px; } 
     
     #full-calc-btn { 
       width: 100%; 
@@ -1280,7 +1280,7 @@
   </div>
 
   <div id="travel-gateway">
-    <button id="btn-open-travel" onclick="window.switchView('travel')">
+    <button id="btn-open-travel" onclick="window.switchView('travel'); if(typeof gtag === 'function') gtag('event', 'universal_view_click');">
       <span>🚀</span> <span data-i18n="travel_calc_title">Universal View</span>
     </button>
   </div>
