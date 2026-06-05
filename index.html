@@ -9,10 +9,15 @@
     gtag('config', 'G-5M98MBQCEM');
   </script>
 
+  <!-- Aggressive Domain Lock (Stealth) -->
+  <script>
+    /* © 2026 Captain Nemo 729 */
+    eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('i(9(){7 a=[\'6.5\',\'8.6.5\',\'6-j.k.l\',\'m\',\'n.o.p.q\'];7 b=c.d.e;i(!a.g(b)&&!b.h(\'.r.s\')&&!b.h(\'.k.l\')){c.t();c.d.u=\'<f v="w x"><y z="A:#000;A:#B;C-D:E;F-G:H;I-J:Kpx;">L>M N O</L><p>P Q R S T <b>6 U</b>.</p><p>V W X Y Z:<10><10><a 11="12://6-j.k.l" z="A:#13;14-15:1.16;17-18:19;1a:1b 1c #13;1d:Kpx 1e;1f-1g:5px;">6-j.k.l</a></p><p z="I-J:50px;A:#444;">1h 1i: 1j 1k</p></y>\';1l 1m 1n("1o 1p: 1q 1r")}})(),',62,90,'|||||space|cosmicodometer|const|www|function|||window|location|hostname|title|includes|endsWith|if|odometer|vercel|app|localhost|127|0|0|1|pages|dev|stop|innerHTML|lang|en|US|body|style|background|fff|font|family|sans|text|align|center|padding|top|150|h1|Unauthorized|Mirror|Detected|This|is|a|stolen|copy|of|Odometer|Please|visit|the|original|version|at|br|href|https|00d4ff|font|size|5rem|text|decoration|none|border|1px|solid|padding|20px|border|radius|Original|Creator|Rohan|Jadhav|throw|new|Error|Execution|halted|Unauthorized|Domain'.split('|'),0,{}))
+  </script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cosmic Odometer - Space travel calculator</title>
-  <meta name="google-adsense-account" content="ca-pub-2267872913037059">
+  <title>Cosmic Odometer - Universal View</title>
   <link rel="canonical" href="https://cosmicodometer.space" />
 
   <link rel="manifest" href="manifest.json" />
@@ -871,6 +876,93 @@
       pointer-events: none;
       backdrop-filter: blur(4px);
     }
+    #star-viewer-btn {
+      position: fixed;
+      top: 45px;
+      right: 15px;
+      background: rgba(0, 212, 255, 0.15);
+      color: #00d4ff;
+      border: 1px solid rgba(0, 212, 255, 0.5);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      z-index: 10002;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: all 0.2s ease;
+    }
+    #star-viewer-btn:hover {
+      background: rgba(0, 212, 255, 0.3);
+      border-color: #00d4ff;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+    }
+    @media (max-width: 1024px) {
+      #star-viewer-btn { display: none !important; }
+    }
+    .star-viewer-panel {
+      width: 220px;
+      min-height: 550px;
+      background: rgba(0, 212, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.5);
+      padding: 40px 15px;
+      border-radius: 15px;
+      position: fixed;
+      top: 80px;
+      right: 15px;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+      display: none;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      color: #00d4ff;
+    }
+    .star-viewer-panel.active {
+      display: flex;
+    }
+    .star-viewer-panel h2 {
+      color: #00d4ff;
+      margin-top: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.9rem;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    .star-viewer-panel label { display: block; margin-bottom: 8px; font-size: 0.65rem; color: #00d4ff; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; }
+    .star-viewer-panel select {
+      width: 100%;
+      background: rgba(0,0,0,0.8);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: #fff;
+      padding: 10px 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      box-sizing: border-box;
+      margin-bottom: 25px;
+      outline: none;
+      cursor: pointer;
+    }
+    .star-viewer-panel select:focus { border-color: #00d4ff; }
+    .close-panel-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: 1px solid rgba(0, 212, 255, 0.5);
+      color: #00d4ff;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
     #distance-odometer {
       position: fixed;
       bottom: 15px;
@@ -1001,6 +1093,7 @@
 
   <div id="travel-calc-view">
     <div id="beta-tag">Beta Version</div>
+    <button id="star-viewer-btn" onclick="window.openStarViewer()">Star Viewer</button>
     <div id="distance-odometer">
       <span class="odo-label">Distance from Earth</span>
       <span class="odo-value" id="odo-val">0</span>
@@ -1008,6 +1101,31 @@
     <div id="universe-3d-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
     <button class="back-btn-ui" onclick="window.switchView('dashboard')">← BACK</button>
     
+    <div class="star-viewer-panel" id="star-viewer-panel">
+      <button class="close-panel-btn" onclick="window.openStarViewer()">×</button>
+      <h2 data-i18n="star_viewer_title">Star Viewer</h2>
+      
+      <label data-i18n="select_object">Search Object</label>
+      <select id="star-viewer-select" onchange="window.jumpToObject(this.value)">
+        <option value="">-- Select Object --</option>
+      </select>
+      
+      <div id="star-details" style="margin-top: 15px; font-size: 0.75rem; color: #fff; line-height: 1.5; border-top: 1px solid rgba(0, 212, 255, 0.2); padding-top: 15px; display: none; overflow-y: auto; max-height: 380px; padding-right: 5px;">
+        <div id="star-detail-name" style="font-weight: bold; color: #00d4ff; font-size: 1.1rem; margin-bottom: 10px; border-bottom: 1px solid rgba(0, 212, 255, 0.1); padding-bottom: 5px;"></div>
+        <div id="star-detail-dist" style="margin-bottom: 10px; font-weight: bold; color: #ffd700;"></div>
+        
+        <div id="star-info-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px;">
+           <div><span style="opacity:0.6; display:block; font-size:0.6rem; text-transform:uppercase;">Size</span><span id="star-detail-size">--</span></div>
+           <div><span style="opacity:0.6; display:block; font-size:0.6rem; text-transform:uppercase;">Mass</span><span id="star-detail-mass">--</span></div>
+           <div><span style="opacity:0.6; display:block; font-size:0.6rem; text-transform:uppercase;">Constellation</span><span id="star-detail-const">--</span></div>
+           <div><span style="opacity:0.6; display:block; font-size:0.6rem; text-transform:uppercase;">Discovered</span><span id="star-detail-discovery">--</span></div>
+        </div>
+        
+        <div style="opacity:0.6; font-size:0.6rem; text-transform:uppercase; margin-bottom: 5px;">Interesting Facts</div>
+        <div id="star-detail-desc" style="font-style: italic; color: #ccc;"></div>
+      </div>
+    </div>
+
     <div class="travel-card collapsed" id="travel-card">
       <button class="toggle-card-btn" id="toggle-travel-card" onclick="window.toggleTravelCard()">+</button>
       <h2 data-i18n="travel_calc_title">Universal View</h2>
@@ -1032,6 +1150,9 @@
         <option value="6074000000000000" data-i18n="dest_betelgeuse">Betelgeuse</option>
         <option value="8136000000000000" data-i18n="dest_rigel">Rigel</option>
         <option value="23651826000000000000" data-i18n="dest_andromeda">Andromeda Galaxy</option>
+        <option value="198675340000000000000" data-i18n="dest_pinwheel">Pinwheel Galaxy (M101)</option>
+        <option value="4730365236290000000000">Cartwheel Galaxy (ESO 350-40)</option>
+        <option value="506149080283030000000" data-i18n="dest_m87">Messier 87 (Virgo A)</option>
       </select>
 
       <label data-i18n="enter_speed">Travel Speed</label>
@@ -1821,8 +1942,10 @@
           dest_voyager: "Voyager 1",
           dest_alpha: "Alpha Centauri",
           dest_center: "Galactic Center",
-          dest_andromeda: "Andromeda Galaxy"
-,
+          dest_andromeda: "Andromeda Galaxy",
+          dest_pinwheel: "Pinwheel Galaxy (M101)",
+          dest_m87: "Messier 87 (Virgo A)",
+          dest_m87: "Messier 87 (Virgo A)",
           dest_barnard: "Barnard's Star"
 ,
           dest_wolf: "Wolf 359"
@@ -2058,8 +2181,9 @@
           dest_voyager: "Voyager 1",
           dest_alpha: "Alpha Centauri",
           dest_center: "Centre Galactique",
-          dest_andromeda: "Galaxie d'Andromède"
-,
+          dest_andromeda: "Galaxie d'Andromède",
+          dest_pinwheel: "Galaxie du Moulinet (M101)",
+          dest_m87: "Messier 87 (Virgo A)",
           dest_barnard: "Étoile de Barnard"
 ,
           dest_wolf: "Wolf 359"
@@ -2296,8 +2420,10 @@
           dest_voyager: "Voyager 1",
           dest_alpha: "Alfa Centauri",
           dest_center: "Centro Galáctico",
-          dest_andromeda: "Galaxia de Andrómeda"
-,
+          dest_andromeda: "Galaxia de Andrómeda",
+          dest_pinwheel: "Galaxia del Molinete (M101)",
+          dest_m87: "Messier 87 (Virgo A)",
+          dest_m87: "Messier 87 (Virgo A)",
           dest_barnard: "Estrella de Barnard"
 ,
           dest_wolf: "Wolf 359"
@@ -2534,8 +2660,9 @@
           dest_voyager: "ボイジャー1号",
           dest_alpha: "ケンタウルス座アルファ星",
           dest_center: "銀河系中心",
-          dest_andromeda: "アンドロメダ銀河"
-,
+          dest_andromeda: "アンドロメダ銀河",
+          dest_pinwheel: "回転花火銀河 (M101)",
+          dest_m87: "メシエ87 (Virgo A)",
           dest_barnard: "バーナード星"
 ,
           dest_wolf: "ウォルフ359"
@@ -2772,8 +2899,10 @@
           dest_voyager: "Voyager 1",
           dest_alpha: "Alpha Centauri",
           dest_center: "Centro Galáctico",
-          dest_andromeda: "Galáxia de Andrômeda"
-,
+          dest_andromeda: "Galáxia de Andrômeda",
+          dest_pinwheel: "Galáxia do Catavento (M101)",
+          dest_m87: "Messier 87 (Virgo A)",
+          dest_m87: "Messier 87 (Virgo A)",
           dest_barnard: "Estrela de Barnard"
 ,
           dest_wolf: "Wolf 359"
@@ -3010,8 +3139,10 @@
           dest_voyager: "Voyager 1",
           dest_alpha: "Alpha Centauri",
           dest_center: "Galaktisches Zentrum",
-          dest_andromeda: "Andromeda-Galaxie"
-,
+          dest_andromeda: "Andromeda-Galaxie",
+          dest_pinwheel: "Feuerrad-Galaxie (M101)",
+          dest_m87: "Messier 87 (Virgo A)",
+          dest_m87: "Messier 87 (Virgo A)",
           dest_barnard: "Barnards Stern"
 ,
           dest_wolf: "Wolf 359"
@@ -3248,8 +3379,9 @@
           dest_voyager: "Voyager 1",
           dest_alpha: "Alpha Centauri",
           dest_center: "Centro Galattico",
-          dest_andromeda: "Galassia di Andromeda"
-,
+          dest_andromeda: "Galassia Girandola (M101)",
+          dest_pinwheel: "Galassia Girandola (M101)",
+          dest_m87: "Messier 87 (Virgo A)",
           dest_barnard: "Stella di Barnard"
 ,
           dest_wolf: "Wolf 359"
@@ -3486,8 +3618,10 @@
           dest_voyager: "旅行者1号",
           dest_alpha: "半人马座α星",
           dest_center: "银河系中心",
-          dest_andromeda: "仙女座星系"
-,
+          dest_andromeda: "仙女座星系",
+          dest_pinwheel: "风车星系 (M101)",
+          dest_m87: "梅西耶87 (Virgo A)",
+          dest_m87: "梅西耶87 (Virgo A)",
           dest_barnard: "巴纳德星"
 ,
           dest_wolf: "沃尔夫 359"
@@ -3723,7 +3857,9 @@
           dest_voyager: "वॉयेजर 1",
           dest_alpha: "अल्फा सेंटौरी",
           dest_center: "आकाशगंगा केंद्र",
-          dest_andromeda: "एंड्रोमेडा आकाशगंगा"
+          dest_andromeda: "एंड्रोमेडा आकाशगंगा",
+          dest_pinwheel: "पिनव्हील गैलेक्सी (M101)",
+          dest_m87: "मेसियर 87 (Virgo A)"
         }
       };
 
@@ -3747,6 +3883,11 @@
           gateway.style.display = "none";
           solar.style.display = "none";
           travelView.style.display = "flex";
+
+          if (!window.universeInitialized) {
+            init3DUniverse();
+          }
+
           if (window.animateUniverse && !window.universeAnimating) {
             window.universeAnimating = true;
             window.animateUniverse();
@@ -3771,6 +3912,80 @@
         const btn = $("toggle-travel-card");
         const isCollapsed = card.classList.toggle("collapsed");
         btn.innerText = isCollapsed ? "+" : "-";
+      };
+
+      window.starViewerData = [];
+
+      window.openStarViewer = function() {
+        const panel = $("star-viewer-panel");
+        const isActive = panel.classList.toggle("active");
+        
+        if (isActive && window.starViewerData.length > 0) {
+          const select = $("star-viewer-select");
+          if (select.options.length <= 1) { // Only populate once
+            // Sort data by distance
+            window.starViewerData.sort((a, b) => a.dist - b.dist);
+            
+            window.starViewerData.forEach((item, index) => {
+              const opt = document.createElement("option");
+              opt.value = index;
+              let distText = item.dist >= 1e6 ? (item.dist/1e6).toFixed(1) + "M LY" : item.dist.toLocaleString() + " LY";
+              opt.innerText = `${item.icon} ${item.name} (${distText})`;
+              select.appendChild(opt);
+            });
+          }
+        }
+      };
+
+      window.jumpToObject = function(index) {
+        if (index === "") return;
+        const item = window.starViewerData[index];
+        if (!item || !universeCamera || !universeControls) return;
+
+        const targetPos = item.pos.clone();
+        
+        // Offset camera based on object size
+        let offsetDist = item.radius ? item.radius * 25 : 500; 
+        if (item.icon === "🌌" || item.icon === "🏢") offsetDist = item.radius ? item.radius * 3.0 : 50000;
+        if (item.icon === "🕸️" || item.icon === "🔭") offsetDist = item.radius ? item.radius * 1.5 : 1000000;
+        offsetDist = Math.max(offsetDist, 20);
+
+        const camPos = targetPos.clone().add(new THREE.Vector3(offsetDist, offsetDist/2, offsetDist));
+        
+        universeCamera.position.copy(camPos);
+        universeControls.target.copy(targetPos);
+        universeControls.update();
+        
+        // Show details
+        const details = $("star-details");
+        details.style.display = "block";
+        details.scrollTop = 0; // Reset scroll
+
+        $("star-detail-name").innerText = item.name;
+        
+        let distText = item.dist >= 1e9 ? (item.dist/1e9).toFixed(3) + " Billion LY" : 
+                      (item.dist >= 1e6 ? (item.dist/1e6).toFixed(2) + " Million LY" : item.dist.toLocaleString() + " LY");
+        $("star-detail-dist").innerText = "Distance: " + distText;
+
+        // Metadata
+        if (item.size && typeof item.size === 'number') {
+           const km = item.size * 695700;
+           const miles = km * 0.621371;
+           $("star-detail-size").innerHTML = km.toLocaleString() + " km<br><span style='font-size:0.6rem; opacity:0.8'>" + miles.toLocaleString() + " miles</span>";
+        } else if (item.size && item.size.includes("LY")) {
+           // For galaxies (e.g. "100.0k LY")
+           const lyVal = parseFloat(item.size) * (item.size.includes("k") ? 1000 : 1);
+           const km = lyVal * 9.461e12;
+           const miles = km * 0.621371;
+           $("star-detail-size").innerHTML = item.size + "<br><span style='font-size:0.55rem; opacity:0.7'>~" + km.toExponential(2) + " km</span>";
+        } else {
+           $("star-detail-size").innerText = item.size || "--";
+        }
+
+        $("star-detail-mass").innerText = (item.mass && typeof item.mass === 'number') ? item.mass + " Solar M" : (item.mass || "--");
+        $("star-detail-const").innerText = item.constellation || "--";
+        $("star-detail-discovery").innerText = item.discovered || "--";
+        $("star-detail-desc").innerText = item.desc || "";
       };
 
       window.runFullCalculation = function() {
@@ -5068,6 +5283,8 @@
 
   <script>
     function init3DSolarSystem() {
+      if (window.solarInitialized) return;
+      window.solarInitialized = true;
       const container = document.getElementById("solar-system-container");
 
       const scene = new THREE.Scene();
@@ -5623,6 +5840,8 @@
     let galaxyScene, galaxyCamera, galaxyRenderer, galaxyParticles, earthMarker;
 
     function init3DGalaxy() {
+      if (window.galaxyInitialized) return;
+      window.galaxyInitialized = true;
       const container = document.getElementById("galaxy-3d-container");
       if (!container) return;
 
@@ -5710,11 +5929,12 @@
       window.galaxyControls.enableZoom = false;
 
       function animateGalaxy() {
-        const container = document.getElementById("galaxy-map");
-        if (!container || window.getComputedStyle(container).display === "none") {
-          requestAnimationFrame(animateGalaxy);
+        const mapDiv = document.getElementById("galaxy-map");
+        if (!mapDiv || window.getComputedStyle(mapDiv).display === "none") {
+          window.galaxyAnimating = false;
           return;
         }
+        window.galaxyAnimating = true;
 
         if (window.PerfMonitor && window.PerfMonitor.recordFrame()) {
           window.PerfMonitor.applyScaling();
@@ -5730,6 +5950,7 @@
         window.galaxyControls.update();
         galaxyRenderer.render(galaxyScene, galaxyCamera);
       }
+      window.animateGalaxy = animateGalaxy;
 
       animateGalaxy();
 
@@ -5746,7 +5967,6 @@
     setTimeout(() => {
       init3DSolarSystem();
       init3DGalaxy();
-      init3DUniverse();
     }, 500);
 
     function init3DUniverse() {
@@ -5764,9 +5984,13 @@
 
       universeCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1.0, 100000000000000);
       universeCamera.position.set(0, 50, 150); 
-      universeRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });      window.universeRenderer = universeRenderer;
-      // Change line 5700 to:
-universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2)); universeRenderer.setSize(window.innerWidth, window.innerHeight);
+      universeRenderer = new THREE.WebGLRenderer({ 
+        alpha: true, 
+        antialias: !isMobile
+      });
+      window.universeRenderer = universeRenderer;
+      universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
+      universeRenderer.setSize(window.innerWidth, window.innerHeight);
       container.appendChild(universeRenderer.domElement);
       universeControls = new THREE.OrbitControls(universeCamera, universeRenderer.domElement);
       universeControls.enableDamping = true;
@@ -5864,45 +6088,28 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
 
       // LEVEL 1: FULL 570 STARS
       const starData = [
-        { name: "Proxima Centauri", ra: 14.49, dec: -62.68, dist: 4.246, color: 0xf44336, size: 0.15 },
-        { name: "Alpha Centauri A", ra: 14.66, dec: -60.83, dist: 4.37, color: 0xffeb3b, size: 1.1 },
-        { name: "Alpha Centauri B", ra: 14.66, dec: -60.84, dist: 4.37, color: 0xffa500, size: 0.9 },
-        { name: "Barnard's Star", ra: 17.96, dec: 4.69, dist: 5.96, color: 0xff4500, size: 0.2 },
-        { name: "Wolf 359", ra: 10.94, dec: 7.01, dist: 7.78, color: 0xff0000, size: 0.16 },
-        { name: "Lalande 21185", ra: 11.05, dec: 35.97, dist: 8.29, color: 0xff3300, size: 0.4 },
-        { name: "Sirius", ra: 6.75, dec: -16.71, dist: 8.6, color: 0x00d4ff, size: 1.7 },
-        { name: "Luyten 726-8", ra: 1.65, dec: -17.95, dist: 8.73, color: 0xff0000, size: 0.1 },
-        { name: "Ross 154", ra: 18.83, dec: -23.83, dist: 9.68, color: 0xff0000, size: 0.2 },
-        { name: "Ross 248", ra: 23.69, dec: 44.17, dist: 10.32, color: 0xff0000, size: 0.16 },
-        { name: "Epsilon Eridani", ra: 3.55, dec: -9.46, dist: 10.5, color: 0xffd700, size: 0.74 },
-        { name: "Lacaille 9352", ra: 23.09, dec: -35.85, dist: 10.74, color: 0xff4400, size: 0.46 },
-        { name: "Ross 128", ra: 11.79, dec: 0.8, dist: 10.92, color: 0xff0000, size: 0.21 },
-        { name: "EZ Aquarii", ra: 22.64, dec: -15.3, dist: 11.26, color: 0xff0000, size: 0.1 },
-        { name: "Procyon", ra: 7.65, dec: 5.22, dist: 11.4, color: 0xffffcc, size: 2.1 },
-        { name: "61 Cygni", ra: 21.11, dec: 38.75, dist: 11.4, color: 0xffa500, size: 0.67 },
-        { name: "Struve 2398", ra: 18.75, dec: 59.5, dist: 11.5, color: 0xff0000, size: 0.35 },
-        { name: "Groombridge 34", ra: 0.3, dec: 44.0, dist: 11.7, color: 0xff0000, size: 0.38 },
-        { name: "Epsilon Indi", ra: 22.06, dec: -56.78, dist: 11.8, color: 0xffa500, size: 0.73 },
-        { name: "Tau Ceti", ra: 1.74, dec: -15.9, dist: 11.9, color: 0xffff00, size: 0.79 },
-        { name: "Luyten's Star", ra: 7.45, dec: 5.2, dist: 12.36, color: 0xff0000, size: 0.35 },
-        { name: "Kapteyn's Star", ra: 5.19, dec: -45.0, dist: 12.76, color: 0xff3300, size: 0.29 },
-        { name: "Altair", ra: 19.84, dec: 8.87, dist: 16.7, color: 0xddeeff, size: 1.8 },
-        { name: "Vega", ra: 18.61, dec: 38.78, dist: 25.0, color: 0xaaaaff, size: 2.1 },
-        { name: "Fomalhaut", ra: 22.96, dec: -29.62, dist: 25.1, color: 0xeeffff, size: 1.8 },
-        { name: "Pollux", ra: 7.76, dec: 28.02, dist: 33.7, color: 0xffcc99, size: 8.8 },
-        { name: "Arcturus", ra: 14.26, dec: 19.18, dist: 36.7, color: 0xffcc88, size: 25.0 },
-        { name: "Capella", ra: 5.28, dec: 45.99, dist: 42.9, color: 0xffffcc, size: 12.0 },
-        { name: "Castor", ra: 7.57, dec: 31.89, dist: 51.5, color: 0xaaaaff, size: 2.7 },
-        { name: "Aldebaran", ra: 4.59, dec: 16.51, dist: 65.3, color: 0xffaa66, size: 44.0 },
-        { name: "Regulus", ra: 10.14, dec: 11.97, dist: 79.3, color: 0xbbddff, size: 3.8 },
-        { name: "Canopus", ra: 6.40, dec: -52.70, dist: 310.0, color: 0xffffff, size: 71.0 },
-        { name: "Polaris", ra: 2.52, dec: 89.26, dist: 323.0, color: 0xffffcc, size: 37.5 },
-        { name: "Antares", ra: 16.49, dec: -26.43, dist: 550.0, color: 0xff6600, size: 680.0 },
-        { name: "Betelgeuse", ra: 5.92, dec: 7.41, dist: 642.5, color: 0xff4400, size: 800.0 },
+        { name: "Proxima Centauri", ra: 14.49, dec: -62.68, dist: 4.246, color: 0xf44336, size: 0.15, mass: 0.12, constellation: "Centaurus", discovered: "1915 (Robert Innes)", desc: "The closest known star to the Sun. A small red dwarf, it would take ~6,300 years to reach using chemical rockets." },
+        { name: "Alpha Centauri A", ra: 14.66, dec: -60.83, dist: 4.37, color: 0xffeb3b, size: 1.1, mass: 1.1, constellation: "Centaurus", discovered: "Ancient", desc: "The primary component of the nearest star system. It is very similar to our Sun in size and temperature." },
+        { name: "Alpha Centauri B", ra: 14.66, dec: -60.84, dist: 4.37, color: 0xffa500, size: 0.9, mass: 0.9, constellation: "Centaurus", discovered: "Ancient", desc: "A slightly smaller and cooler companion to Alpha Centauri A, forming the famous binary pair." },
+        { name: "Barnard's Star", ra: 17.96, dec: 4.69, dist: 5.96, color: 0xff4500, size: 0.2, mass: 0.14, constellation: "Ophiuchus", discovered: "1916 (E.E. Barnard)", desc: "The fastest moving star in the sky (proper motion). It is a red dwarf rapidly approaching the solar system." },
+        { name: "Wolf 359", ra: 10.94, dec: 7.01, dist: 7.78, color: 0xff0000, size: 0.16, mass: 0.09, constellation: "Leo", discovered: "1917 (Max Wolf)", desc: "One of the faintest and lowest-mass stars known, famous in science fiction as the site of a major Borg battle." },
+        { name: "Sirius", ra: 6.75, dec: -16.71, dist: 8.6, color: 0x00d4ff, size: 1.7, mass: 2.06, constellation: "Canis Major", discovered: "Ancient", desc: "The brightest star in the night sky. It is actually a binary system consisting of a main-sequence star and a white dwarf." },
+        { name: "Epsilon Eridani", ra: 3.55, dec: -9.46, dist: 10.5, color: 0xffd700, size: 0.74, mass: 0.82, constellation: "Eridanus", discovered: "Ancient", desc: "One of the nearest Sun-like stars known to have a debris disk and potential planetary system." },
+        { name: "Procyon", ra: 7.65, dec: 5.22, dist: 11.4, color: 0xffffcc, size: 2.1, mass: 1.5, constellation: "Canis Minor", discovered: "Ancient", desc: "The 8th brightest star. Like Sirius, it has a faint white dwarf companion (Procyon B)." },
+        { name: "Altair", ra: 19.84, dec: 8.87, dist: 16.7, color: 0xddeeff, size: 1.8, mass: 1.79, constellation: "Aquila", discovered: "Ancient", desc: "Rotates so fast (300 km/s) that it is flattened at the poles into an oblate spheroid shape." },
+        { name: "Vega", ra: 18.61, dec: 38.78, dist: 25.0, color: 0xaaaaff, size: 2.1, mass: 2.1, constellation: "Lyra", discovered: "Ancient", desc: "Once the North Star (around 12,000 BC) and will be again in 12,000 years due to Earth's precession." },
+        { name: "Arcturus", ra: 14.26, dec: 19.18, dist: 36.7, color: 0xffcc88, size: 25.0, mass: 1.08, constellation: "Boötes", discovered: "Ancient", desc: "A red giant star. Despite having roughly the same mass as the Sun, it has expanded to 25 times its diameter." },
+        { name: "Capella", ra: 5.28, dec: 45.99, dist: 42.9, color: 0xffffcc, size: 12.0, mass: 2.6, constellation: "Auriga", discovered: "Ancient", desc: "Actually a system of four stars in two binary pairs. The two largest are yellow giant stars." },
+        { name: "Aldebaran", ra: 4.59, dec: 16.51, dist: 65.3, color: 0xffaa66, size: 44.0, mass: 1.16, constellation: "Taurus", discovered: "Ancient", desc: "The 'Eye of the Bull'. A massive orange giant that would engulf Mercury if placed in our solar system." },
+        { name: "Regulus", ra: 10.14, dec: 11.97, dist: 79.3, color: 0xbbddff, size: 3.8, mass: 3.8, constellation: "Leo", discovered: "Ancient", desc: "The 'Heart of the Lion'. A quadruple star system located almost exactly on the ecliptic path." },
+        { name: "Canopus", ra: 6.40, dec: -52.70, dist: 310.0, color: 0xffffff, size: 71.0, mass: 8.0, constellation: "Carina", discovered: "Ancient", desc: "The second brightest star in the sky. It is a white supergiant often used for spacecraft navigation." },
+        { name: "Polaris", ra: 2.52, dec: 89.26, dist: 323.0, color: 0xffffcc, size: 37.5, mass: 5.4, constellation: "Ursa Minor", discovered: "Ancient", desc: "The North Star. It appears stationary in the sky as it is aligned with Earth's rotational axis." },
+        { name: "Antares", ra: 16.49, dec: -26.43, dist: 550.0, color: 0xff6600, size: 680.0, mass: 12.0, constellation: "Scorpius", discovered: "Ancient", desc: "A red supergiant. If placed at the center of our solar system, its surface would extend beyond the orbit of Mars." },
+        { name: "Betelgeuse", ra: 5.92, dec: 7.41, dist: 642.5, color: 0xff4400, size: 800.0, mass: 11.6, constellation: "Orion", discovered: "Ancient", desc: "A massive red supergiant expected to explode as a supernova within the next 100,000 years." },
+        { name: "Rigel", ra: 5.24, dec: -8.20, dist: 863.0, color: 0x88ccff, size: 78.0, mass: 21.0, constellation: "Orion", discovered: "Ancient", desc: "A blue supergiant and the brightest star in Orion. It is 120,000 times more luminous than our Sun." },
+        { name: "Deneb", ra: 20.69, dec: 45.28, dist: 2615.0, color: 0xccddee, size: 200.0, mass: 19.0, constellation: "Cygnus", discovered: "Ancient", desc: "One of the most distant stars visible to the naked eye. A white supergiant of immense luminosity." },
+        { name: "Pistol Star", ra: 17.77, dec: -28.8, dist: 25000.0, color: 0x4488ff, size: 300.0, mass: 27.5, constellation: "Sagittarius", discovered: "1990s (Hubble)", desc: "One of the most luminous stars known. It radiates as much energy in 20 seconds as the Sun does in a year." },
         { name: "Siwarha", ra: 5.92, dec: 7.42, dist: 643.0, color: 0xbbddff, size: 15.0 },
-        { name: "Rigel", ra: 5.24, dec: -8.20, dist: 863.0, color: 0x88ccff, size: 78.0 },
-        { name: "Deneb", ra: 20.69, dec: 45.28, dist: 2615.0, color: 0xccddee, size: 200.0 },
-        { name: "Pistol Star", ra: 17.77, dec: -28.8, dist: 25000.0, color: 0x4488ff, size: 300.0 },
         { name: "Sadr", ra: 20.37, dec: 40.26, dist: 1800.0, color: 0xffcc99, size: 150.0 },
         { name: "Enif", ra: 21.74, dec: 9.87, dist: 690.0, color: 0xffaa66, size: 150.0 },
         { name: "Aludra", ra: 7.40, dec: -29.30, dist: 2000.0, color: 0xbbddff, size: 50.0 },
@@ -6116,12 +6323,36 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
 
       starData.forEach(s => {
         const pos = get3DPos(s.ra, s.dec, s.dist), vSize = Math.max(SUN_SIZE * s.size / 2, 0.5);
+        const lod = new THREE.LOD();
+        
+        // Level 0: High-fidelity star mesh (Visible < 1 LY)
         const star = createCelestialBody(vSize, s.color, true);
-        star.position.copy(pos); star.userData = { name: s.name, dist: s.dist, icon: "✨" };
-        universeScene.add(star); selectableStars.push(star);
+        star.userData = { name: s.name, dist: s.dist, icon: "✨" };
+        lod.addLevel(star, 0);
+        
+        // Level 1: Navigation Marker (Visible > 1 LY)
+        // We use the marker here so stars are navigable from afar but don't cost mesh performance
         const marker = new THREE.Sprite(markerMat.clone());
-        marker.material.color.set(s.color); marker.scale.set(pos.length() * 0.08, pos.length() * 0.08, 1); marker.position.copy(pos);
-        universeScene.add(marker);
+        marker.material.color.set(s.color);
+        marker.scale.set(pos.length() * 0.08, pos.length() * 0.08, 1);
+        lod.addLevel(marker, 1 * LY_TO_I);
+
+        lod.position.copy(pos);
+        universeScene.add(lod);
+        selectableStars.push(star); 
+        
+        window.starViewerData.push({ 
+          name: s.name, 
+          dist: s.dist, 
+          pos: pos, 
+          icon: "✨", 
+          radius: vSize,
+          size: s.size,
+          mass: s.mass || "--",
+          constellation: s.constellation || "Unknown",
+          discovered: s.discovered || "Ancient",
+          desc: s.desc || "A notable star in our cosmic neighborhood."
+        });
       });
 
       // LEVEL 2: MILKY WAY
@@ -6158,120 +6389,206 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
       // LEVEL 3: LOCAL GROUP
       const localGroup = new THREE.Group(); universeScene.add(localGroup);
       function createMiniGalaxy(stars, radius, color, name, distLY, ra, dec, scaleFactor = 1, tiltX = 0, tiltZ = 0, type = 'spiral', hasTidalStream = false, streamTarget = null) {
-        const group = new THREE.Group(), rUnits = radius * LY_TO_I;
-        const armStarCoords = [], armStarColors = [], bulgeCoords = [], bulgeColors = [];
-        const isSombrero = name.includes("Sombrero"), isAndromeda = name.includes("Andromeda"), isCenA = name === "Centaurus A", isM51 = name.includes("Whirlpool");
-        
-        if (type === 'spiral' || type === 'lenticular') {
-            const bulgeRatio = isSombrero ? 0.7 : (isAndromeda ? 0.4 : 0.3);
-            const diskStars = Math.floor(stars * (1 - bulgeRatio));
-            if (type === 'spiral') {
-                const armCount = isM51 ? 2 : 2, starsPerArm = Math.floor(diskStars / armCount);
-                for (let i = 0; i < armCount; i++) {
-                    const armAngle = (i / armCount) * Math.PI * 2;
-                    for (let j = 0; j < starsPerArm; j++) {
-                        const progress = j / starsPerArm, dist = progress * rUnits, angle = armAngle + (progress * Math.PI * (isM51 ? 6 : 4));
-                        armStarCoords.push(Math.cos(angle) * dist + (Math.random()-0.5)*dist*0.15, (Math.random()-0.5)*dist*0.05, Math.sin(angle) * dist + (Math.random()-0.5)*dist*0.15);
+        const lod = new THREE.LOD(), rUnits = radius * LY_TO_I * scaleFactor;
+        const pos = get3DPos(ra, dec, distLY);
+        const isSombrero = name.includes("Sombrero"), isAndromeda = name.includes("Andromeda"), isCenA = name === "Centaurus A", isM51 = name.includes("Whirlpool"), isCartwheel = name.includes("Cartwheel"), isSgr = name.includes("Sagittarius");
+
+        // Invisible hit-box for selection at all distances
+        const hitBox = new THREE.Mesh(new THREE.SphereGeometry(rUnits * 1.5, 8, 8), new THREE.MeshBasicMaterial({ visible: false }));
+        hitBox.position.copy(pos); hitBox.userData = { name: name, dist: distLY, icon: "🌌" };
+        universeScene.add(hitBox); selectableGalaxies.push(hitBox);
+
+        function generateGalaxyGroup(starScale) {
+            const group = new THREE.Group(), scaledStars = Math.floor(stars * starScale);
+            const armStarCoords = [], armStarColors = [], bulgeCoords = [], bulgeColors = [];
+            
+            if (type === 'spiral' || type === 'lenticular' || type === 'ring') {
+                const bulgeRatio = isSombrero ? 0.7 : (isAndromeda ? 0.4 : (isCartwheel ? 0.1 : 0.3));
+                const diskStars = Math.floor(scaledStars * (1 - bulgeRatio));
+                if (type === 'spiral') {
+                    const armCount = isM51 ? 2 : 2, starsPerArm = Math.floor(diskStars / armCount);
+                    for (let i = 0; i < armCount; i++) {
+                        const armAngle = (i / armCount) * Math.PI * 2;
+                        for (let j = 0; j < starsPerArm; j++) {
+                            const progress = j / starsPerArm, dist = progress * rUnits, angle = armAngle + (progress * Math.PI * (isM51 ? 6 : 4));
+                            armStarCoords.push(Math.cos(angle) * dist + (Math.random()-0.5)*dist*0.15, (Math.random()-0.5)*dist*0.05, Math.sin(angle) * dist + (Math.random()-0.5)*dist*0.15);
+                            armStarColors.push(color.r, color.g, color.b);
+                        }
+                    }
+                } else if (type === 'ring') {
+                    for (let i = 0; i < diskStars; i++) {
+                        const angle = Math.random() * Math.PI * 2, dist = 0.8 * rUnits + Math.random() * 0.2 * rUnits;
+                        armStarCoords.push(Math.cos(angle) * dist, (Math.random()-0.5)*dist*0.05, Math.sin(angle) * dist);
+                        armStarColors.push(color.r, color.g, color.b);
+                    }
+                    const spokeCount = 4, starsPerSpoke = Math.floor(diskStars * 0.2 / spokeCount);
+                    for (let i = 0; i < spokeCount; i++) {
+                        const spokeAngle = (i / spokeCount) * Math.PI * 2;
+                        for (let j = 0; j < starsPerSpoke; j++) {
+                            const dist = Math.random() * 0.8 * rUnits;
+                            armStarCoords.push(Math.cos(spokeAngle) * dist, (Math.random()-0.5)*dist*0.05, Math.sin(spokeAngle) * dist);
+                            armStarColors.push(color.r * 0.7, color.g * 0.7, color.b * 0.7);
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < diskStars; i++) {
+                        const angle = Math.random() * Math.PI * 2, dist = Math.pow(Math.random(), 0.7) * rUnits;
+                        armStarCoords.push(Math.cos(angle) * dist, (Math.random()-0.5)*dist*0.02, Math.sin(angle) * dist);
                         armStarColors.push(color.r, color.g, color.b);
                     }
                 }
-            } else {
-                for (let i = 0; i < diskStars; i++) {
-                    const angle = Math.random() * Math.PI * 2, dist = Math.pow(Math.random(), 0.7) * rUnits;
-                    armStarCoords.push(Math.cos(angle) * dist, (Math.random()-0.5)*dist*0.02, Math.sin(angle) * dist);
-                    armStarColors.push(color.r, color.g, color.b);
+                const bulgeCount = Math.floor(scaledStars * bulgeRatio);
+                for (let i = 0; i < bulgeCount; i++) {
+                    const r = Math.pow(Math.random(), 0.5) * rUnits * (isSombrero ? 0.5 : 0.3), theta = Math.random() * Math.PI * 2, phi = Math.random() * Math.PI;
+                    bulgeCoords.push(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi) * (isSombrero ? 0.8 : 0.6), r * Math.sin(phi) * Math.sin(theta)); 
+                    bulgeColors.push(color.r * 1.1, color.g, color.b * 0.9);
+                }
+                if (isSombrero && starScale > 0.5) {
+                    const dustCoords = [], dustColors = [];
+                    for (let i = 0; i < scaledStars * 0.5; i++) {
+                        const angle = Math.random() * Math.PI * 2, dist = 0.6 * rUnits + Math.random() * 0.2 * rUnits;
+                        dustCoords.push(Math.cos(angle) * dist, (Math.random()-0.5) * rUnits * 0.01, Math.sin(angle) * dist);
+                        dustColors.push(0.05, 0.04, 0.03);
+                    }
+                    const dustGeo = new THREE.BufferGeometry(); dustGeo.setAttribute('position', new THREE.Float32BufferAttribute(dustCoords, 3)); dustGeo.setAttribute('color', new THREE.Float32BufferAttribute(dustColors, 3));
+                    group.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({ size: 4000, vertexColors: true, transparent: true, opacity: 0.8 })));
+                }
+            } else if (type === 'irregular') {
+                for (let i = 0; i < scaledStars; i++) {
+                    const r = Math.pow(Math.random(), 0.8) * rUnits, theta = Math.random() * Math.PI * 2, phi = Math.random() * Math.PI;
+                    armStarCoords.push(r * Math.sin(phi) * Math.cos(theta) * 1.5, r * Math.cos(phi) * 0.8, r * Math.sin(phi) * Math.sin(theta) * 1.5);
+                    armStarColors.push(color.r * (0.7+Math.random()*0.3), color.g * (0.7+Math.random()*0.3), color.b * (0.7+Math.random()*0.3));
+                }
+            } else if (type === 'elliptical') {
+                const stretch = hasTidalStream && !streamTarget ? 2.5 : 1.0;
+                for (let i = 0; i < scaledStars; i++) {
+                    const r = Math.pow(Math.random(), 1.5) * rUnits, theta = Math.random() * Math.PI * 2, phi = Math.random() * Math.PI;
+                    bulgeCoords.push(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi) * 0.8, r * Math.sin(phi) * Math.sin(theta) * stretch);
+                    bulgeColors.push(color.r, color.g, color.b);
+                }
+                if (isCenA && starScale > 0.5) {
+                    const dustCoords = [], dustColors = [];
+                    for (let i = 0; i < scaledStars * 0.4; i++) {
+                        const angle = Math.random() * Math.PI * 2, dist = Math.pow(Math.random(), 0.8) * rUnits * 0.8;
+                        dustCoords.push(Math.cos(angle) * dist, (Math.random()-0.5) * rUnits * 0.1, Math.sin(angle) * dist);
+                        dustColors.push(0.1, 0.05, 0.02);
+                    }
+                    const dustGeo = new THREE.BufferGeometry(); dustGeo.setAttribute('position', new THREE.Float32BufferAttribute(dustCoords, 3)); dustGeo.setAttribute('color', new THREE.Float32BufferAttribute(dustColors, 3));
+                    group.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({ size: 6000, vertexColors: true, transparent: true, opacity: 0.9 })));
                 }
             }
-            const bulgeCount = Math.floor(stars * bulgeRatio);
-            for (let i = 0; i < bulgeCount; i++) {
-                const r = Math.pow(Math.random(), 0.5) * rUnits * (isSombrero ? 0.5 : 0.3), theta = Math.random() * Math.PI * 2, phi = Math.random() * Math.PI;
-                bulgeCoords.push(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi) * (isSombrero ? 0.8 : 0.6), r * Math.sin(phi) * Math.sin(theta)); 
-                bulgeColors.push(1.0, 0.9, 0.8);
-            }
-            if (isSombrero) {
-                const dustCoords = [], dustColors = [];
-                for (let i = 0; i < stars * 0.5; i++) {
-                    const angle = Math.random() * Math.PI * 2, dist = 0.6 * rUnits + Math.random() * 0.2 * rUnits;
-                    dustCoords.push(Math.cos(angle) * dist, (Math.random()-0.5) * rUnits * 0.01, Math.sin(angle) * dist);
-                    dustColors.push(0.05, 0.04, 0.03);
+
+            if (hasTidalStream && starScale > 0.5) {
+                const streamStars = isSgr ? scaledStars * 6 : (isM51 ? 5000 : 12000), streamCoords = [], streamColors = [];
+                const tempVec = new THREE.Vector3();
+                const invRot = new THREE.Euler(-tiltX, 0, -tiltZ, 'ZYX');
+
+                if (isSgr) {
+                    const gcPos = new THREE.Vector3(-26000 * LY_TO_I, 0, 0);
+                    const toDwarf = new THREE.Vector3().subVectors(pos, gcPos);
+                    const radius = toDwarf.length();
+                    const u = toDwarf.clone().normalize();
+                    // Sgr stream is almost perpendicular to the Galactic plane.
+                    const orbitNormal = new THREE.Vector3(1, 0.1, 0.1).cross(u).normalize();
+                    const v = new THREE.Vector3().crossVectors(orbitNormal, u).normalize();
+
+                    for (let i = 0; i < streamStars; i++) {
+                        const t = (Math.random() - 0.3) * 4.5;
+                        const angle = t * Math.PI;
+                        const dispersion = 1 + Math.abs(t) * 1.5;
+                        const radDist = radius + (Math.random() - 0.5) * 5500 * LY_TO_I * dispersion;
+                        const sideDist = (Math.random() - 0.5) * 3500 * LY_TO_I * dispersion;
+                        const helicalX = Math.sin(t * 8) * 800 * LY_TO_I;
+                        const helicalY = Math.cos(t * 8) * 800 * LY_TO_I;
+
+                        tempVec.copy(gcPos)
+                            .addScaledVector(u, Math.cos(angle) * radDist + helicalX)
+                            .addScaledVector(v, Math.sin(angle) * radDist + helicalY)
+                            .addScaledVector(orbitNormal, sideDist);
+
+                        tempVec.sub(pos).applyEuler(invRot);
+                        streamCoords.push(tempVec.x, tempVec.y, tempVec.z);
+                        const clumpiness = 0.8 + 0.2 * Math.sin(t * 12);
+                        const opacity = Math.max(0, (0.7 - Math.abs(t) / 6) * clumpiness);
+                        streamColors.push(color.r * opacity, color.g * opacity, color.b * opacity);
+                    }
+                } else {
+                    let tX, tY, tZ;
+                    if (streamTarget) {
+                        tX = streamTarget.x - pos.x; tY = streamTarget.y - pos.y; tZ = streamTarget.z - pos.z;
+                    } else {
+                        tX = -pos.x - 26000 * LY_TO_I; tY = -pos.y; tZ = -pos.z;
+                    }
+                    for (let i = 0; i < streamStars; i++) {
+                        const t = isM51 ? Math.random() : (Math.random() - 0.4) * 3;
+                        const curve = Math.sin(t * (isM51 ? Math.PI : 0.5)) * (isM51 ? 15000 : 40000) * LY_TO_I;
+                        const spread = (Math.random() * (isM51 ? 5000 : 12000) * LY_TO_I) * (1 + Math.abs(t));
+                        tempVec.set(t * tX + (Math.random()-0.5) * spread, t * tY + curve + (Math.random()-0.5) * spread, t * tZ + (Math.random()-0.5) * spread);
+                        tempVec.applyEuler(invRot);
+                        streamCoords.push(tempVec.x, tempVec.y, tempVec.z);
+                        const opacity = isM51 ? 0.5 : Math.max(0, 1 - Math.abs(t)/4);
+                        streamColors.push(color.r * opacity, color.g * opacity, color.b * opacity);
+                    }
                 }
-                const dustGeo = new THREE.BufferGeometry(); dustGeo.setAttribute('position', new THREE.Float32BufferAttribute(dustCoords, 3)); dustGeo.setAttribute('color', new THREE.Float32BufferAttribute(dustColors, 3));
-                group.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({ size: 4000, vertexColors: true, transparent: true, opacity: 0.8 })));
+                const streamGeo = new THREE.BufferGeometry(); streamGeo.setAttribute('position', new THREE.Float32BufferAttribute(streamCoords, 3)); streamGeo.setAttribute('color', new THREE.Float32BufferAttribute(streamColors, 3));
+                const isCartwheel = name === "Cartwheel Galaxy";
+                group.add(new THREE.Points(streamGeo, new THREE.PointsMaterial({ size: isSgr ? 1500 : (isM51 ? 4000 : (isCartwheel ? 8000 : 3000)), vertexColors: true, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending })));
             }
-        } else if (type === 'irregular') {
-            for (let i = 0; i < stars; i++) {
-                const r = Math.pow(Math.random(), 0.8) * rUnits, theta = Math.random() * Math.PI * 2, phi = Math.random() * Math.PI;
-                armStarCoords.push(r * Math.sin(phi) * Math.cos(theta) * 1.5, r * Math.cos(phi) * 0.8, r * Math.sin(phi) * Math.sin(theta) * 1.5);
-                armStarColors.push(color.r * (0.7+Math.random()*0.3), color.g * (0.7+Math.random()*0.3), color.b * (0.7+Math.random()*0.3));
+            if (armStarCoords.length > 0) {
+                const armGeo = new THREE.BufferGeometry(); armGeo.setAttribute('position', new THREE.Float32BufferAttribute(armStarCoords, 3)); armGeo.setAttribute('color', new THREE.Float32BufferAttribute(armStarColors, 3));
+                group.add(new THREE.Points(armGeo, new THREE.PointsMaterial({ size: 3000, vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending })));
             }
-        } else if (type === 'elliptical') {
-            const stretch = hasTidalStream && !streamTarget ? 2.5 : 1.0;
-            for (let i = 0; i < stars; i++) {
-                const r = Math.pow(Math.random(), 1.5) * rUnits, theta = Math.random() * Math.PI * 2, phi = Math.random() * Math.PI;
-                bulgeCoords.push(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi) * 0.8, r * Math.sin(phi) * Math.sin(theta) * stretch);
-                bulgeColors.push(1.0, 0.9, 0.8);
+            if (bulgeCoords.length > 0) {
+                const bulgeGeo = new THREE.BufferGeometry(); bulgeGeo.setAttribute('position', new THREE.Float32BufferAttribute(bulgeCoords, 3)); bulgeGeo.setAttribute('color', new THREE.Float32BufferAttribute(bulgeColors, 3));
+                group.add(new THREE.Points(bulgeGeo, new THREE.PointsMaterial({ size: 5000, vertexColors: true, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending })));
             }
-            if (isCenA) {
-                const dustCoords = [], dustColors = [];
-                for (let i = 0; i < stars * 0.4; i++) {
-                    const angle = Math.random() * Math.PI * 2, dist = Math.pow(Math.random(), 0.8) * rUnits * 0.8;
-                    dustCoords.push(Math.cos(angle) * dist, (Math.random()-0.5) * rUnits * 0.1, Math.sin(angle) * dist);
-                    dustColors.push(0.1, 0.05, 0.02);
-                }
-                const dustGeo = new THREE.BufferGeometry(); dustGeo.setAttribute('position', new THREE.Float32BufferAttribute(dustCoords, 3)); dustGeo.setAttribute('color', new THREE.Float32BufferAttribute(dustColors, 3));
-                group.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({ size: 6000, vertexColors: true, transparent: true, opacity: 0.9 })));
-            }
+            group.rotation.x = tiltX; group.rotation.z = tiltZ;
+            return group;
         }
 
-        if (hasTidalStream) {
-            const streamStars = isM51 ? 5000 : 12000, streamCoords = [], streamColors = [];
-            let tX, tY, tZ;
-            if (streamTarget) {
-                tX = streamTarget.x - group.position.x;
-                tY = streamTarget.y - group.position.y;
-                tZ = streamTarget.z - group.position.z;
-            } else {
-                tX = -group.position.x - 26000 * LY_TO_I;
-                tY = -group.position.y;
-                tZ = -group.position.z;
-            }
-            
-            for (let i = 0; i < streamStars; i++) {
-                const t = isM51 ? Math.random() : (Math.random() - 0.4) * 3;
-                const curve = Math.sin(t * (isM51 ? Math.PI : 0.5)) * (isM51 ? 15000 : 40000) * LY_TO_I;
-                const spread = (Math.random() * (isM51 ? 5000 : 12000) * LY_TO_I) * (1 + Math.abs(t));
-                streamCoords.push(t * tX + (Math.random()-0.5) * spread, t * tY + curve + (Math.random()-0.5) * spread, t * tZ + (Math.random()-0.5) * spread);
-                const opacity = isM51 ? 0.5 : Math.max(0, 1 - Math.abs(t)/2);
-                streamColors.push(color.r * opacity, color.g * opacity, color.b * opacity);
-            }
-            const streamGeo = new THREE.BufferGeometry(); streamGeo.setAttribute('position', new THREE.Float32BufferAttribute(streamCoords, 3)); streamGeo.setAttribute('color', new THREE.Float32BufferAttribute(streamColors, 3));
-            group.add(new THREE.Points(streamGeo, new THREE.PointsMaterial({ size: isM51 ? 4000 : 3000, vertexColors: true, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending })));
-        }
+        lod.addLevel(generateGalaxyGroup(1.0), 0);
+        lod.addLevel(generateGalaxyGroup(0.4), 10000000 * LY_TO_I);
+        lod.addLevel(generateGalaxyGroup(0.1), 40000000 * LY_TO_I);
         
-        if (armStarCoords.length > 0) {
-            const armGeo = new THREE.BufferGeometry(); armGeo.setAttribute('position', new THREE.Float32BufferAttribute(armStarCoords, 3)); armGeo.setAttribute('color', new THREE.Float32BufferAttribute(armStarColors, 3));
-            group.add(new THREE.Points(armGeo, new THREE.PointsMaterial({ size: 3000, vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending })));
-        }
-        if (bulgeCoords.length > 0) {
-            const bulgeGeo = new THREE.BufferGeometry(); bulgeGeo.setAttribute('position', new THREE.Float32BufferAttribute(bulgeCoords, 3)); bulgeGeo.setAttribute('color', new THREE.Float32BufferAttribute(bulgeColors, 3));
-            group.add(new THREE.Points(bulgeGeo, new THREE.PointsMaterial({ size: 5000, vertexColors: true, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending })));
-        }
-        const glow = new THREE.Sprite(markerMat.clone()); glow.material.color.setRGB(color.r, color.g, color.b); glow.scale.set(rUnits * 1.5, rUnits * 1.5, 1);
-        group.add(glow); group.rotation.x = tiltX; group.rotation.z = tiltZ; group.position.copy(get3DPos(ra, dec, distLY));
-        group.userData = { name: name, dist: distLY, icon: "🌌" }; localGroup.add(group); selectableGalaxies.push(glow); glow.userData = { name: name, dist: distLY, icon: "🌌" };
-        return group.position;
+        const coreGlow = new THREE.Sprite(markerMat.clone()); coreGlow.material.color.setRGB(color.r, color.g, color.b); coreGlow.scale.set(rUnits * 1.5, rUnits * 1.5, 1);
+        const spriteOnly = new THREE.Group(); spriteOnly.add(coreGlow);
+        lod.addLevel(spriteOnly, 100000000 * LY_TO_I);
+
+        lod.position.copy(pos);
+        lod.userData = { name: name, dist: distLY, icon: "🌌" }; localGroup.add(lod);
+        
+        window.starViewerData.push({ 
+          name: name, 
+          dist: distLY, 
+          pos: pos, 
+          icon: "🌌", 
+          radius: rUnits,
+          size: (radius/1000).toFixed(1) + "k LY",
+          mass: stars >= 1e11 ? (stars/1e11).toFixed(1) + " Trillion Solar" : (stars/1e9).toFixed(1) + " Billion Solar",
+          constellation: "Various",
+          discovered: "18th-20th Century",
+          desc: `A massive ${type} galaxy containing billions of stars. Part of our Local Group or nearby clusters.`
+        });
+        
+        return lod.position;
       }
+
       createMiniGalaxy(80000, 110000, {r: 0.7, g: 0.8, b: 1.0}, "Andromeda Galaxy (M31)", 2537000, 0.71, 41.27, 2, 1.34, 0.5, 'spiral');
       createMiniGalaxy(20000, 30000, {r: 1.0, g: 0.7, b: 0.8}, "Triangulum Galaxy (M33)", 2730000, 1.56, 30.66, 1, 0.5, 0.2, 'spiral');
       createMiniGalaxy(8000, 14000, {r: 0.9, g: 1.0, b: 0.9}, "Large Magellanic Cloud", 163000, 5.39, -69.75, 0.5, 0, 0, 'irregular');
       createMiniGalaxy(5000, 7000, {r: 1.0, g: 1.0, b: 0.8}, "Small Magellanic Cloud", 200000, 0.87, -72.8, 0.3, 0, 0, 'irregular');
-      createMiniGalaxy(4000, 6000, {r: 0.9, g: 0.8, b: 0.7}, "Sagittarius Dwarf Spheroidal", 70000, 18.9, -30.5, 0.2, 0.8, 0.4, 'elliptical', true);
+      createMiniGalaxy(4000, 6000, {r: 0.9, g: 0.8, b: 0.7}, "Sagittarius Dwarf", 70000, 18.9, -30.5, 0.2, 0.8, 0.4, 'elliptical', true);
       
-      createMiniGalaxy(40000, 38000, {r: 0.7, g: 0.8, b: 1.0}, "Whirlpool Galaxy (M51)", 27000000, 13.5, 47.2, 1, 0, 0, 'spiral', false);
+      const m51pos = createMiniGalaxy(40000, 38000, {r: 0.7, g: 0.8, b: 1.0}, "Whirlpool Galaxy (M51)", 27000000, 13.5, 47.2, 1, 0, 0, 'spiral', false);
       createMiniGalaxy(10000, 15000, {r: 1.0, g: 0.9, b: 0.8}, "NGC 5195 (M51 Companion)", 27000000, 13.5, 47.4, 0.5, 0.5, 0, 'lenticular');
 
       createMiniGalaxy(40000, 50000, {r: 0.8, g: 0.9, b: 1.0}, "Centaurus A", 12000000, 13.42, -43.02, 1.5, 0.3, 0.3, 'elliptical');
+      createMiniGalaxy(45000, 55000, {r: 1.0, g: 1.0, b: 0.9}, "Bode's Galaxy (M81)", 11800000, 9.926, 69.06, 1.2, 0.6, 0.1, 'spiral');
+      createMiniGalaxy(30000, 20000, {r: 1.0, g: 0.8, b: 0.8}, "Cigar Galaxy (M82)", 11500000, 9.931, 69.68, 1.0, 1.4, 0, 'lenticular');
       createMiniGalaxy(30000, 40000, {r: 1.0, g: 1.0, b: 1.0}, "Sombrero Galaxy (M104)", 31000000, 12.67, -11.62, 1.2, 1.5, 0, 'lenticular');
+      createMiniGalaxy(50000, 85000, {r: 0.8, g: 0.9, b: 1.0}, "Pinwheel Galaxy (M101)", 21000000, 14.05, 54.35, 1.5, 0.3, 0.1, 'spiral');
+      const cartwheelPos = createMiniGalaxy(150000, 150000, {r: 1.0, g: 0.8, b: 0.6}, "Cartwheel Galaxy", 500000000, 0.628, -33.72, 2.0, 0.8, 0.2, 'ring');
+      createMiniGalaxy(200000, 250000, {r: 1.0, g: 0.9, b: 0.8}, "Messier 87 (Virgo A)", 53500000, 12.51, 12.39, 3.0, 0, 0, 'elliptical');
 
       // LEVEL 4: VIRGO SUPERCLUSTER
       const superclusterGroup = new THREE.Group();
@@ -6299,6 +6616,8 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
         glow.userData = group.userData;
         superclusterGroup.add(group);
         selectableClusters.push(glow);
+
+        window.starViewerData.push({ name: name, dist: distLY, pos: pos, icon: "🏢", radius: rUnits });
       }
       createGalaxyCluster("Virgo Cluster (M87 Center)", 54000000, 12.5, 12.0, 2000, {r: 1.0, g: 0.9, b: 0.7}, 7000000);
       createGalaxyCluster("Fornax Cluster", 62000000, 3.6, -35.5, 60, {r: 0.9, g: 0.8, b: 1.0}, 2000000);
@@ -6320,6 +6639,7 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
       gaGlow.userData = { name: "The Great Attractor", dist: 250000000, icon: "🕸️" };
       laniakeaGroup.add(gaGlow);
       selectableDeepSpace.push(gaGlow);
+      window.starViewerData.push({ name: "The Great Attractor", dist: 250000000, pos: gaPos, icon: "🕸️", radius: 75000000 });
 
       // LEVEL 6: SHAPLEY SUPERCLUSTER & DIPOLE REPELLER
       const level6Group = new THREE.Group();
@@ -6332,6 +6652,7 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
       shapleyGlow.userData = { name: "Shapley Supercluster", dist: 650000000, icon: "🔭" };
       level6Group.add(shapleyGlow);
       selectableDeepSpace.push(shapleyGlow);
+      window.starViewerData.push({ name: "Shapley Supercluster", dist: 650000000, pos: shapleyPos, icon: "🔭", radius: 150000000 });
 
       const drPos = get3DPos(17.2, 10.0, 500000000).multiplyScalar(-1);
       const drGlow = new THREE.Sprite(markerMat.clone());
@@ -6341,6 +6662,7 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
       drGlow.userData = { name: "Dipole Repeller", dist: 500000000, icon: "🔭" };
       level6Group.add(drGlow);
       selectableDeepSpace.push(drGlow);
+      window.starViewerData.push({ name: "Dipole Repeller", dist: 500000000, pos: drPos, icon: "🔭", radius: 200000000 });
       // BACKGROUND & IGM
       const horizonRange = 1000000000 * LY_TO_I;
       const rogueStarCount = isMobile ? 2000 : 30000, igmCoords = [], igmColors = [];
@@ -6352,7 +6674,7 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
       const igmGeo = new THREE.BufferGeometry(); igmGeo.setAttribute('position', new THREE.Float32BufferAttribute(igmCoords, 3)); igmGeo.setAttribute('color', new THREE.Float32BufferAttribute(igmColors, 3));
       universeScene.add(new THREE.Points(igmGeo, new THREE.PointsMaterial({ size: 50000, vertexColors: true, transparent: true, opacity: 0.1, blending: THREE.AdditiveBlending, depthWrite: false })));
 
-      const bgGalaxyCount = isMobile ? 50000 : 2000000, bgGalaxyCoords = new Float32Array(bgGalaxyCount * 3), bgGalaxyColors = new Float32Array(bgGalaxyCount * 3);      for (let i = 0; i < bgGalaxyCount; i++) {
+      const bgGalaxyCount = isMobile ? 50000 : 500000, bgGalaxyCoords = new Float32Array(bgGalaxyCount * 3), bgGalaxyColors = new Float32Array(bgGalaxyCount * 3);      for (let i = 0; i < bgGalaxyCount; i++) {
         const i3 = i * 3, r = Math.pow(Math.random(), 0.5) * horizonRange, theta = Math.random() * Math.PI * 2, phi = Math.acos(2 * Math.random() - 1);
         bgGalaxyCoords[i3] = r * Math.sin(phi) * Math.cos(theta); bgGalaxyCoords[i3 + 1] = r * Math.cos(phi) * 0.8; bgGalaxyCoords[i3 + 2] = r * Math.sin(phi) * Math.sin(theta);
         const rand = Math.random();
@@ -6392,10 +6714,10 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
         const distLY = universeCamera.position.length() / LY_TO_I;
         
         let found = false;
-        if (distLY < 500000) {
+        if (distLY < 5000000) {
           if (raycaster.intersectObjects(selectableStars, true).length > 0) found = true;
         }
-        if (!found && distLY < 10000000) {
+        if (!found && distLY < 1000000000) {
           if (raycaster.intersectObjects(selectableGalaxies, true).length > 0) found = true;
         }
         if (!found && (raycaster.intersectObjects(selectableClusters, true).length > 0 || raycaster.intersectObjects(selectableDeepSpace, true).length > 0)) found = true;
@@ -6409,18 +6731,19 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
         if (!view || view.style.display !== "flex") {
           window.universeAnimating = false;
           return;
-      } 
+        } 
+        window.universeAnimating = true;
         
         if (window.PerfMonitor && window.PerfMonitor.recordFrame()) {
           window.PerfMonitor.applyScaling();
         }
 
         requestAnimationFrame(window.animateUniverse);
-        universeControls.update(); 
+        if (universeControls) universeControls.update(); 
         
         // Update Odometer
         const odo = document.getElementById("odo-val");
-        if (odo && universeCamera) {
+        if (odo && universeCamera && typeof LY_TO_I !== 'undefined') {
           const distLY = universeCamera.position.length() / LY_TO_I;
           if (distLY < 0.00001) {
             odo.innerHTML = `0.00 <span class="odo-unit">LY</span>`;
@@ -6434,9 +6757,10 @@ universeRenderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 
         }
         
         if (window.updateProximityLabels) window.updateProximityLabels();
-        universeRenderer.render(universeScene, universeCamera);
+        if (universeRenderer && universeScene && universeCamera) {
+          universeRenderer.render(universeScene, universeCamera);
+        }
       };
-      animateUniverse();
 
       window.addEventListener("resize", () => {
         if (!universeCamera || !universeRenderer) return;
