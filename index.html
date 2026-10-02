@@ -1064,6 +1064,51 @@
       opacity: 0.5;
     }
     #infograph-close:hover { opacity: 1; }
+
+    .domain-marquee {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      background: rgba(10, 10, 20, 0.7);
+      border-top: 1px solid rgba(255, 215, 0, 0.3);
+      border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+      padding: 6px 0;
+      margin-bottom: 5px;
+      font-size: 0.8rem;
+      color: #e2e8f0;
+      position: relative;
+      z-index: 5;
+    }
+    .domain-marquee-track {
+      display: inline-flex;
+      white-space: nowrap;
+      animation: domainMarquee 28s linear infinite;
+    }
+    .domain-marquee:hover .domain-marquee-track {
+      animation-play-state: paused;
+    }
+    @keyframes domainMarquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .domain-marquee-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      padding: 0 40px;
+    }
+    .domain-marquee a {
+      color: #00d4ff;
+      text-decoration: underline;
+    }
+    .domain-marquee .coffee-link {
+      color: #ffd700;
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      background: rgba(255, 215, 0, 0.1);
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-decoration: none;
+    }
   </style>
 </head>
 
@@ -1174,6 +1219,17 @@
           <span class="full-res-label" data-i18n="arrival_label">Arrival:</span>
           <span class="full-res-val" id="full-res-arrival">---</span>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="domain-marquee" role="region" aria-label="Domain Notice">
+    <div class="domain-marquee-track">
+      <div class="domain-marquee-text">
+        ⚠️ Notice: <strong>cosmicodometer.space</strong> domain will expire soon. Please use <a href="https://cosmic-odometer.vercel.app" target="_blank" rel="noopener noreferrer">cosmic-odometer.vercel.app</a> &nbsp;|&nbsp; Support the website: <a href="https://www.buymeacoffee.com/nemo7299" target="_blank" rel="noopener noreferrer" class="coffee-link">☕ Buy Me a Coffee</a>
+      </div>
+      <div class="domain-marquee-text" aria-hidden="true">
+        ⚠️ Notice: <strong>cosmicodometer.space</strong> domain will expire soon. Please use <a href="https://cosmic-odometer.vercel.app" target="_blank" rel="noopener noreferrer">cosmic-odometer.vercel.app</a> &nbsp;|&nbsp; Support the website: <a href="https://www.buymeacoffee.com/nemo7299" target="_blank" rel="noopener noreferrer" class="coffee-link">☕ Buy Me a Coffee</a>
       </div>
     </div>
   </div>
